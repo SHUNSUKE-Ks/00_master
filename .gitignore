@@ -1,0 +1,18 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.vercel/
+
+# Logs and local caches
+*.log
+.cache/
+.tmp/
+
+# Existing independent app repository
+DevApps/kanban_June/
