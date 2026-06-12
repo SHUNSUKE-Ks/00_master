@@ -20,6 +20,12 @@
 | 1000_OriginalTemplates | template-registry | `C:\00_master\Brain\1000_OriginalTemplates` | 原本テンプレート索引 |
 | BrainAgent | agent | `C:\00_master\Brain\BrainAgent` | Brain 整理担当 agent |
 
+## Agents
+
+| Name | Genre | Path | Memo |
+|---|---|---|---|
+| novelDesigner | visual-design-agent | `C:\00_master\Brain\CommandModules\AgentRoom\modules\novelDesigner` | 画風とノベル用ビジュアル素材の統一 |
+
 ## 更新ルール
 
 新しいアプリ、agent、skill、hook、重要資料を追加したら、`master_index.json` とこのファイルに登録します。

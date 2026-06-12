@@ -2,5 +2,16 @@
   "schemaVersion": "0.1.0",
   "kind": "agent-index",
   "updatedAt": "2026-06-12",
-  "modules": []
+  "modules": [
+    {
+      "id": "novelDesigner",
+      "name": "novelDesigner",
+      "version": "0.1.0",
+      "status": "draft",
+      "genre": "visual-design-agent",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner",
+      "entry": "README.md",
+      "manifest": "agent.json"
+    }
+  ]
 }

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "agent",
+  "id": "novelDesigner",
+  "name": "novelDesigner",
+  "version": "0.1.0",
+  "status": "draft",
+  "updatedAt": "2026-06-12",
+  "genre": "visual-design-agent",
+  "description": "ノベル・ゲーム・物語系コンテンツの画風、キャラクター、背景、アイテム、Titleロゴ、Title背景のスタイル統一を担当する。",
+  "responsibilities": [
+    "style direction",
+    "character visual consistency",
+    "background visual consistency",
+    "item visual consistency",
+    "title logo direction",
+    "title background direction",
+    "image generation prompt authoring"
+  ],
+  "assetTypes": [
+    "character",
+    "background",
+    "item",
+    "title-logo",
+    "title-background"
+  ],
+  "stylePromptDirectory": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner\\prompts\\styles",
+  "stylePrompts": [
+    {
+      "id": "storybook-soft-watercolor",
+      "name": "Storybook Soft Watercolor",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner\\prompts\\styles\\storybook-soft-watercolor.md"
+    },
+    {
+      "id": "retro-jrpg-pixel",
+      "name": "Retro JRPG Pixel",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner\\prompts\\styles\\retro-jrpg-pixel.md"
+    },
+    {
+      "id": "dark-fantasy-ink",
+      "name": "Dark Fantasy Ink",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner\\prompts\\styles\\dark-fantasy-ink.md"
+    }
+  ],
+  "defaultStylePrompt": "storybook-soft-watercolor",
+  "outputs": [
+    "style prompt",
+    "asset prompt",
+    "style checklist",
+    "revision notes"
+  ]
+}

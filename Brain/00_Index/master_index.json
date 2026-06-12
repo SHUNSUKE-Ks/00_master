@@ -82,6 +82,16 @@
       "updatedAt": "2026-06-12",
       "path": "C:\\00_master\\Brain\\00_Index",
       "description": "司令塔室全体の索引用フォルダー。目次、辞書、更新日、パス、genre を管理する。"
+    },
+    {
+      "id": "agent-novel-designer",
+      "name": "novelDesigner",
+      "genre": "visual-design-agent",
+      "kind": "agent",
+      "status": "draft",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner",
+      "description": "画風、Character、背景、アイテム、Titleロゴ、Title背景のスタイル統一を担当する agent。"
     }
   ]
 }

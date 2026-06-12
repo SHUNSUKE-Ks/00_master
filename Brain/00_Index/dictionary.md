@@ -15,6 +15,7 @@
 | `report` | agent の報告、調査結果、レビュー |
 | `inbox` | 未分類の受信物 |
 | `tech-stack` | 技術スタック、package、外部サービス |
+| `visual-design-agent` | 画風や素材表現の統一を担当する agent |
 
 ## Kind
 
