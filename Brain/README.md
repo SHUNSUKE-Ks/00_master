@@ -10,6 +10,15 @@
 - `CommandModules/`  
   agent、skill、hook、module registry など、司令塔室の実行モジュールをまとめます。
 
+- `00_Index/`  
+  登録したアプリ、資料、module、テンプレートをまとめる全体索引です。
+
+- `1000_OriginalTemplates/`  
+  原本テンプレートの目次と参照パスを管理します。
+
+- `BrainAgent/`  
+  Brain 全体の整理、索引更新、context block 更新を担当する agent の作業場所です。
+
 - `Reports/`  
   各 agent の作業報告、調査結果、レビュー結果、実行ログの要約を置きます。
 

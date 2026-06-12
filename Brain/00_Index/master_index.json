@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "master-index",
+  "updatedAt": "2026-06-12",
+  "items": [
+    {
+      "id": "app-note-original",
+      "name": "Note",
+      "genre": "app-template",
+      "kind": "app",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\APP\\Note",
+      "description": "汎用 Note 原本テンプレート。派生ノート作成時のベース。"
+    },
+    {
+      "id": "app-kanban-note01",
+      "name": "kanban-note01",
+      "genre": "project-app",
+      "kind": "app",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\APP\\kanban-note01",
+      "description": "司令塔室専用ノート。Brain と kanban_June に連動するカンバン特化版。"
+    },
+    {
+      "id": "app-kanban-june",
+      "name": "kanban_June",
+      "genre": "project-app",
+      "kind": "app",
+      "status": "external-repo",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\DevApps\\kanban_June",
+      "description": "task、agent、skill、hook、report を見える化する司令塔モニター。"
+    },
+    {
+      "id": "brain-command-modules",
+      "name": "CommandModules",
+      "genre": "module-registry",
+      "kind": "brain-folder",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\CommandModules",
+      "description": "AgentRoom、SkillsLibrary、Hooks、ModuleRegistry をまとめる実行系フォルダー。"
+    },
+    {
+      "id": "brain-context-blocks",
+      "name": "ContextBlocks",
+      "genre": "context",
+      "kind": "brain-folder",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\ContextBlocks",
+      "description": "カンバンや Codex prompt に貼るための参照パスブロック。"
+    },
+    {
+      "id": "brain-original-templates",
+      "name": "1000_OriginalTemplates",
+      "genre": "template-registry",
+      "kind": "brain-folder",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\1000_OriginalTemplates",
+      "description": "原本テンプレートの目次と参照パスを管理する場所。"
+    },
+    {
+      "id": "brain-agent",
+      "name": "BrainAgent",
+      "genre": "agent",
+      "kind": "agent",
+      "status": "draft",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\BrainAgent",
+      "description": "Brain 全体の索引、context block、原本テンプレート登録を管理する agent。"
+    },
+    {
+      "id": "brain-master-index",
+      "name": "00_Index",
+      "genre": "index",
+      "kind": "brain-folder",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\00_Index",
+      "description": "司令塔室全体の索引用フォルダー。目次、辞書、更新日、パス、genre を管理する。"
+    }
+  ]
+}

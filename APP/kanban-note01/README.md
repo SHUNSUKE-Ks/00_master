@@ -1,7 +1,7 @@
-## Note Original Template
+## kanban-note01
 
-このアプリは汎用 Note の原本テンプレートです。
-このプロジェクト専用の改造は `C:\00_master\APP\kanban-note01` で行います。
+このアプリは `C:\00_master\APP\Note` を原本として作成した、司令塔室専用ノートです。
+`Brain` と `kanban_June` に連動する context 整理・昇格・参照用のノートとして改造します。
 
 ## Usage
 
@@ -18,7 +18,13 @@ In the project directory, you can run:
 ### `npm run dev`
 
 Runs the app in the development mode.<br>
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+Open the local URL printed by Vite to view it in the browser.
+
+司令塔室では、次のポートで起動する想定です。
+
+```powershell
+npm run dev -- --host 127.0.0.1 --port 5176
+```
 
 ### `npm run build`
 

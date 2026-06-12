@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "brain-agent-profile",
+  "id": "brain-agent",
+  "name": "BrainAgent",
+  "genre": "agent",
+  "status": "draft",
+  "updatedAt": "2026-06-12",
+  "responsibilities": [
+    "Brain index maintenance",
+    "Context block maintenance",
+    "Original template registry maintenance",
+    "Inbox and report classification"
+  ],
+  "primaryPaths": [
+    "C:\\00_master\\Brain\\00_Index",
+    "C:\\00_master\\Brain\\1000_OriginalTemplates",
+    "C:\\00_master\\Brain\\ContextBlocks",
+    "C:\\00_master\\Brain\\CommandModules"
+  ]
+}

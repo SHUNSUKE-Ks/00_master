@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "original-template-index",
+  "updatedAt": "2026-06-12",
+  "items": [
+    {
+      "id": "note-original-template",
+      "name": "Note Original Template",
+      "genre": "app-template",
+      "status": "active",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\APP\\Note",
+      "description": "汎用 Note アプリの原本テンプレート。派生ノート作成時のベース。"
+    }
+  ]
+}
