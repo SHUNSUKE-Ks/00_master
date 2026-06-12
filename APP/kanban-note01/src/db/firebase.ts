@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app'
+import { getAuth, signInAnonymously } from 'firebase/auth'
 import {
   getFirestore,
   collection,
@@ -28,12 +29,26 @@ export const firebaseEnabled =
   import.meta.env.VITE_ENABLE_FIREBASE === 'true' &&
   Boolean(firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId && firebaseConfig.appId)
 
-const app = firebaseEnabled ? initializeApp(firebaseConfig) : null
+export const firebaseConfigured =
+  Boolean(firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId && firebaseConfig.appId)
+
+export const kanbanMemoInboxEnabled =
+  import.meta.env.VITE_ENABLE_KANBAN_MEMO_SYNC === 'true' && firebaseConfigured
+
+const app = firebaseEnabled || kanbanMemoInboxEnabled ? initializeApp(firebaseConfig) : null
 export const firestore = app ? getFirestore(app) : null
+const auth = app ? getAuth(app) : null
 
 function requireFirestore() {
   if (!firestore) throw new Error('Firebase is disabled. Local JSON/MD mode is active.')
   return firestore
+}
+
+async function ensureAnonymousUser() {
+  if (!auth) throw new Error('Firebase auth is disabled.')
+  if (auth.currentUser) return auth.currentUser
+  const credential = await signInAnonymously(auth)
+  return credential.user
 }
 
 function fromFs(data: Record<string, unknown>): Record<string, unknown> {
@@ -71,6 +86,43 @@ export async function updateMemoFs(id: string, patch: Partial<Omit<Memo, 'id'>>)
 export async function deleteMemoFs(id: string): Promise<void> {
   const db = requireFirestore()
   await deleteDoc(doc(db, 'memos', id))
+}
+
+// ── Kanban MemoInbox bridge ──────────────────────────────────────────────────
+
+type KanbanMemoArchiveItem = {
+  id: string
+  title: string
+  body: string
+  status: 'consult'
+  createdAt: string
+  updatedAt: string
+  source: 'kanban-note01'
+  sourceMemoId?: string
+}
+
+const KANBAN_MEMO_COLLECTION = import.meta.env.VITE_KANBAN_MEMO_COLLECTION || 'memoArchive'
+
+export async function sendMemoToKanbanMemoInbox(memo: Memo): Promise<KanbanMemoArchiveItem> {
+  if (!kanbanMemoInboxEnabled) {
+    throw new Error('Kanban MemoInbox sync is disabled. Set VITE_ENABLE_KANBAN_MEMO_SYNC=true.')
+  }
+  const db = requireFirestore()
+  await ensureAnonymousUser()
+
+  const now = new Date().toISOString()
+  const item: KanbanMemoArchiveItem = {
+    id: `knote_${Date.now()}`,
+    title: memo.title?.trim() || 'Kanban Note memo',
+    body: memo.body?.trim() || '',
+    status: 'consult',
+    createdAt: now,
+    updatedAt: now,
+    source: 'kanban-note01',
+    sourceMemoId: memo.id,
+  }
+  await setDoc(doc(db, KANBAN_MEMO_COLLECTION, item.id), stripUndefined(item as unknown as Record<string, unknown>))
+  return item
 }
 
 // ── Blogs ────────────────────────────────────────────────────────────────────

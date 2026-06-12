@@ -3,6 +3,7 @@ import type { Tag } from '../types'
 import { PRODUCTS } from '../db/products'
 import { NUTRIENTS } from '../db/nutrients'
 import { state, setState, addMemo, updateMemo, deleteMemo } from '../store'
+import { kanbanMemoInboxEnabled, sendMemoToKanbanMemoInbox } from '../db/firebase'
 
 let saveTimer: ReturnType<typeof setTimeout>
 
@@ -15,6 +16,7 @@ const PageMemo: Component = () => {
   const [selectedId, setSelectedId] = createSignal<string | null>(null)
   const isMobile = () => window.innerWidth < 768
   const [mobilePanel, setMobilePanel] = createSignal<'list' | 'editor'>('list')
+  const [sendStatus, setSendStatus] = createSignal<'idle' | 'sending' | 'sent' | 'error'>('idle')
 
   const [tagPickerOpen, setTagPickerOpen] = createSignal(false)
   const [tagPickerTab, setTagPickerTab] = createSignal<'product' | 'nutrient'>('product')
@@ -46,7 +48,21 @@ const PageMemo: Component = () => {
 
   function selectMemo(id: string) {
     setSelectedId(id)
+    setSendStatus('idle')
     if (isMobile()) setMobilePanel('editor')
+  }
+
+  async function sendSelectedToKanban() {
+    const memo = selected()
+    if (!memo || sendStatus() === 'sending') return
+    setSendStatus('sending')
+    try {
+      await sendMemoToKanbanMemoInbox(memo)
+      setSendStatus('sent')
+    } catch (error) {
+      console.warn('[Kanban MemoInbox] send failed:', error)
+      setSendStatus('error')
+    }
   }
 
   function removeTag(tagName: string) {
@@ -202,6 +218,25 @@ const PageMemo: Component = () => {
                 >
                   🗑️ 削除
                 </button>
+                <div class="flex items-center gap-2">
+                  <Show when={sendStatus() === 'sent'}>
+                    <span class="text-green-600">送信済み</span>
+                  </Show>
+                  <Show when={sendStatus() === 'error'}>
+                    <span class="text-red-500">
+                      {kanbanMemoInboxEnabled ? '送信失敗' : 'Firebase未設定'}
+                    </span>
+                  </Show>
+                  <button
+                    class="kanban-send-btn"
+                    type="button"
+                    disabled={sendStatus() === 'sending'}
+                    onClick={sendSelectedToKanban}
+                    title="カンバンのCodex相談Inboxへ送る"
+                  >
+                    {sendStatus() === 'sending' ? '送信中...' : 'カンバンへ送る'}
+                  </button>
+                </div>
                 <span>自動保存 — {new Date(memo().updatedAt).toLocaleDateString('ja-JP')}</span>
               </div>
             </div>

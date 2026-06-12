@@ -102,6 +102,27 @@ body {
 }
 .mobile-back:hover { opacity: .75; }
 
+.kanban-send-btn {
+  min-height: 32px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid #1f8f4f;
+  background: #07140d;
+  color: #35f28a;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: opacity .15s, transform .15s;
+}
+.kanban-send-btn:hover:not(:disabled) {
+  opacity: .86;
+  transform: translateY(-1px);
+}
+.kanban-send-btn:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
 /* ── Mobile overrides (portrait phones + landscape phones) ── */
 @media screen and (max-width: 767px),
        screen and (max-height: 500px) and (orientation: landscape) {
@@ -151,6 +172,11 @@ body {
   .desktop-right-panel { display: none !important; }
   .mobile-back { display: flex !important; }
   button { min-height: 36px; }
+  .kanban-send-btn {
+    min-height: 36px;
+    padding-inline: 10px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 1023px) {

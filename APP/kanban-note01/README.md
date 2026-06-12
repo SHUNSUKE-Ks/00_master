@@ -26,6 +26,27 @@ Open the local URL printed by Vite to view it in the browser.
 npm run dev -- --host 127.0.0.1 --port 5176
 ```
 
+## Kanban MemoInbox sync
+
+メモ画面の「カンバンへ送る」は、`kanban_June` と同じ Firebase project の `memoArchive` collection に書き込みます。
+
+必要な環境変数:
+
+```text
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_ENABLE_FIREBASE=false
+VITE_ENABLE_KANBAN_MEMO_SYNC=true
+VITE_KANBAN_MEMO_COLLECTION=memoArchive
+```
+
+`VITE_ENABLE_FIREBASE` は、Note 本体の `memos` / `blogs` などを同期する設定です。
+`kanban_June` の Firebase project を使う場合は、Firestore rules の対象が異なるため `false` のままにします。
+
 ### `npm run build`
 
 Builds the app for production to the `dist` folder.<br>
