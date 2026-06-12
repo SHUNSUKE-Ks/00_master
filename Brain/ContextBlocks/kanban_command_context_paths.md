@@ -11,6 +11,7 @@ Root: C:\00_master
 Brain:
 - Overview: C:\00_master\Brain\README.md
 - GitInBox: C:\00_master\Brain\GitInBox
+- CommandModules: C:\00_master\Brain\CommandModules
 - Reports: C:\00_master\Brain\Reports
 - TechStack: C:\00_master\Brain\TechStack
 - Inbox: C:\00_master\Brain\Inbox
@@ -19,10 +20,10 @@ Brain:
 - ContextBlocks: C:\00_master\Brain\ContextBlocks
 
 Agent / Skill / Hook modules:
-- AgentRoom: C:\00_master\Brain\AgentRoom
-- SkillsLibrary: C:\00_master\Brain\SkillsLibrary
-- Hooks: C:\00_master\Brain\Hooks
-- ModuleRegistry: C:\00_master\Brain\ModuleRegistry
+- AgentRoom: C:\00_master\Brain\CommandModules\AgentRoom
+- SkillsLibrary: C:\00_master\Brain\CommandModules\SkillsLibrary
+- Hooks: C:\00_master\Brain\CommandModules\Hooks
+- ModuleRegistry: C:\00_master\Brain\CommandModules\ModuleRegistry
 
 Apps:
 - Kanban monitor app: C:\00_master\DevApps\kanban_June
@@ -39,4 +40,3 @@ Important notes:
 - `APP\Note` は雑多なメモ、資料、ギャラリー、ノート DB を扱う場所です。
 - `DevApps\kanban_June` は task、agent、skill、report、hook の状態を見える化する場所です。
 - `Brain` は両者の間にある知識・参照・整理の層です。
-

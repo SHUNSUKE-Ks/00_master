@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "module-registry",
+  "updatedAt": "2026-06-12",
+  "registries": {
+    "agents": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\agents.index.json",
+    "skills": "C:\\00_master\\Brain\\CommandModules\\SkillsLibrary\\skills.index.json",
+    "hooks": "C:\\00_master\\Brain\\CommandModules\\Hooks\\hooks.index.json"
+  },
+  "activeSets": []
+}

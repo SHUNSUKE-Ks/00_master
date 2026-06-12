@@ -7,6 +7,9 @@
 - `GitInBox/`  
   GitHub Issue、PR、GitHub Actions、外部 agent から届く作業依頼や通知を置きます。
 
+- `CommandModules/`  
+  agent、skill、hook、module registry など、司令塔室の実行モジュールをまとめます。
+
 - `Reports/`  
   各 agent の作業報告、調査結果、レビュー結果、実行ログの要約を置きます。
 
@@ -26,4 +29,3 @@
 
 「技術スタッツ」は統計やメトリクスの意味に近いため、技術構成や package を整理する場所としては「技術スタック」が自然です。
 このためフォルダー名は `TechStack` にします。
-
