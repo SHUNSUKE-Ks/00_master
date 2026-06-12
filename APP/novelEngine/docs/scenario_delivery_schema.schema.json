@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.solidjs-novel-engine/schema/scenario_delivery_vol1_1.schema.json",
+  "title": "Scenario AI Delivery Schema Vol1.1",
+  "description": "OneJson NovelEngine Vol1.1向けに、シナリオAIが納品するscenario_main.jsonのSchema。再生用の最小情報と、将来の素材生成・発注に使うtags/cgHintsを含む。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["meta", "title", "scenes"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectName", "version", "language"],
+      "properties": {
+        "projectName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "default": "1.1"
+        },
+        "format": {
+          "type": "string",
+          "default": "one_json_novel"
+        },
+        "language": {
+          "type": "string",
+          "default": "ja"
+        },
+        "authorNote": {
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ゲームタイトル。Vol1.1 EngineのTitle表示に使う。"
+    },
+    "titleScreen": {
+      "$ref": "#/$defs/titleScreen"
+    },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startScreen": {
+          "type": "string",
+          "default": "TITLE"
+        },
+        "startPhase": {
+          "type": "string",
+          "default": "TITLE"
+        },
+        "startScene": {
+          "type": "string"
+        }
+      }
+    },
+    "screenFlow": {
+      "type": "array",
+      "description": "将来のScreenManager接続用。Vol1.1 Engineでは読まなくてもよい。",
+      "items": {
+        "$ref": "#/$defs/screenFlowItem"
+      }
+    },
+    "initialState": {
+      "$ref": "#/$defs/initialState"
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scene"
+      }
+    },
+    "keyEvents": {
+      "type": "array",
+      "description": "物語が飛び飛びの場合の重要イベント。Engine再生には必須ではない。",
+      "items": {
+        "$ref": "#/$defs/keyEvent"
+      },
+      "default": []
+    },
+    "cgHints": {
+      "type": "array",
+      "description": "一枚絵やイベントCGのイメージ指定。画像生成・素材発注の後工程に使う。",
+      "items": {
+        "$ref": "#/$defs/cgHint"
+      },
+      "default": []
+    },
+    "assetOrderHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "purpose": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Backgrounds", "Characters", "Faces", "BGM", "SE", "CG", "FX", "UI"]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tag": {
+      "type": "string",
+      "pattern": "^(bg|char|face|cg|bgm|se|fx|mood|flag|ev|memo|ui)_[a-zA-Z0-9_]+$",
+      "description": "素材・演出・イベント候補のtag。例: bg_forest, char_knight, cg_forest_encounter"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tag"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "titleScreen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "catchcopy": {
+          "type": "string"
+        },
+        "startButtonLabel": {
+          "type": "string",
+          "default": "はじめる"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        }
+      }
+    },
+    "screenFlowItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["screen", "no", "component"],
+      "properties": {
+        "screen": {
+          "type": "string",
+          "enum": ["TITLE", "NOVEL", "END", "MENU", "SETTINGS", "COLLECTION"]
+        },
+        "no": {
+          "type": "string",
+          "pattern": "^[0-9]{2,3}$"
+        },
+        "component": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase": {
+          "type": "string"
+        }
+      }
+    },
+    "initialState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["screen", "phase", "sceneIndex", "talkIndex"],
+      "properties": {
+        "screen": {
+          "type": "string",
+          "default": "TITLE"
+        },
+        "phase": {
+          "type": "string",
+          "default": "TITLE"
+        },
+        "sceneIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "talkIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "scene", "talk"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^scene_[a-zA-Z0-9_]+$"
+        },
+        "scene": {
+          "type": "string",
+          "minLength": 1,
+          "description": "画面に表示するScene名。"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Codexや制作担当向けの場面要約。"
+        },
+        "phase": {
+          "type": "string",
+          "default": "PLAYING"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "talk": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/talk"
+          }
+        },
+        "next": {
+          "type": ["string", "null"],
+          "description": "次Sceneのid。飛び飛び構成や最終Sceneではnullでもよい。"
+        }
+      }
+    },
+    "talk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["speaker", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^talk_[a-zA-Z0-9_]+$"
+        },
+        "speaker": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "emotion": {
+          "type": "string",
+          "description": "表情や声色のメモ。face_ tagと併用してよい。"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "memo": {
+          "type": "string"
+        }
+      }
+    },
+    "keyEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "summary"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ev_[a-zA-Z0-9_]+$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relatedScenes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^scene_[a-zA-Z0-9_]+$"
+          },
+          "default": []
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        }
+      }
+    },
+    "cgHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "description", "tags"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^cg_[a-zA-Z0-9_]+$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sceneId": {
+          "type": "string",
+          "pattern": "^scene_[a-zA-Z0-9_]+$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "一枚絵として作りたい画の説明。Codexが画像生成や発注書作成に使う。"
+        },
+        "composition": {
+          "type": "string",
+          "description": "構図、カメラ、画角のメモ。"
+        },
+        "tags": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/tags"
+            },
+            {
+              "contains": {
+                "type": "string",
+                "pattern": "^cg_[a-zA-Z0-9_]+$"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

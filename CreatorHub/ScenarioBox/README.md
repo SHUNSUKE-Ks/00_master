@@ -29,6 +29,20 @@ C:\00_master\Brain\CommandModules\AgentRoom\modules\scenarioDesigner\agent.json
 C:\00_master\Brain\CommandModules\AgentRoom\modules\novelDesigner
 ```
 
+## 関連アプリ
+
+シナリオ実行・確認用の NovelEngine は次の場所にあります。
+
+```text
+C:\00_master\APP\novelEngine
+```
+
+移植元:
+
+```text
+C:\Users\enjoy\InBox2026\InBox0601\06_AppList\solidjs-novel-engine-01-short-schema
+```
+
 ## 使い方
 
 1. このフォルダーに企画メモを置く
@@ -43,4 +57,3 @@ YYYY-MM-DD_topic_scenario-brief.md
 YYYY-MM-DD_topic_scene-breakdown.md
 YYYY-MM-DD_topic_visual-handoff.md
 ```
-

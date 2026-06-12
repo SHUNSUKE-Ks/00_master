@@ -112,6 +112,16 @@
       "updatedAt": "2026-06-12",
       "path": "C:\\00_master\\CreatorHub\\ScenarioBox",
       "description": "CreatorHub のシナリオ試作置き場。scenarioDesigner が担当する。"
+    },
+    {
+      "id": "app-novel-engine",
+      "name": "novelEngine",
+      "genre": "project-app",
+      "kind": "app",
+      "status": "draft",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\APP\\novelEngine",
+      "description": "ScenarioBox 専用の SolidJS NovelEngine。短編シナリオ JSON と素材表示を確認する。"
     }
   ]
 }

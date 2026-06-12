@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "projectName": "SolidJS_NovelEngine_Vol1.1",
+    "version": "1.1",
+    "format": "one_json_novel",
+    "language": "ja"
+  },
+  "title": "魔女の森",
+  "engine": {
+    "startScreen": "TITLE",
+    "startPhase": "TITLE",
+    "startScene": "scene_forest_entrance"
+  },
+  "screenFlow": [
+    {
+      "screen": "TITLE",
+      "no": "10",
+      "component": "10_Title",
+      "phase": "TITLE"
+    },
+    {
+      "screen": "NOVEL",
+      "no": "20",
+      "component": "20_Novel",
+      "phase": "PLAYING"
+    },
+    {
+      "screen": "END",
+      "no": "90",
+      "component": "90_End",
+      "phase": "END"
+    }
+  ],
+  "initialState": {
+    "screen": "TITLE",
+    "phase": "TITLE",
+    "sceneIndex": 0,
+    "talkIndex": 0
+  },
+  "scenes": [
+    {
+      "id": "scene_forest_entrance",
+      "scene": "森入口",
+      "phase": "PLAYING",
+      "tags": [
+        "bg_forest_entrance",
+        "mood_lonely",
+        "bgm_forest"
+      ],
+      "talk": [
+        {
+          "id": "talk_001",
+          "speaker": "騎士",
+          "text": "ここが魔女の森か……。",
+          "tags": [
+            "char_knight",
+            "face_knight_serious",
+            "memo_need_knight_standing"
+          ]
+        },
+        {
+          "id": "talk_002",
+          "speaker": "少女",
+          "text": "怖くないの？",
+          "tags": [
+            "char_girl",
+            "face_girl_worried",
+            "memo_need_girl_standing"
+          ]
+        }
+      ],
+      "next": "scene_forest_deep"
+    },
+    {
+      "id": "scene_forest_deep",
+      "scene": "森の奥",
+      "phase": "PLAYING",
+      "tags": [
+        "bg_forest_deep",
+        "fx_fog_slow",
+        "se_step_grass",
+        "flag_enter_forest"
+      ],
+      "talk": [
+        {
+          "id": "talk_003",
+          "speaker": "騎士",
+          "text": "妹を救うためなら、恐れるものはない。",
+          "tags": [
+            "char_knight",
+            "face_knight_angry"
+          ]
+        },
+        {
+          "id": "talk_004",
+          "speaker": "少女",
+          "text": "それなら、森の奥まで案内してあげる。",
+          "tags": [
+            "char_girl",
+            "face_girl_normal",
+            "ev_guide_to_forest"
+          ]
+        }
+      ],
+      "next": null
+    }
+  ],
+  "assetOrderHint": {
+    "purpose": "Vol1.1では未使用。将来の素材発注用にtagsから抽出する。",
+    "categories": [
+      "Backgrounds",
+      "Characters",
+      "Faces",
+      "BGM",
+      "SE",
+      "FX"
+    ]
+  }
+}

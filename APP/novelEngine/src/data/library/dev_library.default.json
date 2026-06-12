@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "id": "dev_library_default",
+    "version": "0.4.0",
+    "purpose": "CodexとDevStudioが初期状態で参照する制作DB。キャラクター、背景、UI、音、仮素材方針を一枚で管理する。",
+    "format": "one_json_dev_library",
+    "language": "ja"
+  },
+  "policy": {
+    "defaultAssetMode": "png_initial_for_visuals_svg_for_ui",
+    "notes": [
+      "背景や立ち絵などレイアウト確認に影響する素材は、初期データとしてPNGを置く。",
+      "UIパーツは形状調整しやすいSVGで作る。",
+      "最終素材が届いたらassetOrderのfileNameまたはpathを差し替える。",
+      "scenario_main.jsonは脚本、dev_library.default.jsonは制作DBとして分離する。"
+    ]
+  },
+  "layoutPresets": {
+    "pcLandscape": {
+      "width": 1280,
+      "height": 720,
+      "safeArea": {
+        "top": 48,
+        "right": 64,
+        "bottom": 56,
+        "left": 64
+      },
+      "dialogueBox": {
+        "x": 64,
+        "y": 478,
+        "width": 1152,
+        "height": 198
+      },
+      "characterSlots": {
+        "left": {
+          "x": 210,
+          "y": 92,
+          "height": 560
+        },
+        "right": {
+          "x": 780,
+          "y": 92,
+          "height": 560
+        }
+      }
+    }
+  },
+  "assetPacks": [
+    {
+      "id": "fantasy_novel_default",
+      "name": "Fantasy Novel Default Pack",
+      "type": "novel_pack",
+      "targetLayout": "pcLandscape",
+      "rootPath": "/assets/packs/fantasy_novel_default",
+      "description": "初動用のファンタジーノベル素材パック。背景と立ち絵はPNG、UIはSVGで構成する。"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char_knight",
+      "name": "騎士",
+      "role": "主人公",
+      "description": "失われた妹を探して魔女の森へ入る若い騎士。",
+      "defaultFace": "face_knight_serious",
+      "defaultStanding": "asset_char_knight_sheet_png",
+      "assetPath": "/assets/packs/fantasy_novel_default/characters/char_knight_neutral.png",
+      "standingVariants": [
+        "neutral",
+        "serious",
+        "angry_battle",
+        "gentle_smile"
+      ],
+      "standingAssets": {
+        "neutral": "/assets/packs/fantasy_novel_default/characters/char_knight_neutral.png",
+        "serious": "/assets/packs/fantasy_novel_default/characters/char_knight_serious.png",
+        "angry_battle": "/assets/packs/fantasy_novel_default/characters/char_knight_angry_battle.png",
+        "gentle_smile": "/assets/packs/fantasy_novel_default/characters/char_knight_gentle_smile.png"
+      },
+      "tags": ["char_knight", "face_knight_neutral", "face_knight_serious", "face_knight_angry", "face_knight_smile"]
+    },
+    {
+      "id": "char_girl",
+      "name": "ヒロイン",
+      "role": "ヒロイン / 案内役",
+      "description": "森の入口で騎士に出会い、奥へ案内する不思議な少女。",
+      "defaultFace": "face_girl_normal",
+      "defaultStanding": "asset_char_heroine_sheet_png",
+      "assetPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_neutral.png",
+      "standingVariants": [
+        "neutral",
+        "worried",
+        "gentle_smile",
+        "mysterious_serious"
+      ],
+      "standingAssets": {
+        "neutral": "/assets/packs/fantasy_novel_default/characters/char_heroine_neutral.png",
+        "worried": "/assets/packs/fantasy_novel_default/characters/char_heroine_worried.png",
+        "gentle_smile": "/assets/packs/fantasy_novel_default/characters/char_heroine_gentle_smile.png",
+        "mysterious_serious": "/assets/packs/fantasy_novel_default/characters/char_heroine_mysterious_serious.png"
+      },
+      "tags": ["char_girl", "char_heroine", "face_girl_normal", "face_girl_worried", "face_girl_smile", "face_girl_serious"]
+    }
+  ],
+  "locations": [
+    {
+      "id": "bg_forest_entrance",
+      "name": "森入口",
+      "description": "霧が薄く漂う森の入口。タイトルと序盤の舞台。",
+      "defaultAsset": "asset_bg_forest_entrance_png",
+      "assetPath": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_entrance_initial.png",
+      "tags": ["bg_forest_entrance", "mood_lonely"]
+    },
+    {
+      "id": "bg_forest_deep",
+      "name": "森の奥",
+      "description": "霧が濃く、先の見えない森の深部。",
+      "defaultAsset": "asset_bg_forest_deep_png",
+      "assetPath": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_deep_initial.png",
+      "tags": ["bg_forest_deep", "fx_fog_slow"]
+    }
+  ],
+  "assetOrder": {
+    "TITLE": {
+      "TITLE_BG": {
+        "id": "asset_title_bg_png",
+        "fileName": "bg_forest_entrance_initial.png",
+        "path": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_entrance_initial.png",
+        "kind": "image",
+        "status": "initial_png",
+        "usage": "タイトル背景"
+      },
+      "TITLE_LOGO": {
+        "id": "asset_title_logo_svg",
+        "fileName": "title_logo_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/title_logo_default.svg",
+        "kind": "image",
+        "status": "initial_svg",
+        "usage": "タイトルロゴ"
+      },
+      "START_BUTTON": {
+        "id": "asset_start_button_svg",
+        "fileName": "start_button_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/start_button_default.svg",
+        "kind": "ui",
+        "status": "initial_svg",
+        "usage": "開始ボタン"
+      },
+      "TITLE_OP": {
+        "id": "asset_bgm_title_op",
+        "fileName": "interlude.mp3",
+        "path": "/assets/sound/bgm/Unnamed Memory/interlude.mp3",
+        "kind": "bgm",
+        "status": "copied",
+        "usage": "タイトルOP"
+      },
+      "BGM": {
+        "id": "asset_bgm_title_theme",
+        "fileName": "Unnamed Memory ～新たな歴史へ〜.mp3",
+        "path": "/assets/sound/bgm/Unnamed Memory/Unnamed Memory ～新たな歴史へ〜.mp3",
+        "kind": "bgm",
+        "status": "copied",
+        "usage": "タイトルBGM"
+      },
+      "SE_START": {
+        "id": "asset_se_button_start",
+        "fileName": "se_button_start.mp3",
+        "kind": "se",
+        "status": "planned",
+        "usage": "開始ボタン押下音"
+      }
+    },
+    "NOVEL": {
+      "BGM": {
+        "id": "asset_bgm_novel_main",
+        "fileName": "Unnamed Memory ～名も無き御伽噺～.mp3",
+        "path": "/assets/sound/bgm/Unnamed Memory/Unnamed Memory ～名も無き御伽噺～.mp3",
+        "kind": "bgm",
+        "status": "copied",
+        "usage": "ノベル本文BGM"
+      },
+      "CHARACTER_BGM": {
+        "id": "asset_bgm_character_theme",
+        "fileName": "いつか対峙する日のために.mp3",
+        "path": "/assets/sound/bgm/Unnamed Memory/いつか対峙する日のために.mp3",
+        "kind": "bgm",
+        "status": "copied",
+        "usage": "キャラクター登場BGM"
+      },
+      "DIALOGUE_BOX": {
+        "id": "asset_dialogue_box_svg",
+        "fileName": "dialogue_box_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/dialogue_box_default.svg",
+        "kind": "ui",
+        "status": "initial_svg",
+        "usage": "本文ウィンドウ"
+      },
+      "NAME_PLATE": {
+        "id": "asset_name_plate_svg",
+        "fileName": "name_plate_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/name_plate_default.svg",
+        "kind": "ui",
+        "status": "initial_svg",
+        "usage": "話者名表示"
+      },
+      "SE_NEXT": {
+        "id": "asset_se_next",
+        "fileName": "se_next.mp3",
+        "kind": "se",
+        "status": "planned",
+        "usage": "次へ進行音"
+      }
+    },
+    "SCENE": {
+      "BG_FOREST_ENTRANCE": {
+        "id": "asset_bg_forest_entrance_png",
+        "fileName": "bg_forest_entrance_initial.png",
+        "path": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_entrance_initial.png",
+        "kind": "background",
+        "status": "initial_png",
+        "usage": "森入口背景"
+      },
+      "BG_FOREST_DEEP": {
+        "id": "asset_bg_forest_deep_png",
+        "fileName": "bg_forest_deep_initial.png",
+        "path": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_deep_initial.png",
+        "kind": "background",
+        "status": "initial_png",
+        "usage": "森の奥背景"
+      },
+      "KNIGHT_STANDING": {
+        "id": "asset_char_knight_sheet_png",
+        "fileName": "char_knight_sheet_initial.png",
+        "path": "/assets/packs/fantasy_novel_default/characters/char_knight_sheet_initial.png",
+        "kind": "character",
+        "status": "initial_png_sheet",
+        "usage": "主人公立ち絵 表情差分シート"
+      },
+      "GIRL_STANDING": {
+        "id": "asset_char_heroine_sheet_png",
+        "fileName": "char_heroine_sheet_initial.png",
+        "path": "/assets/packs/fantasy_novel_default/characters/char_heroine_sheet_initial.png",
+        "kind": "character",
+        "status": "initial_png_sheet",
+        "usage": "ヒロイン立ち絵 表情差分シート"
+      }
+    },
+    "END": {
+      "END_PANEL": {
+        "id": "asset_end_panel_svg",
+        "fileName": "end_panel_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/end_panel_default.svg",
+        "kind": "ui",
+        "status": "initial_svg",
+        "usage": "読了画面パネル"
+      },
+      "SE_COMPLETE": {
+        "id": "asset_se_complete",
+        "fileName": "se_complete.mp3",
+        "kind": "se",
+        "status": "planned",
+        "usage": "読了音"
+      }
+    },
+    "COMMON_UI": {
+      "BACKLOG_BUTTON": {
+        "id": "asset_backlog_button_svg",
+        "fileName": "backlog_button_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/backlog_button_default.svg",
+        "kind": "ui",
+        "status": "initial_svg",
+        "usage": "バックログボタン"
+      },
+      "MENU_BUTTON": {
+        "id": "asset_menu_button_svg",
+        "fileName": "menu_button_default.svg",
+        "path": "/assets/packs/fantasy_novel_default/ui/menu_button_default.svg",
+        "kind": "ui",
+        "status": "initial_svg",
+        "usage": "メニューボタン"
+      },
+      "SE_BUTTON": {
+        "id": "asset_se_button_click",
+        "fileName": "se_button_click.mp3",
+        "kind": "se",
+        "status": "planned",
+        "usage": "共通ボタンクリック音"
+      }
+    }
+  }
+}

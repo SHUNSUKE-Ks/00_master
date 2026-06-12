@@ -1,0 +1,304 @@
+{
+  "id": "Unnamed Memory",
+  "label": "Unnamed Memory",
+  "description": "Unnamed Memory album",
+  "artworkPath": "src/assets/sound/bgm/Unnamed Memory/artwork.jpg",
+  "tracks": [
+    {
+      "filename": "Unnamed Memory ～名も無き御伽噺～.mp3",
+      "title": "Unnamed Memory ～名も無き御伽噺～"
+    },
+    {
+      "filename": "Unnamed Memory ～新たな歴史へ〜.mp3",
+      "title": "Unnamed Memory ～新たな歴史へ〜"
+    },
+    {
+      "filename": "interlude.mp3",
+      "title": "interlude"
+    },
+    {
+      "filename": "いつか対峙する日のために.mp3",
+      "title": "いつか対峙する日のために"
+    },
+    {
+      "filename": "そうしたら私たち、また恋をしましょう.mp3",
+      "title": "そうしたら私たち、また恋をしましょう"
+    },
+    {
+      "filename": "ただ、愛する人のもとへ.mp3",
+      "title": "ただ、愛する人のもとへ"
+    },
+    {
+      "filename": "ただそこに在る人間として、愛している.mp3",
+      "title": "ただそこに在る人間として、愛している"
+    },
+    {
+      "filename": "ゆめあと.mp3",
+      "title": "ゆめあと"
+    },
+    {
+      "filename": "わちゃわちゃする二人.mp3",
+      "title": "わちゃわちゃする二人"
+    },
+    {
+      "filename": "一幕の終わりに.mp3",
+      "title": "一幕の終わりに"
+    },
+    {
+      "filename": "不快な風.mp3",
+      "title": "不快な風"
+    },
+    {
+      "filename": "不透明な存在.mp3",
+      "title": "不透明な存在"
+    },
+    {
+      "filename": "世界が求める変革.mp3",
+      "title": "世界が求める変革"
+    },
+    {
+      "filename": "人心に巣食う.mp3",
+      "title": "人心に巣食う"
+    },
+    {
+      "filename": "人懐こい笑顔.mp3",
+      "title": "人懐こい笑顔"
+    },
+    {
+      "filename": "何に換えても取り戻したいもののために.mp3",
+      "title": "何に換えても取り戻したいもののために"
+    },
+    {
+      "filename": "余裕で勝とう.mp3",
+      "title": "余裕で勝とう"
+    },
+    {
+      "filename": "光の祝福.mp3",
+      "title": "光の祝福"
+    },
+    {
+      "filename": "凍てる空気.mp3",
+      "title": "凍てる空気"
+    },
+    {
+      "filename": "分岐点.mp3",
+      "title": "分岐点"
+    },
+    {
+      "filename": "切望の果てに.mp3",
+      "title": "切望の果てに"
+    },
+    {
+      "filename": "取り返しのつかない過去の夢.mp3",
+      "title": "取り返しのつかない過去の夢"
+    },
+    {
+      "filename": "呪具ーエルテリアー.mp3",
+      "title": "呪具ーエルテリアー"
+    },
+    {
+      "filename": "夜に包まれて.mp3",
+      "title": "夜に包まれて"
+    },
+    {
+      "filename": "夢想する幸福.mp3",
+      "title": "夢想する幸福"
+    },
+    {
+      "filename": "妖しい微笑み.mp3",
+      "title": "妖しい微笑み"
+    },
+    {
+      "filename": "完璧によく似て、そして不安定.mp3",
+      "title": "完璧によく似て、そして不安定"
+    },
+    {
+      "filename": "幼子のように.mp3",
+      "title": "幼子のように"
+    },
+    {
+      "filename": "張り詰めた糸.mp3",
+      "title": "張り詰めた糸"
+    },
+    {
+      "filename": "影の足音.mp3",
+      "title": "影の足音"
+    },
+    {
+      "filename": "彼方から蛇が睨む.mp3",
+      "title": "彼方から蛇が睨む"
+    },
+    {
+      "filename": "心、凪ぐ.mp3",
+      "title": "心、凪ぐ"
+    },
+    {
+      "filename": "思慕の行方.mp3",
+      "title": "思慕の行方"
+    },
+    {
+      "filename": "悠久の願い.mp3",
+      "title": "悠久の願い"
+    },
+    {
+      "filename": "憎悪の渦.mp3",
+      "title": "憎悪の渦"
+    },
+    {
+      "filename": "懲りない二人.mp3",
+      "title": "懲りない二人"
+    },
+    {
+      "filename": "戦線に立つ.mp3",
+      "title": "戦線に立つ"
+    },
+    {
+      "filename": "攻防.mp3",
+      "title": "攻防"
+    },
+    {
+      "filename": "日常の片隅で.mp3",
+      "title": "日常の片隅で"
+    },
+    {
+      "filename": "暗がりに潜む悪意.mp3",
+      "title": "暗がりに潜む悪意"
+    },
+    {
+      "filename": "月光が照らす享楽.mp3",
+      "title": "月光が照らす享楽"
+    },
+    {
+      "filename": "果てない狂乱.mp3",
+      "title": "果てない狂乱"
+    },
+    {
+      "filename": "栄華は此処に.mp3",
+      "title": "栄華は此処に"
+    },
+    {
+      "filename": "歪な微笑み.mp3",
+      "title": "歪な微笑み"
+    },
+    {
+      "filename": "歴史の影に潜む者.mp3",
+      "title": "歴史の影に潜む者"
+    },
+    {
+      "filename": "消失したすべてを識る者.mp3",
+      "title": "消失したすべてを識る者"
+    },
+    {
+      "filename": "混迷の戦局.mp3",
+      "title": "混迷の戦局"
+    },
+    {
+      "filename": "温かかったはずの腕.mp3",
+      "title": "温かかったはずの腕"
+    },
+    {
+      "filename": "狂気を撒く神.mp3",
+      "title": "狂気を撒く神"
+    },
+    {
+      "filename": "略奪を誇る一族.mp3",
+      "title": "略奪を誇る一族"
+    },
+    {
+      "filename": "目を覚ました激情.mp3",
+      "title": "目を覚ました激情"
+    },
+    {
+      "filename": "祝福と呪詛.mp3",
+      "title": "祝福と呪詛"
+    },
+    {
+      "filename": "禍つ力.mp3",
+      "title": "禍つ力"
+    },
+    {
+      "filename": "穏やかな日々 ～王の休息～.mp3",
+      "title": "穏やかな日々 ～王の休息～"
+    },
+    {
+      "filename": "穏やかな日々 ～魔女の慈愛～.mp3",
+      "title": "穏やかな日々 ～魔女の慈愛～"
+    },
+    {
+      "filename": "純白の閃光.mp3",
+      "title": "純白の閃光"
+    },
+    {
+      "filename": "縺れた願い.mp3",
+      "title": "縺れた願い"
+    },
+    {
+      "filename": "美しき各威.mp3",
+      "title": "美しき各威"
+    },
+    {
+      "filename": "背筋を這う予感.mp3",
+      "title": "背筋を這う予感"
+    },
+    {
+      "filename": "脅威との衝突.mp3",
+      "title": "脅威との衝突"
+    },
+    {
+      "filename": "膨らむ苦悩.mp3",
+      "title": "膨らむ苦悩"
+    },
+    {
+      "filename": "色褪せぬ愛情.mp3",
+      "title": "色褪せぬ愛情"
+    },
+    {
+      "filename": "荒野にそびえる青い塔.mp3",
+      "title": "荒野にそびえる青い塔"
+    },
+    {
+      "filename": "虚ろの君主.mp3",
+      "title": "虚ろの君主"
+    },
+    {
+      "filename": "蠢く敵意.mp3",
+      "title": "蠢く敵意"
+    },
+    {
+      "filename": "見透かせない相手.mp3",
+      "title": "見透かせない相手"
+    },
+    {
+      "filename": "運命に抗う.mp3",
+      "title": "運命に抗う"
+    },
+    {
+      "filename": "邪悪なるモノ.mp3",
+      "title": "邪悪なるモノ"
+    },
+    {
+      "filename": "閉ざされた記憶.mp3",
+      "title": "閉ざされた記憶"
+    },
+    {
+      "filename": "開戦の狼煙.mp3",
+      "title": "開戦の狼煙"
+    },
+    {
+      "filename": "願いを導に.mp3",
+      "title": "願いを導に"
+    },
+    {
+      "filename": "魔を統べる.mp3",
+      "title": "魔を統べる"
+    },
+    {
+      "filename": "魔女の時代.mp3",
+      "title": "魔女の時代"
+    },
+    {
+      "filename": "魔法大国ートゥルダールー.mp3",
+      "title": "魔法大国ートゥルダールー"
+    }
+  ]
+}

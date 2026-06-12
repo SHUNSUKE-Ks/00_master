@@ -1,0 +1,347 @@
+:root {
+  color: #f7f2e8;
+  background: #16130f;
+  font-family: "Yu Gothic UI", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button {
+  font: inherit;
+}
+
+.app-mode-switch {
+  display: flex;
+  gap: 8px;
+  left: 16px;
+  position: fixed;
+  top: 16px;
+  z-index: 200;
+}
+
+.app-mode-switch button {
+  background: rgb(15 18 24 / 78%);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 7px;
+  color: #d8d2c5;
+  cursor: pointer;
+  padding: 7px 12px;
+}
+
+.app-mode-switch button.active {
+  background: #f0c46b;
+  border-color: #f0c46b;
+  color: #21170b;
+}
+
+.game-shell,
+.screen {
+  min-height: 100vh;
+}
+
+.screen {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgb(20 16 13 / 84%), rgb(7 8 10 / 92%)),
+    radial-gradient(circle at 50% 20%, #3d573f, transparent 44%),
+    #15130f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: 72px 20px 28px;
+  position: relative;
+}
+
+.screen-inner {
+  max-width: 760px;
+  text-align: center;
+  width: min(100%, 760px);
+}
+
+.screen-kicker,
+.novel-topbar code {
+  color: #f0c46b;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.title-screen h1,
+.end-screen h1 {
+  font-size: clamp(40px, 8vw, 88px);
+  line-height: 1.05;
+  margin: 8px 0 14px;
+}
+
+.title-screen {
+  background:
+    linear-gradient(180deg, rgb(8 10 12 / 28%), rgb(6 7 9 / 78%)),
+    var(--title-bg) center / cover no-repeat;
+}
+
+.title-vignette {
+  background:
+    radial-gradient(circle at 50% 36%, transparent 0 32%, rgb(0 0 0 / 42%) 74%),
+    linear-gradient(90deg, rgb(0 0 0 / 48%), transparent 30% 70%, rgb(0 0 0 / 48%));
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.title-content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.title-logo {
+  display: block;
+  height: auto;
+  margin: 8px auto 2px;
+  max-width: min(680px, 72vw);
+  width: 100%;
+}
+
+.title-subtitle,
+.end-screen p {
+  color: #d8d2c5;
+  font-size: 18px;
+  margin: 0 auto 28px;
+}
+
+.primary-button,
+.dialogue-box button {
+  background: #f0c46b;
+  border: 0;
+  border-radius: 7px;
+  color: #21170b;
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 44px;
+  padding: 11px 22px;
+}
+
+.novel-screen {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgb(6 8 10 / 16%), rgb(6 7 9 / 24%)),
+    var(--novel-bg) center / cover no-repeat;
+  cursor: pointer;
+  justify-content: flex-start;
+  padding: 70px 48px 32px;
+}
+
+.novel-shade {
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 18%) 0%, transparent 24%, transparent 56%, rgb(0 0 0 / 54%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 24%), transparent 28% 72%, rgb(0 0 0 / 24%));
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.novel-topbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  max-width: 1180px;
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+.novel-topbar span {
+  background: rgb(0 0 0 / 36%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 7px;
+  color: #f7f2e8;
+  padding: 8px 12px;
+}
+
+.stage-layer {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.character-sprite {
+  bottom: 184px;
+  filter: drop-shadow(0 18px 28px rgb(0 0 0 / 52%));
+  max-height: min(62vh, 560px);
+  object-fit: contain;
+  position: absolute;
+}
+
+.main-character {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dialogue-box {
+  background: rgb(15 16 19 / 88%);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 8px;
+  box-shadow: 0 18px 60px rgb(0 0 0 / 34%);
+  bottom: 30px;
+  left: 50%;
+  max-width: 1180px;
+  min-height: 190px;
+  padding: 22px 24px 20px;
+  position: absolute;
+  transform: translateX(-50%);
+  width: min(1180px, calc(100vw - 96px));
+  z-index: 6;
+}
+
+.speaker-name {
+  color: #f0c46b;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.dialogue-box p {
+  color: #fff8ea;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.65;
+  margin: 0 120px 18px 0;
+  min-height: 3.4em;
+}
+
+.dialogue-box button {
+  bottom: 20px;
+  min-width: 76px;
+  position: absolute;
+  right: 22px;
+}
+
+.audio-controls {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  z-index: 210;
+}
+
+.audio-controls button {
+  background: rgb(15 18 24 / 78%);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 7px;
+  color: #f0c46b;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  min-height: 36px;
+  padding: 7px 12px;
+}
+
+.audio-controls span {
+  background: rgb(15 18 24 / 72%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 7px;
+  color: #d8d2c5;
+  font-size: 12px;
+  max-width: 280px;
+  overflow: hidden;
+  padding: 8px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.end-panel {
+  background: rgb(13 15 18 / 70%);
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 8px;
+  padding: 28px;
+}
+
+.tag-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 0 28px;
+}
+
+.tag-preview span {
+  background: rgb(255 255 255 / 9%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 5px;
+  color: #d8d2c5;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.sample-component-preview {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgb(4 6 10 / 78%), rgb(19 14 17 / 92%)),
+    radial-gradient(circle at 24% 20%, rgb(0 224 131 / 18%), transparent 28%),
+    #120f13;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: auto;
+  padding: 74px 18px 28px;
+}
+
+@media (max-width: 680px) {
+  .app-mode-switch {
+    left: 10px;
+    top: 10px;
+  }
+
+  .novel-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dialogue-box {
+    bottom: 18px;
+    padding: 18px;
+    width: calc(100vw - 28px);
+  }
+
+  .dialogue-box p {
+    font-size: 21px;
+    margin-right: 0;
+    min-height: 4.5em;
+  }
+
+  .dialogue-box button {
+    position: static;
+    margin-left: auto;
+  }
+
+  .character-sprite {
+    bottom: 220px;
+    max-height: 42vh;
+  }
+
+  .audio-controls {
+    align-items: flex-end;
+    flex-direction: column;
+    right: 10px;
+    top: 10px;
+  }
+
+  .audio-controls span {
+    max-width: 180px;
+  }
+}

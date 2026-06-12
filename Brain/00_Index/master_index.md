@@ -8,6 +8,7 @@
 |---|---|---|---|
 | Note | app-template | `C:\00_master\APP\Note` | 汎用 Note 原本テンプレート |
 | kanban-note01 | project-app | `C:\00_master\APP\kanban-note01` | 司令塔室専用ノート |
+| novelEngine | project-app | `C:\00_master\APP\novelEngine` | ScenarioBox 専用 NovelEngine |
 | kanban_June | project-app | `C:\00_master\DevApps\kanban_June` | 司令塔モニター |
 
 ## Brain
