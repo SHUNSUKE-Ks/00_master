@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "agent",
+  "id": "scenarioDesigner",
+  "name": "scenarioDesigner",
+  "version": "0.1.0",
+  "status": "draft",
+  "updatedAt": "2026-06-12",
+  "genre": "scenario-design-agent",
+  "description": "CreatorHub\\ScenarioBox のシナリオ試作、世界観整理、scene/beat/branch設計を担当する。",
+  "targetPath": "C:\\00_master\\CreatorHub\\ScenarioBox",
+  "responsibilities": [
+    "scenario brief creation",
+    "worldbuilding organization",
+    "character relationship design",
+    "scene and beat breakdown",
+    "branch and choice design",
+    "visual-design handoff to novelDesigner"
+  ],
+  "inputTypes": [
+    "idea memo",
+    "rough plot",
+    "character note",
+    "worldbuilding fragment",
+    "scene draft"
+  ],
+  "outputs": [
+    "scenario brief",
+    "scene outline",
+    "character relationship map",
+    "branch design note",
+    "visual handoff note"
+  ],
+  "promptFiles": [
+    "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\scenarioDesigner\\prompts\\scenario-brief.md",
+    "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\scenarioDesigner\\prompts\\scene-breakdown.md",
+    "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\scenarioDesigner\\prompts\\visual-handoff.md"
+  ],
+  "relatedAgents": [
+    "novelDesigner"
+  ]
+}

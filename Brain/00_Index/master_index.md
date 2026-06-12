@@ -25,6 +25,13 @@
 | Name | Genre | Path | Memo |
 |---|---|---|---|
 | novelDesigner | visual-design-agent | `C:\00_master\Brain\CommandModules\AgentRoom\modules\novelDesigner` | 画風とノベル用ビジュアル素材の統一 |
+| scenarioDesigner | scenario-design-agent | `C:\00_master\Brain\CommandModules\AgentRoom\modules\scenarioDesigner` | ScenarioBox のシナリオ試作 |
+
+## CreatorHub
+
+| Name | Genre | Path | Memo |
+|---|---|---|---|
+| ScenarioBox | scenario-workspace | `C:\00_master\CreatorHub\ScenarioBox` | シナリオ試作置き場 |
 
 ## 更新ルール
 

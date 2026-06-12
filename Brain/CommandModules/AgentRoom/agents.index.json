@@ -12,6 +12,16 @@
       "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner",
       "entry": "README.md",
       "manifest": "agent.json"
+    },
+    {
+      "id": "scenarioDesigner",
+      "name": "scenarioDesigner",
+      "version": "0.1.0",
+      "status": "draft",
+      "genre": "scenario-design-agent",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\scenarioDesigner",
+      "entry": "README.md",
+      "manifest": "agent.json"
     }
   ]
 }

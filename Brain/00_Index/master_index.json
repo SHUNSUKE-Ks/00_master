@@ -92,6 +92,26 @@
       "updatedAt": "2026-06-12",
       "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\novelDesigner",
       "description": "画風、Character、背景、アイテム、Titleロゴ、Title背景のスタイル統一を担当する agent。"
+    },
+    {
+      "id": "agent-scenario-designer",
+      "name": "scenarioDesigner",
+      "genre": "scenario-design-agent",
+      "kind": "agent",
+      "status": "draft",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\Brain\\CommandModules\\AgentRoom\\modules\\scenarioDesigner",
+      "description": "CreatorHub\\ScenarioBox のシナリオ試作、世界観整理、scene/beat/branch設計を担当する agent。"
+    },
+    {
+      "id": "creatorhub-scenario-box",
+      "name": "ScenarioBox",
+      "genre": "scenario-workspace",
+      "kind": "workspace-folder",
+      "status": "draft",
+      "updatedAt": "2026-06-12",
+      "path": "C:\\00_master\\CreatorHub\\ScenarioBox",
+      "description": "CreatorHub のシナリオ試作置き場。scenarioDesigner が担当する。"
     }
   ]
 }

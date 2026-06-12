@@ -16,6 +16,8 @@
 | `inbox` | 未分類の受信物 |
 | `tech-stack` | 技術スタック、package、外部サービス |
 | `visual-design-agent` | 画風や素材表現の統一を担当する agent |
+| `scenario-design-agent` | 物語、scene、branch、キャラクター関係を整理する agent |
+| `scenario-workspace` | シナリオ試作や構想メモを置く workspace |
 
 ## Kind
 
@@ -27,3 +29,4 @@
 | `skill` | 作業手順や能力 |
 | `hook` | 起動条件や自動反応 |
 | `document` | 説明・設計・学習資料 |
+| `workspace-folder` | 作業や試作のためのフォルダー |
