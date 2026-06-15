@@ -38,7 +38,9 @@ button { font: inherit; cursor: pointer; }
 .deck-nav small { margin-bottom: 12px; color: var(--muted); }
 
 .deck-nav button,
-.mock-page button {
+.mock-page button,
+.doc-links a,
+.doc-card {
   min-height: 38px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -248,6 +250,60 @@ th { color: #f4f7f7; font-size: 13px; }
   overflow: auto;
 }
 
+.doc-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.doc-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  color: var(--accent);
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.doc-card {
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  padding: 14px;
+  text-decoration: none;
+}
+
+.doc-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 65%, var(--border));
+}
+
+.doc-card b {
+  color: var(--accent);
+  font-size: 16px;
+}
+
+.doc-card span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.doc-card code {
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--amber);
+  padding: 3px 7px;
+}
+
 @media (max-width: 900px) {
   .deck { display: block; }
   .deck-nav { position: static; height: auto; }
@@ -255,6 +311,6 @@ th { color: #f4f7f7; font-size: 13px; }
   .screen-layout,
   .mock-card-grid,
   .engine-row,
-  .spec-strip { grid-template-columns: 1fr; }
+  .spec-strip,
+  .docs-grid { grid-template-columns: 1fr; }
 }
-

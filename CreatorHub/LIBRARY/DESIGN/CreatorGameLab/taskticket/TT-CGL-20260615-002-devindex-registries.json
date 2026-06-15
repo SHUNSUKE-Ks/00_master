@@ -1,0 +1,23 @@
+{
+  "ticketId": "TT-CGL-20260615-002-devindex-registries",
+  "projectId": "creator_game_lab",
+  "phase": "scaffold",
+  "title": "_devindexの初期Registryを作る",
+  "scope": "game title、engine sandbox、component view、migration queue、dev save slotの初期JSONを作る。",
+  "acceptance": [
+    "_devindex 配下の5ファイルが存在する",
+    "Title Select / Engine Sandbox / Dev Save Load / Component Registry がJSONから描画できる",
+    "旧100_gamecollectionの本番移植候補はmigration queueに直接入れず、pending scanとして扱う"
+  ],
+  "consoleChecks": [
+    "CG_DEVINDEX_LOAD",
+    "CG_DEVINDEX_FALLBACK"
+  ],
+  "outputFiles": [
+    "C:/00_master/CreatorGameLab/_devindex/game-title.registry.json",
+    "C:/00_master/CreatorGameLab/_devindex/engine-sandbox.registry.json",
+    "C:/00_master/CreatorGameLab/_devindex/component-view.registry.json",
+    "C:/00_master/CreatorGameLab/_devindex/migration-queue.registry.json",
+    "C:/00_master/CreatorGameLab/_devindex/dev-save-slots.json"
+  ]
+}

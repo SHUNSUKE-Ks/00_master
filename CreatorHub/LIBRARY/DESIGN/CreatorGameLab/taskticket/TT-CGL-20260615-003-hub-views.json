@@ -1,0 +1,25 @@
+{
+  "ticketId": "TT-CGL-20260615-003-hub-views",
+  "projectId": "creator_game_lab",
+  "phase": "build",
+  "title": "Hub View 4画面を_devindexから描画する",
+  "scope": "TitleSelectView、EngineSandboxView、DevSaveLoadView、ComponentRegistryViewを作る。",
+  "acceptance": [
+    "Title Selectでタイトルを選択できる",
+    "Engine SandboxでAdventure/Battle/Collection/Isolated Testを選択できる",
+    "Dev Save / LoadでResume Pointを選択できる",
+    "Component RegistryでcomponentKey一覧を確認できる"
+  ],
+  "consoleChecks": [
+    "CG_TITLE_TILE",
+    "CG_ENGINE_CARD",
+    "CG_SAVE_ROW",
+    "CG_COMPONENT_ROW"
+  ],
+  "outputFiles": [
+    "C:/00_master/CreatorGameLab/src/views/TitleSelectView.tsx",
+    "C:/00_master/CreatorGameLab/src/views/EngineSandboxView.tsx",
+    "C:/00_master/CreatorGameLab/src/views/DevSaveLoadView.tsx",
+    "C:/00_master/CreatorGameLab/src/views/ComponentRegistryView.tsx"
+  ]
+}

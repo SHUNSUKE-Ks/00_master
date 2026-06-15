@@ -17,6 +17,7 @@
         <button data-slide="3">03 Dev Save / Load</button>
         <button data-slide="4">04 Workspace Placeholder</button>
         <button data-slide="5">05 Scaffold Map</button>
+        <button data-slide="6">06 Dev Docs</button>
       </aside>
 
       <section class="slides">
@@ -32,13 +33,19 @@
             <img src="../creator_game_lab_layout_concept_2026-06-15.png" alt="CreatorGameLab concept overview" />
             <div class="note-panel">
               <h2>実装では4分割にしない</h2>
-              <p>この画像は全体の雰囲気と情報設計の確認用です。実アプリでは Sidebar + Full Page View として各画面を広く表示します。</p>
+              <p>この画像は全体の雰囲気と情報設計の確認用です。Workspace以外はこのLayoutを基準にし、実アプリでは Sidebar + Full Page View として各画面を広く表示します。</p>
               <ul>
-                <li>Title Select: フルページのタイトルギャラリー</li>
-                <li>Engine Sandbox: フルページの試験室一覧</li>
-                <li>Dev Save / Load: フルページの再開スロット一覧</li>
-                <li>Workspace: 後続開発用Placeholder</li>
+                <li>Title Select: tile-window基調のタイトルギャラリー</li>
+                <li>Engine Sandbox: tile-window基調の試験室一覧</li>
+                <li>Dev Save / Load: tile-window基調の再開スロット一覧</li>
+                <li>Component Registry: Dynamic差し替え候補一覧</li>
+                <li>Workspace: ワイヤーフレームの遷移先だけ確保</li>
               </ul>
+              <div class="doc-links">
+                <a href="../SCAFFOLD_LAYOUT_2026-06-15.md">SCAFFOLD_LAYOUT</a>
+                <a href="../DEVELOPMENT_GUIDE_2026-06-15.md">開発ガイド</a>
+                <a href="../DEVINDEX_SCHEMA_2026-06-15.md">_devindex仕様</a>
+              </div>
             </div>
           </div>
         </article>
@@ -129,7 +136,7 @@
             <span>04</span>
             <div>
               <h1>Workspace Placeholder</h1>
-              <p>NovelGameWorkspace本体は後続Chatで集中開発します。</p>
+              <p>NovelGameWorkspace本体は後続Chatで集中開発します。このScaffoldでは遷移先だけ確保します。</p>
             </div>
           </div>
           <div class="screen-layout workspace-screen">
@@ -163,9 +170,60 @@
                 <tr><td>TitleSelect</td><td>Gallery</td><td>TitleTile</td><td>CG_TITLE_TILE</td><td>TT-title-select</td></tr>
                 <tr><td>EngineSandbox</td><td>Core Engines</td><td>EngineCard</td><td>CG_ENGINE_CARD</td><td>TT-engine-sandbox</td></tr>
                 <tr><td>DevSaveLoad</td><td>Save Slots</td><td>ResumeSlotRow</td><td>CG_SAVE_ROW</td><td>TT-dev-save-load</td></tr>
-                <tr><td>Workspace</td><td>Toolbar</td><td>BackButton</td><td>CG_WORKSPACE_BACK</td><td>TT-workspace-nav</td></tr>
+                <tr><td>Workspace</td><td>Toolbar</td><td>BackButton</td><td>CG_WORKSPACE_BACK</td><td>TT-workspace-wireframe</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="spec-strip">
+            <b>Scaffold docs</b>
+            <span>この画面から `SCAFFOLD_LAYOUT`、`TaskTicket`、`Implementation Checklist` へ辿れるようにします。</span>
+          </div>
+        </article>
+
+        <article class="slide">
+          <div class="slide-head">
+            <span>06</span>
+            <div>
+              <h1>Development Docs Index</h1>
+              <p>Layout確認後、Scaffold化とTaskTicket化へ進むための資料入口です。</p>
+            </div>
+          </div>
+          <div class="docs-grid">
+            <a class="doc-card" href="../creator_game_lab_layout_spec_2026-06-15.md">
+              <b>Layout Spec</b>
+              <span>サンプル画像を元にした画面構成と遷移方針。</span>
+              <code>creator_game_lab_layout_spec_2026-06-15.md</code>
+            </a>
+            <a class="doc-card" href="./screen_specs.md">
+              <b>Screen Specs</b>
+              <span>Screen / Section / Component / Console Prefix / View State Layering。</span>
+              <code>screen_specs.md</code>
+            </a>
+            <a class="doc-card" href="../SCAFFOLD_LAYOUT_2026-06-15.md">
+              <b>SCAFFOLD_LAYOUT</b>
+              <span>ファイル構成、_devindex、TODO、TaskTicket分解。</span>
+              <code>SCAFFOLD_LAYOUT_2026-06-15.md</code>
+            </a>
+            <a class="doc-card" href="../DEVELOPMENT_GUIDE_2026-06-15.md">
+              <b>Development Guide</b>
+              <span>開発前に読む順番、実装境界、状態設計、完了条件。</span>
+              <code>DEVELOPMENT_GUIDE_2026-06-15.md</code>
+            </a>
+            <a class="doc-card" href="../DEVINDEX_SCHEMA_2026-06-15.md">
+              <b>_devindex Schema</b>
+              <span>game-title、engine-sandbox、component-view、migration、save-slotのJSON仕様。</span>
+              <code>DEVINDEX_SCHEMA_2026-06-15.md</code>
+            </a>
+            <a class="doc-card" href="../IMPLEMENTATION_CHECKLIST_2026-06-15.md">
+              <b>Implementation Checklist</b>
+              <span>実装完了前の確認項目。</span>
+              <code>IMPLEMENTATION_CHECKLIST_2026-06-15.md</code>
+            </a>
+            <a class="doc-card" href="../taskticket/">
+              <b>TaskTicket</b>
+              <span>初期実装を4件に分けたJSON ticket。</span>
+              <code>taskticket/*.json</code>
+            </a>
           </div>
         </article>
       </section>
@@ -173,4 +231,3 @@
     <script src="./slides.js"></script>
   </body>
 </html>
-

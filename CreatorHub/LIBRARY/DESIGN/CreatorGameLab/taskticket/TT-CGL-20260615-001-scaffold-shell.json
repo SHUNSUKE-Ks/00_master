@@ -1,0 +1,26 @@
+{
+  "ticketId": "TT-CGL-20260615-001-scaffold-shell",
+  "projectId": "creator_game_lab",
+  "phase": "scaffold",
+  "title": "CreatorGameLabのSolidState Shellを作る",
+  "scope": "C:/00_master/CreatorGameLab にSolidJS + Vite + TypeScriptの最小構成、AppShell、Sidebar、labStateを作る。",
+  "acceptance": [
+    "npm run build が通る",
+    "Sidebarから Title Select / Engine Sandbox / Dev Save Load / Component Registry を選択できる",
+    "App Phase / View Phase / Active Target / View Mode / Interaction State / Overlay State が分離されている"
+  ],
+  "consoleChecks": [
+    "CG_SHELL_NAV",
+    "CG_STATE_VIEW_PHASE",
+    "CG_STATE_ACTIVE_TARGET"
+  ],
+  "blockedBy": [
+    "screen_specs.md",
+    "SCAFFOLD_LAYOUT_2026-06-15.md"
+  ],
+  "outputFiles": [
+    "C:/00_master/CreatorGameLab/src/shell/AppShell.tsx",
+    "C:/00_master/CreatorGameLab/src/shell/Sidebar.tsx",
+    "C:/00_master/CreatorGameLab/src/state/labState.ts"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "ticketId": "TT-CGL-20260615-004-workspace-placeholder",
+  "projectId": "creator_game_lab",
+  "phase": "build",
+  "title": "Workspace PlaceholderとBack遷移を作る",
+  "scope": "Active TargetをWorkspace Placeholderへ渡し、Backで直前のHub画面へ戻る導線だけを作る。Workspace本体は開発しない。",
+  "nonGoals": [
+    "NovelGameWorkspace本体のUI実装",
+    "ゲーム制作エディタ機能の実装",
+    "Title / Dialogue / Escape / SRPG各Workspaceの作り込み"
+  ],
+  "acceptance": [
+    "Title SelectからWorkspace Placeholderへ遷移できる",
+    "Engine SandboxからWorkspace Placeholderへ遷移できる",
+    "Dev Save / LoadからWorkspace Placeholderへ遷移できる",
+    "Backで直前のHub画面へ戻れる",
+    "componentKeyが存在しない場合はFallback表示になる",
+    "Workspace内はワイヤーフレーム表示に留まっている"
+  ],
+  "consoleChecks": [
+    "CG_WORKSPACE_OPEN",
+    "CG_WORKSPACE_BACK",
+    "CG_WORKSPACE_FALLBACK"
+  ],
+  "outputFiles": [
+    "C:/00_master/CreatorGameLab/src/views/WorkspacePlaceholderView.tsx",
+    "C:/00_master/CreatorGameLab/src/components/WorkspaceToolbar.tsx",
+    "C:/00_master/CreatorGameLab/src/registry/componentRegistry.tsx"
+  ]
+}

@@ -8,6 +8,19 @@
 Sidebar + Full Page View
 ```
 
+Workspace以外のHub画面は、サンプル画像の方向性を基準に `tile-window` 調の本番寄せLayoutで作ります。
+Workspaceだけはワイヤーフレームのまま遷移先を確保し、本体機能は実装しません。
+
+## 実装レベル
+
+| Screen | Layout Level | Transition | Function |
+|---|---|---|---|
+| TitleSelect | production-like tile-window | Workspace Placeholderへ遷移 | console commentのみ |
+| EngineSandbox | production-like tile-window | Workspace Placeholderへ遷移 | console commentのみ |
+| DevSaveLoad | production-like tile-window | Workspace Placeholderへ遷移 | console commentのみ |
+| ComponentRegistry | production-like tile-window | detail/preview想定まで | console commentのみ |
+| WorkspacePlaceholder | wireframe | Back遷移のみ | 開発しない |
+
 ## Screen: TitleSelect
 
 目的:
@@ -81,6 +94,8 @@ Action Token:
 
 - 後続のNovelGameWorkspace開発までの仮入口。
 - Back遷移を確認する。
+- Active Targetを受け取れることだけ確認する。
+- Workspace内部の制作機能は、このScaffoldでは実装しない。
 
 Sections:
 
@@ -95,6 +110,41 @@ Action Token:
 - `idle`
 - `workspace_open`
 
+## View State Layering
+
+CreatorGameLabでは、画面内の現在状態をひとつの `currentState` に混ぜない。
+
+```ts
+type AppPhase = "hub" | "workspace";
+type ViewPhase = "titleSelect" | "engineSandbox" | "devSaveLoad" | "componentRegistry" | "activeWorkspace";
+type ViewMode = "index" | "detail" | "preview";
+type InteractionState = "idle" | "hovering" | "selecting" | "opening" | "saving" | "error";
+type OverlayState = "none" | "inspector" | "quickCapture" | "confirm";
+```
+
+| Layer | 初期値 | 役割 |
+|---|---|---|
+| App Phase | `hub` | Hub表示中かWorkspace表示中か |
+| View Phase | `titleSelect` | Sidebarで選択中の画面 |
+| Active Target | `null` | 選択中のtitle / engine / save slot / component |
+| View Mode | `index` | 一覧、詳細、プレビューの表示状態 |
+| Interaction State | `idle` | hover、選択、保存中、エラーなどの一時状態 |
+| Overlay State | `none` | inspector、Quick Capture、確認Dialogなど |
+
+初期実装では、次のStateを持つ。
+
+```ts
+type ActiveTarget =
+  | { kind: "game-title"; id: string; componentKey: string }
+  | { kind: "engine-sandbox"; id: string; componentKey: string }
+  | { kind: "dev-save-slot"; id: string; componentKey: string; routeState?: Record<string, unknown> }
+  | { kind: "component-view"; id: string; componentKey: string }
+  | null;
+```
+
+Backは `viewHistory` を使い、`activeWorkspace` から直前のHub画面へ戻す。
+直前がない場合は `titleSelect` へ戻す。
+
 ## TaskTicket化の考え方
 
 この仕様書の `Screen / Section / Component / Console Prefix` が、後でTaskTicketへ変換されます。
@@ -108,4 +158,3 @@ Component: TitleTile
 Console Prefix: CG_TITLE_TILE
 Ticket: TT-20260615-001-title-tile-interaction
 ```
-
