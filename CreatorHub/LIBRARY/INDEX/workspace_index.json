@@ -1,0 +1,60 @@
+{
+  "workspaceId": "creatorhub_library_game_20260615",
+  "title": "CreatorHub LIBRARY and GAME Index",
+  "updatedAt": "2026-06-15T00:00:00+09:00",
+  "purpose": "NovelGame素材DATABASE、Adventure/Battle/Collection Engine、CreatorGameLabから本番移植までをAIとKanbanが把握するための親目次。",
+  "roots": {
+    "library": "C:/00_master/CreatorHub/LIBRARY",
+    "game": "C:/00_master/GAME",
+    "kanban": "C:/00_master/DevApps/kanban_June",
+    "creatorGameLabCurrent": "C:/202604_claude_workspace/100_gamecollection",
+    "creatorGameLabName": "CreatorGameLab",
+    "shortNovelSource": "C:/Users/enjoy/InBox2026/InBox0601/06_AppList/solidjs-novel-engine-01-short-schema"
+  },
+  "engines": [
+    {
+      "engineId": "adventure_engine",
+      "label": "AdventureEngine",
+      "path": "C:/00_master/GAME/AdventureEngine",
+      "status": "planned",
+      "firstMigrationCandidate": "ShortNovelEngine",
+      "sourcePath": "C:/Users/enjoy/InBox2026/InBox0601/06_AppList/solidjs-novel-engine-01-short-schema",
+      "responsibility": ["novel", "scenario", "dialogue", "choice", "flag", "exploration"]
+    },
+    {
+      "engineId": "battle_engine",
+      "label": "BattleEngine",
+      "path": "C:/00_master/GAME/BattleEngine",
+      "status": "planned",
+      "responsibility": ["battle", "status", "skill", "enemy", "reward"]
+    },
+    {
+      "engineId": "collection_engine",
+      "label": "CollectionEngine",
+      "path": "C:/00_master/GAME/CollectionEngine",
+      "status": "planned",
+      "responsibility": ["collection", "gallery", "unlock", "catalog", "progress"]
+    }
+  ],
+  "libraryDatabases": [
+    "assets.json",
+    "characters.json",
+    "scenarios.json",
+    "collections.json",
+    "orders.json"
+  ],
+  "kanbanViewsToAddLater": [
+    "Engine Index View",
+    "Experiment Index View",
+    "Asset DB View",
+    "Migration Queue View",
+    "Report Index View"
+  ],
+  "entryDocuments": [
+    "C:/00_master/CreatorHub/LIBRARY/README.md",
+    "C:/00_master/CreatorHub/LIBRARY/DOCS/novel_engine_asset_architecture.md",
+    "C:/00_master/CreatorHub/LIBRARY/DOCS/experiment_to_production_flow.md",
+    "C:/00_master/CreatorHub/LIBRARY/DOCS/order_asset_policy.md",
+    "C:/00_master/GAME/README.md"
+  ]
+}

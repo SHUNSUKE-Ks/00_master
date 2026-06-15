@@ -1,0 +1,38 @@
+{
+  "registryId": "reusable_skill_candidates_20260615",
+  "updatedAt": "2026-06-15T00:00:00+09:00",
+  "storageRoot": "C:/00_master/CreatorHub/LIBRARY/REUSE",
+  "policyDoc": "C:/00_master/DevApps/kanban_June/docs/reusable_skill_escape_policy_2026-06-15.md",
+  "skillCandidates": [
+    {
+      "id": "skill_candidate_component_inventory",
+      "title": "CreatorGameLab ComponentView棚卸し",
+      "status": "candidate",
+      "repeatCount": 1,
+      "summary": "実験場のComponentView、依存、入力DB、移植先Engineを一覧化する。",
+      "input": ["sourceRoot", "componentFiles", "packageJson"],
+      "output": ["experiment_registry.json", "component-view.registry.js", "migration candidates"],
+      "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/skill-candidates/component_inventory.md"
+    },
+    {
+      "id": "skill_candidate_asset_prompt_order",
+      "title": "素材発注プロンプト作成",
+      "status": "candidate",
+      "repeatCount": 1,
+      "summary": "既存素材との差分、用途、サイズ、表情差分、受け入れ条件を整理し、orders.jsonへ登録できる形にする。",
+      "input": ["targetUse", "engine", "referenceAssets", "styleNotes"],
+      "output": ["order draft", "image prompt", "acceptance checklist"],
+      "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/skill-candidates/asset_prompt_order.md"
+    }
+  ],
+  "taskPatterns": [
+    {
+      "id": "task_pattern_pre_cleanup_report",
+      "title": "開発前整理レポート",
+      "status": "active",
+      "summary": "削除前に、残すもの、統合するもの、削除候補をレポート化して確認する。",
+      "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/task-patterns/pre_cleanup_report.md"
+    }
+  ]
+}
+

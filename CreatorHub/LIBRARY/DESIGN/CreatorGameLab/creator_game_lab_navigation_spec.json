@@ -1,0 +1,76 @@
+{
+  "specId": "creator_game_lab_navigation_20260615",
+  "title": "CreatorGameLab navigation and view model",
+  "updatedAt": "2026-06-15T00:00:00+09:00",
+  "conceptImage": "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/creator_game_lab_layout_concept_2026-06-15.png",
+  "views": [
+    {
+      "viewId": "titleSelect",
+      "label": "Title Select",
+      "purpose": "ゲームタイトルをサムネイルと進捗付きで選ぶ",
+      "canGoBack": false,
+      "opens": ["activeWorkspace"]
+    },
+    {
+      "viewId": "engineSandbox",
+      "label": "Engine Sandbox",
+      "purpose": "Adventure/Battle/Collection/隔離テスト環境を選ぶ",
+      "canGoBack": false,
+      "opens": ["activeWorkspace"]
+    },
+    {
+      "viewId": "devSaveLoad",
+      "label": "Dev Save / Load",
+      "purpose": "中断した開発作業をスロットから再開する",
+      "canGoBack": false,
+      "opens": ["activeWorkspace"]
+    },
+    {
+      "viewId": "componentRegistry",
+      "label": "Component Registry",
+      "purpose": "Dynamicで差し替え可能なComponentViewを確認する",
+      "canGoBack": false,
+      "opens": ["activeWorkspace"]
+    },
+    {
+      "viewId": "activeWorkspace",
+      "label": "Active Workspace",
+      "purpose": "選択したタイトル、Sandbox、保存スロットの作業画面",
+      "canGoBack": true,
+      "backFallback": "titleSelect"
+    }
+  ],
+  "componentKeys": [
+    "novelTitleScreenEditor",
+    "novelDialogueSceneEditor",
+    "escapeRoomSceneEditor",
+    "srpgEncounterSetup",
+    "emptyPrototypeWorkspace"
+  ],
+  "transitionRules": [
+    {
+      "from": "titleSelect",
+      "action": "openTitle",
+      "to": "activeWorkspace",
+      "history": "push"
+    },
+    {
+      "from": "engineSandbox",
+      "action": "openSandbox",
+      "to": "activeWorkspace",
+      "history": "push"
+    },
+    {
+      "from": "devSaveLoad",
+      "action": "resumeSlot",
+      "to": "activeWorkspace",
+      "history": "push"
+    },
+    {
+      "from": "activeWorkspace",
+      "action": "back",
+      "to": "previous",
+      "history": "pop"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schemaId": "creatorhub_asset_schema_draft_20260615",
+  "updatedAt": "2026-06-15T00:00:00+09:00",
+  "asset": {
+    "assetId": "asset_bg_sample_001",
+    "title": "sample background",
+    "type": "background",
+    "status": "existing",
+    "sourcePath": "C:/00_master/CreatorHub/LIBRARY/MATERIALS/backgrounds/sample.png",
+    "tags": ["novel", "background"],
+    "compatibleEngines": ["AdventureEngine", "CollectionEngine"],
+    "promptId": null,
+    "orderId": null,
+    "licenseNote": "",
+    "metadata": {
+      "width": null,
+      "height": null,
+      "transparent": false,
+      "variantGroup": null
+    }
+  },
+  "scenarioAssetRef": {
+    "scenarioId": "scenario_intro_001",
+    "sceneId": "scene_001",
+    "backgroundAssetId": "asset_bg_sample_001",
+    "characterAssetIds": [],
+    "audioAssetIds": []
+  },
+  "order": {
+    "orderId": "order_asset_001",
+    "title": "new background request",
+    "targetUse": "AdventureEngine scene background",
+    "assetType": "background",
+    "requiredByEngine": "AdventureEngine",
+    "stylePrompt": "",
+    "negativePrompt": "",
+    "references": [],
+    "acceptance": [],
+    "status": "needed",
+    "outputAssetIds": []
+  }
+}
+

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CreatorGameLab Prototype</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="lab-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">CG</span>
+          <div>
+            <strong>CreatorGameLab</strong>
+            <small>hub / hosting shell</small>
+          </div>
+        </div>
+        <nav class="nav-list" aria-label="CreatorGameLab views">
+          <button class="nav-item active" data-view="titleSelect">Title Select</button>
+          <button class="nav-item" data-view="engineSandbox">Engine Sandbox</button>
+          <button class="nav-item" data-view="devSaveLoad">Dev Save / Load</button>
+          <button class="nav-item" data-view="componentRegistry">Component Registry</button>
+        </nav>
+        <div class="sidebar-foot">
+          <small>Environment</small>
+          <b>Design Prototype</b>
+        </div>
+      </aside>
+
+      <main class="main-surface">
+        <section class="view active" data-panel="titleSelect">
+          <header class="view-head">
+            <div>
+              <h1>Title Select</h1>
+              <p>制作するゲームタイトルを選び、進行中の作業へ入ります。</p>
+            </div>
+            <button class="primary-action">New Title</button>
+          </header>
+          <div class="title-grid" id="titleGrid"></div>
+        </section>
+
+        <section class="view" data-panel="engineSandbox">
+          <header class="view-head">
+            <div>
+              <h1>Engine Sandbox</h1>
+              <p>本番移植前に、Engine単位で隔離された検証環境を開きます。</p>
+            </div>
+          </header>
+          <div class="engine-grid" id="engineGrid"></div>
+          <div class="test-list" id="testList"></div>
+        </section>
+
+        <section class="view" data-panel="devSaveLoad">
+          <header class="view-head">
+            <div>
+              <h1>Dev Save / Load</h1>
+              <p>複数タイトルをまたいで、中断した開発作業を再開します。</p>
+            </div>
+            <button class="primary-action">New Save</button>
+          </header>
+          <div class="save-table" id="saveTable"></div>
+        </section>
+
+        <section class="view" data-panel="componentRegistry">
+          <header class="view-head">
+            <div>
+              <h1>Component Registry</h1>
+              <p>Dynamicで差し替え可能なComponentViewを確認します。</p>
+            </div>
+          </header>
+          <div class="registry-list" id="registryList"></div>
+        </section>
+
+        <section class="view workspace-view" data-panel="activeWorkspace">
+          <header class="workspace-toolbar">
+            <button class="back-button" id="backButton">Back</button>
+            <div>
+              <strong id="workspaceTitle">Workspace Placeholder</strong>
+              <small id="workspaceCrumb">Workspace will be built in a focused pass</small>
+            </div>
+            <button class="play-button">Save State</button>
+          </header>
+          <div class="workspace-layout">
+            <aside class="hierarchy-panel">
+              <h2>Hierarchy</h2>
+              <button>Scenario</button>
+              <button>Characters</button>
+              <button>Backgrounds</button>
+              <button>Events</button>
+            </aside>
+            <section class="workspace-canvas" id="workspaceCanvas">
+              <div class="canvas-preview">
+                <div class="workspace-placeholder">
+                  <h2>NovelGame Workspace</h2>
+                  <p>この領域は後続開発で Title / Dialogue / Escape / SRPG の制作ページにします。</p>
+                </div>
+              </div>
+              <div class="console-strip">Reserved componentKey: <code id="componentKey">novelDialogueSceneEditor</code></div>
+            </section>
+            <aside class="inspector-panel">
+              <h2>Inspector</h2>
+              <label>
+                Mode
+                <select>
+                  <option>Local</option>
+                  <option>Shared</option>
+                </select>
+              </label>
+              <label>
+                Progress
+                <input type="range" min="0" max="100" value="42" />
+              </label>
+              <button class="primary-action">Add Component</button>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>

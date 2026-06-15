@@ -1,0 +1,22 @@
+{
+  "registryId": "experiment_registry_20260615",
+  "updatedAt": "2026-06-15T00:00:00+09:00",
+  "sourceRoot": "C:/202604_claude_workspace/100_gamecollection",
+  "policyDoc": "C:/00_master/CreatorHub/LIBRARY/DOCS/experiment_to_production_flow.md",
+  "features": [
+    {
+      "featureId": "feature_100_gamecollection_inventory_pending_scan",
+      "title": "100_gamecollection existing feature inventory",
+      "status": "idea",
+      "sourcePath": "C:/202604_claude_workspace/100_gamecollection",
+      "targetEngine": "undecided",
+      "componentViews": [],
+      "dependencies": [],
+      "assetRefs": [],
+      "dbRefs": [],
+      "notes": "外部ワークスペースのため、次の調査で機能・ComponentView・依存関係を洗い出す。",
+      "lastCheckedAt": null
+    }
+  ]
+}
+
