@@ -2,6 +2,8 @@
   "ticketId": "TT-CGL-20260615-004-workspace-placeholder",
   "projectId": "creator_game_lab",
   "phase": "build",
+  "status": "implemented",
+  "implementedAt": "2026-06-18",
   "title": "Workspace PlaceholderとBack遷移を作る",
   "scope": "Active TargetをWorkspace Placeholderへ渡し、Backで直前のHub画面へ戻る導線だけを作る。Workspace本体は開発しない。",
   "nonGoals": [
@@ -26,5 +28,6 @@
     "C:/00_master/CreatorGameLab/src/views/WorkspacePlaceholderView.tsx",
     "C:/00_master/CreatorGameLab/src/components/WorkspaceToolbar.tsx",
     "C:/00_master/CreatorGameLab/src/registry/componentRegistry.tsx"
-  ]
+  ],
+  "implementationNotes": "Workspace本体は作らず、ワイヤーフレーム、Active Target表示、componentKey確認、Back遷移だけを実装した。"
 }

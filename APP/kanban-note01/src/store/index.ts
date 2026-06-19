@@ -26,6 +26,8 @@ export type AppState = {
   selectedNutrientId: string | null
   selectedBlogId: string | null
   selectedMemoId: string | null
+  selectedNotebookId: string | null
+  selectedNotebookPageId: string | null
   sidebarOpen: boolean
   settingsPanelOpen: boolean
   galleryPanelOpen: boolean
@@ -47,9 +49,16 @@ export type AppState = {
 
 const FONT_SIZE_PX: Record<FontSize, number> = { s: 13, m: 16, l: 19, xl: 22 }
 
+function initFontSize(): FontSize {
+  if (typeof window === 'undefined') return 'l'
+  return window.innerWidth < 768 || (window.innerHeight <= 500 && window.matchMedia('(orientation: landscape)').matches)
+    ? 'm'
+    : 'l'
+}
+
 function initDarkMode(): boolean {
   const saved = localStorage.getItem('note00-dark-mode')
-  const isDark = saved === 'true'
+  const isDark = saved === null ? true : saved === 'true'
   if (isDark) document.documentElement.classList.add('dark')
   return isDark
 }
@@ -60,19 +69,19 @@ function initSidebarOpen(): boolean {
 
 export const DB01_COLUMNS_DEFAULT: ColumnDef[] = [
   { id: 'name',        label: 'Title',       visible: true,  locked: true  },
-  { id: 'category',    label: 'Type',        visible: true,  locked: false },
-  { id: 'description', label: 'Summary',     visible: true,  locked: false },
-  { id: 'symptoms',    label: 'Status',      visible: true,  locked: false },
-  { id: 'effects',     label: 'Actions',     visible: true,  locked: false },
-  { id: 'ingredients', label: 'Relations',   visible: true,  locked: false },
+  { id: 'category',    label: 'Genre',       visible: true,  locked: false },
+  { id: 'description', label: 'Synopsis',    visible: true,  locked: false },
+  { id: 'symptoms',    label: 'State',       visible: true,  locked: false },
+  { id: 'effects',     label: 'Plot',        visible: true,  locked: false },
+  { id: 'ingredients', label: 'Characters',  visible: true,  locked: false },
   { id: 'image',       label: 'Cover',       visible: false, locked: false },
   { id: 'memo',        label: 'Note',        visible: true,  locked: false },
 ]
 
 export const DB02_COLUMNS_DEFAULT: ColumnDef[] = [
-  { id: 'name',        label: 'Tag',          visible: true,  locked: true  },
-  { id: 'description', label: 'Description',  visible: true,  locked: false },
-  { id: 'products',    label: 'Linked Notes', visible: true,  locked: false },
+  { id: 'name',        label: 'Character',    visible: true,  locked: true  },
+  { id: 'description', label: 'Profile',      visible: true,  locked: false },
+  { id: 'products',    label: 'Linked Titles', visible: true, locked: false },
   { id: 'memo',        label: 'Memo',         visible: true,  locked: false },
 ]
 
@@ -90,18 +99,137 @@ export const DB10_COLUMNS_DEFAULT: ColumnDef[] = [
 ]
 
 const INITIAL_BLOGS: Blog[] = []
+const INITIAL_MEMOS: Memo[] = [
+  {
+    id: 'scenario-note-initial',
+    title: 'scenarioノート',
+    body: '',
+    tags: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+const INITIAL_NOTEBOOKS: Notebook[] = [
+  {
+    id: 'story-ideas',
+    title: 'アイディア帳',
+    storyOnly: true,
+    pages: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'story-tensai-mage',
+    title: '天災魔法使い',
+    cover: '/story-covers/tensai-mage.webp',
+    storyOnly: true,
+    pages: [
+      {
+        id: 'tensai-task01',
+        title: 'Task01',
+        body: '',
+        sourcePath: '/story-notebooks/tensai-mage/task01.md',
+        order: 0,
+      },
+      {
+        id: 'tensai-chapter-1-draft',
+        title: '天災_第一章 短稿',
+        body: '',
+        sourcePath: '/story-notebooks/tensai-mage/chapter-1-draft.md',
+        order: 1,
+      },
+      {
+        id: 'tensai-chapter-1-full',
+        title: '天災_第一章',
+        body: '',
+        sourcePath: '/story-notebooks/tensai-mage/chapter-1-full.md',
+        order: 2,
+      },
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'story-future-blacksmith',
+    title: '未来を打ち直す鍛冶屋',
+    cover: '/story-covers/future-blacksmith.webp',
+    storyOnly: true,
+    pages: [
+      {
+        id: 'future-character-idialog',
+        title: 'Character IdiaLog',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/character-idialog.md',
+        order: 0,
+      },
+      {
+        id: 'future-world-master',
+        title: 'マスター設定書',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/world-master.md',
+        order: 1,
+      },
+      {
+        id: 'future-scenario-chat-log',
+        title: 'IdiaChatログ',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/scenario-chat-log.md',
+        order: 2,
+      },
+      {
+        id: 'future-episode-1-samples',
+        title: '第一話 サンプル集',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/episode-1-samples.md',
+        order: 3,
+      },
+      {
+        id: 'future-episode-1-directions',
+        title: '第一話 ト書き',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/episode-1-directions.md',
+        order: 4,
+      },
+      {
+        id: 'future-plot-episodes-1-3',
+        title: 'プロットシート 第1-3話',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/plot-episodes-1-3.md',
+        order: 5,
+      },
+      {
+        id: 'future-devlog-idialog',
+        title: 'DevLog IdiaLog',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/devlog-idialog.md',
+        order: 6,
+      },
+      {
+        id: 'future-root-idialog',
+        title: 'Root IdiaLog',
+        body: '',
+        sourcePath: '/story-notebooks/future-blacksmith/root-idialog.md',
+        order: 7,
+      },
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
 
 const [state, setState] = createStore<AppState>({
-  page: 'db01',
+  page: 'notebook',
   galleryReturnPage: 'db01',
   blogMode: 'memo',
-  fontSize: 'xl',
+  fontSize: initFontSize(),
   darkMode: initDarkMode(),
   dbView: 'table',
   selectedProductId: null,
   selectedNutrientId: null,
   selectedBlogId: null,
   selectedMemoId: null,
+  selectedNotebookId: INITIAL_NOTEBOOKS[0]?.id ?? null,
+  selectedNotebookPageId: null,
   sidebarOpen: initSidebarOpen(),
   settingsPanelOpen: false,
   galleryPanelOpen: false,
@@ -109,17 +237,17 @@ const [state, setState] = createStore<AppState>({
   products: PRODUCTS,
   nutrients: NUTRIENTS,
   symptoms: SYMPTOMS,
-  memos: [],
+  memos: INITIAL_MEMOS,
   blogs: INITIAL_BLOGS,
   trashBlogs: [],
-  notebooks: [],
+  notebooks: INITIAL_NOTEBOOKS,
   db01Columns: DB01_COLUMNS_DEFAULT,
   db02Columns: DB02_COLUMNS_DEFAULT,
   db03Columns: DB03_COLUMNS_DEFAULT,
   db10Columns: DB10_COLUMNS_DEFAULT,
   dbTitles: {
-    db01: 'Note DB',
-    db02: 'Tag DB',
+    db01: 'Title',
+    db02: 'Character',
   },
   dbStatus: 'idle',
 })
@@ -225,12 +353,12 @@ export function updateProduct(id: string, patch: Partial<Product>): void {
 }
 
 export function addProduct(type = 'note'): string {
-  const id = `NOTE-${String(state.products.length + 1).padStart(3, '0')}`
+  const id = `TITLE-${String(state.products.length + 1).padStart(3, '0')}`
   const product: Product = {
     id,
-    name: 'Untitled note item',
+    name: 'Untitled title',
     image: '',
-    category: type.trim() || 'note',
+    category: type.trim() || 'scenario',
     description: '',
     price: 0,
     volume: '',
@@ -252,10 +380,10 @@ export function updateNutrient(id: string, patch: Partial<Nutrient>): void {
 }
 
 export function addNutrient(): string {
-  const id = `TAG-${String(state.nutrients.length + 1).padStart(3, '0')}`
+  const id = `CHAR-${String(state.nutrients.length + 1).padStart(3, '0')}`
   const nutrient: Nutrient = {
     id,
-    name: 'Untitled tag',
+    name: 'Untitled character',
     description: '',
     productIds: [],
     memo: '',

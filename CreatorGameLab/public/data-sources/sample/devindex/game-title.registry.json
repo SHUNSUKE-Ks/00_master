@@ -1,0 +1,134 @@
+{
+  "registryId": "game_title_registry_20260618",
+  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "titles": [
+    {
+      "titleId": "realm_of_aether",
+      "title": "Realm of Aether",
+      "status": "prototype",
+      "engine": "AdventureEngine",
+      "engineSlots": {
+        "adventure": {
+          "engineId": "AdventureEngine",
+          "modelId": "adventure_novel_core",
+          "version": "0.1.0",
+          "status": "selected"
+        },
+        "battle": {
+          "engineId": "BattleEngine",
+          "modelId": "battle_turn_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        },
+        "collection": {
+          "engineId": "CollectionEngine",
+          "modelId": "collection_loop_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        }
+      },
+      "layoutProfileId": "android_portrait_standard",
+      "progressPercent": 72,
+      "theme": "adventure",
+      "lastEditedAt": "2026-06-18T09:20:00+09:00",
+      "componentKey": "novelDialogueSceneEditor",
+      "latestSaveSlotId": "save_slot_realm_001"
+    },
+    {
+      "titleId": "steel_horizon",
+      "title": "Steel Horizon",
+      "status": "prototype",
+      "engine": "BattleEngine",
+      "engineSlots": {
+        "adventure": {
+          "engineId": "AdventureEngine",
+          "modelId": "adventure_novel_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        },
+        "battle": {
+          "engineId": "BattleEngine",
+          "modelId": "battle_turn_core",
+          "version": "0.1.0",
+          "status": "selected"
+        },
+        "collection": {
+          "engineId": "CollectionEngine",
+          "modelId": "collection_loop_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        }
+      },
+      "layoutProfileId": "android_landscape_standard",
+      "progressPercent": 48,
+      "theme": "battle",
+      "lastEditedAt": "2026-06-17T22:10:00+09:00",
+      "componentKey": "battleScenarioSandbox",
+      "latestSaveSlotId": "save_slot_steel_001"
+    },
+    {
+      "titleId": "pixel_harvest",
+      "title": "Pixel Harvest",
+      "status": "planning",
+      "engine": "CollectionEngine",
+      "engineSlots": {
+        "adventure": {
+          "engineId": "AdventureEngine",
+          "modelId": "adventure_novel_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        },
+        "battle": {
+          "engineId": "BattleEngine",
+          "modelId": "battle_turn_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        },
+        "collection": {
+          "engineId": "CollectionEngine",
+          "modelId": "collection_loop_core",
+          "version": "0.1.0",
+          "status": "selected"
+        }
+      },
+      "layoutProfileId": "android_portrait_standard",
+      "progressPercent": 31,
+      "theme": "collection",
+      "lastEditedAt": "2026-06-16T19:45:00+09:00",
+      "componentKey": "collectionLoopPlanner",
+      "latestSaveSlotId": "save_slot_pixel_001"
+    },
+    {
+      "titleId": "neon_district",
+      "title": "Neon District",
+      "status": "idea",
+      "engine": "AdventureEngine",
+      "engineSlots": {
+        "adventure": {
+          "engineId": "AdventureEngine",
+          "modelId": "adventure_exploration_plus",
+          "version": "0.2.0",
+          "status": "planned"
+        },
+        "battle": {
+          "engineId": "BattleEngine",
+          "modelId": "battle_turn_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        },
+        "collection": {
+          "engineId": "CollectionEngine",
+          "modelId": "collection_crafting_plus",
+          "version": "0.2.0",
+          "status": "planned"
+        }
+      },
+      "layoutProfileId": "desktop_editor_standard",
+      "progressPercent": 18,
+      "theme": "neon",
+      "lastEditedAt": "2026-06-15T21:12:00+09:00",
+      "componentKey": "emptyPrototypeWorkspace",
+      "latestSaveSlotId": null
+    }
+  ]
+}

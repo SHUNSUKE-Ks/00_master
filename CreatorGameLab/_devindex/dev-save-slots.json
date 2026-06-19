@@ -1,0 +1,45 @@
+{
+  "registryId": "dev_save_slots_20260618",
+  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "slots": [
+    {
+      "slotId": "save_slot_realm_001",
+      "targetTitleId": "realm_of_aether",
+      "label": "Overworld / Verdant Plains",
+      "resumePoint": "chapter_01 / overworld_verdant_plains",
+      "componentKey": "novelDialogueSceneEditor",
+      "routeState": {
+        "sceneId": "overworld_verdant_plains",
+        "lineId": "line_012"
+      },
+      "memo": "会話ログと探索導線の表示確認中。",
+      "updatedAt": "2026-06-18T09:20:00+09:00"
+    },
+    {
+      "slotId": "save_slot_steel_001",
+      "targetTitleId": "steel_horizon",
+      "label": "Mission 04 / Iron Ridge",
+      "resumePoint": "mission_04 / combat_setup",
+      "componentKey": "battleScenarioSandbox",
+      "routeState": {
+        "missionId": "mission_04",
+        "encounterId": "iron_ridge"
+      },
+      "memo": "BattleEngineへの依存境界を確認する。",
+      "updatedAt": "2026-06-17T22:10:00+09:00"
+    },
+    {
+      "slotId": "save_slot_pixel_001",
+      "targetTitleId": "pixel_harvest",
+      "label": "Farm / Spring Day",
+      "resumePoint": "farm_loop / collection_table",
+      "componentKey": "collectionLoopPlanner",
+      "routeState": {
+        "loopId": "spring_day",
+        "tableId": "seed_collection"
+      },
+      "memo": "CollectionEngineの収集ループを棚卸しする。",
+      "updatedAt": "2026-06-16T19:45:00+09:00"
+    }
+  ]
+}

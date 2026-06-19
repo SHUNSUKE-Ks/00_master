@@ -66,6 +66,8 @@ export type GalleryPhoto = {
 export type Notebook = {
   id?: string
   title: string
+  cover?: string
+  storyOnly?: boolean
   pages: NotebookPage[]
   createdAt: Date
   updatedAt: Date
@@ -75,6 +77,7 @@ export type NotebookPage = {
   id: string
   title: string
   body: string
+  sourcePath?: string
   order: number
 }
 

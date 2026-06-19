@@ -6,6 +6,7 @@ import { exportLocalWorkspace } from '../dataBridge/localExport'
 const PAGE_LABELS: Record<Page, string> = {
   memo:     '📝 メモ',
   upnote:   'UPNOTE',
+  scenarioBook: 'ScenarioBook',
   db01:     'DB01 Note DB',
   db02:     'DB02 Tag DB',
   db03:     'DB03 Relation',

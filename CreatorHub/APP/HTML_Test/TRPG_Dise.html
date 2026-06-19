@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Dual Dice - Wood Tray</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        #ui {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #8d6e63;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 0 #5d4037;
+            transition: all 0.1s;
+        }
+
+        button:hover {
+            background: #a1887f;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        #result-display {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #d7ccc8;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+
+    <div id="result-display">合計: -</div>
+    <div id="ui">
+        <button id="roll-btn">ダイスを投げる</button>
+    </div>
+
+    <script>
+        // --- 1. シーン・カメラ・レンダラー ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // 斜め上からの視点
+        camera.position.set(10, 14, 10);
+        camera.lookAt(0, -1, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // --- 2. 照明 ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        const spotLight = new THREE.SpotLight(0xffffff, 0.8);
+        spotLight.position.set(10, 20, 10);
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        scene.add(spotLight);
+
+        // --- 3. 木製トレイ（箱）の作成 ---
+        function createWoodMaterial() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            // ベースの茶色
+            ctx.fillStyle = '#5d4037';
+            ctx.fillRect(0, 0, 256, 256);
+            // 木目風のテクスチャ
+            for (let i = 0; i < 100; i++) {
+                ctx.strokeStyle = `rgba(62, 39, 35, ${Math.random() * 0.5})`;
+                ctx.lineWidth = Math.random() * 5;
+                const y = Math.random() * 256;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(256, y + (Math.random() - 0.5) * 20);
+                ctx.stroke();
+            }
+            const texture = new THREE.CanvasTexture(canvas);
+            return new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8 });
+        }
+
+        const woodMat = createWoodMaterial();
+        const trayGroup = new THREE.Group();
+
+        // 底板
+        const floor = new THREE.Mesh(new THREE.BoxGeometry(12, 0.5, 12), woodMat);
+        floor.receiveShadow = true;
+        trayGroup.add(floor);
+
+        // 壁
+        const wallGeomH = new THREE.BoxGeometry(12.5, 1.5, 0.5);
+        const wallGeomV = new THREE.BoxGeometry(0.5, 1.5, 12.5);
+
+        const walls = [
+            { pos: [0, 0.5, 6], geo: wallGeomH },
+            { pos: [0, 0.5, -6], geo: wallGeomH },
+            { pos: [6, 0.5, 0], geo: wallGeomV },
+            { pos: [-6, 0.5, 0], geo: wallGeomV }
+        ];
+
+        walls.forEach(w => {
+            const wall = new THREE.Mesh(w.geo, woodMat);
+            wall.position.set(...w.pos);
+            wall.castShadow = true;
+            wall.receiveShadow = true;
+            trayGroup.add(wall);
+        });
+        scene.add(trayGroup);
+
+        // --- 4. ダイスの作成 ---
+        function createDiceFace(number) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(0, 0, 128, 128);
+            ctx.fillStyle = (number === 1) ? '#d32f2f' : '#212121';
+            const dot = (x, y) => {
+                ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI * 2); ctx.fill();
+            };
+            const c = 64, q1 = 32, q3 = 96;
+            const dots = {
+                1: [[c, c]], 2: [[q1, q1], [q3, q3]], 3: [[q1, q1], [c, c], [q3, q3]],
+                4: [[q1, q1], [q1, q3], [q3, q1], [q3, q3]],
+                5: [[q1, q1], [q1, q3], [c, c], [q3, q1], [q3, q3]],
+                6: [[q1, q1], [q1, c], [q1, q3], [q3, q1], [q3, c], [q3, q3]]
+            };
+            dots[number].forEach(p => dot(p[0], p[1]));
+            return new THREE.MeshStandardMaterial({ map: new THREE.CanvasTexture(canvas), roughness: 0.4 });
+        }
+
+        const diceMaterials = [
+            createDiceFace(1), createDiceFace(6), createDiceFace(2),
+            createDiceFace(5), createDiceFace(3), createDiceFace(4)
+        ];
+        const faceRotations = {
+            1: [0, -Math.PI / 2, 0], 6: [0, Math.PI / 2, 0],
+            2: [Math.PI / 2, 0, 0], 5: [-Math.PI / 2, 0, 0],
+            3: [0, 0, 0], 4: [0, Math.PI, 0]
+        };
+
+        function createDiceMesh() {
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 1.2), diceMaterials);
+            mesh.castShadow = true;
+            mesh.position.y = -5; // 最初は隠しておく
+            return mesh;
+        }
+
+        const dice1 = createDiceMesh();
+        const dice2 = createDiceMesh();
+        scene.add(dice1);
+        scene.add(dice2);
+
+        // --- 5. アニメーションロジック ---
+        let isRolling = false;
+        let rollStartTime = 0;
+        const duration = 1200;
+        const rollData = [{}, {}];
+
+        function startRoll() {
+            if (isRolling) return;
+
+            const v1 = Math.floor(Math.random() * 6) + 1;
+            const v2 = Math.floor(Math.random() * 6) + 1;
+
+            document.getElementById('result-display').style.opacity = '0';
+
+            [dice1, dice2].forEach((d, i) => {
+                const val = (i === 0) ? v1 : v2;
+                const targetRot = faceRotations[val];
+
+                rollData[i] = {
+                    obj: d,
+                    startPos: [8 + i * 2, 10, 8 + i * 2], // 画面外（右上）から
+                    endPos: [(Math.random() - 0.5) * 6, 0.8, (Math.random() - 0.5) * 6],
+                    startRot: [Math.random() * 10, Math.random() * 10, Math.random() * 10],
+                    endRot: [
+                        targetRot[0] + Math.PI * 4,
+                        targetRot[1] + Math.PI * 4,
+                        targetRot[2] + Math.PI * 4
+                    ]
+                };
+            });
+
+            rollStartTime = performance.now();
+            isRolling = true;
+
+            setTimeout(() => {
+                const resUI = document.getElementById('result-display');
+                resUI.innerText = `合計: ${v1 + v2} (${v1}+${v2})`;
+                resUI.style.opacity = '1';
+            }, duration);
+        }
+
+        document.getElementById('roll-btn').addEventListener('click', startRoll);
+
+        function animate(time) {
+            requestAnimationFrame(animate);
+            if (isRolling) {
+                let elapsed = time - rollStartTime;
+                let t = Math.min(elapsed / duration, 1);
+
+                // Back out easing (少し跳ねる感じ)
+                const ease = 1 - Math.pow(1 - t, 3);
+
+                rollData.forEach(data => {
+                    // ポジション（放物線）
+                    data.obj.position.x = data.startPos[0] + (data.endPos[0] - data.startPos[0]) * ease;
+                    data.obj.position.z = data.startPos[2] + (data.endPos[2] - data.startPos[2]) * ease;
+                    // Y軸は放物線を描く
+                    const jump = Math.sin(t * Math.PI) * 5;
+                    data.obj.position.y = (data.startPos[1] + (data.endPos[1] - data.startPos[1]) * t) + (jump * (1 - t));
+
+                    // 回転
+                    data.obj.rotation.x = data.startRot[0] + (data.endRot[0] - data.startRot[0]) * ease;
+                    data.obj.rotation.y = data.startRot[1] + (data.endRot[1] - data.startRot[1]) * ease;
+                    data.obj.rotation.z = data.startRot[2] + (data.endRot[2] - data.startRot[2]) * ease;
+                });
+
+                if (t === 1) isRolling = false;
+            }
+            renderer.render(scene, camera);
+        }
+
+        requestAnimationFrame(animate);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>

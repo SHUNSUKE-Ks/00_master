@@ -4,6 +4,10 @@ import { PRODUCTS } from '../db/products'
 import { NUTRIENTS } from '../db/nutrients'
 import { state, setState, addMemo, updateMemo, deleteMemo } from '../store'
 import { kanbanMemoInboxEnabled, sendMemoToKanbanMemoInbox } from '../db/firebase'
+import CharacterInputSection from '../components/CharacterInputSection'
+import CalloutInputSection from '../components/CalloutInputSection'
+import NotionCalloutQuickInsert from '../components/NotionCalloutQuickInsert'
+import { dialogueIndent, escapeDialogueToNextParagraph, formatDialogueLine } from '../utils/dialogueFormat'
 
 let saveTimer: ReturnType<typeof setTimeout>
 
@@ -12,16 +16,43 @@ function scheduleFirestoreSave(id: string, patch: Parameters<typeof updateMemo>[
   saveTimer = setTimeout(() => updateMemo(id, patch), 800)
 }
 
+function formatCurrentLine(
+  value: string,
+  selectionStart: number,
+  selectionEnd: number,
+  prefix: string
+): { value: string; selectionStart: number; selectionEnd: number } {
+  const lineStart = value.lastIndexOf('\n', Math.max(0, selectionStart - 1)) + 1
+  const lineEndIndex = value.indexOf('\n', selectionStart)
+  const lineEnd = lineEndIndex === -1 ? value.length : lineEndIndex
+  const line = value.slice(lineStart, lineEnd)
+  const cleanLine = line.replace(/^(#{1,6}\s+|- |\d+\.\s+)/, '')
+  const nextLine = `${prefix}${cleanLine}`
+  const nextValue = `${value.slice(0, lineStart)}${nextLine}${value.slice(lineEnd)}`
+  const delta = nextLine.length - line.length
+
+  return {
+    value: nextValue,
+    selectionStart: Math.max(lineStart + prefix.length, selectionStart + delta),
+    selectionEnd: Math.max(lineStart + prefix.length, selectionEnd + delta),
+  }
+}
+
+
 const PageMemo: Component = () => {
-  const [selectedId, setSelectedId] = createSignal<string | null>(null)
+  const [selectedId, setSelectedId] = createSignal<string | null>(state.selectedMemoId ?? state.memos[0]?.id ?? null)
   const isMobile = () => window.innerWidth < 768
   const [mobilePanel, setMobilePanel] = createSignal<'list' | 'editor'>('list')
   const [sendStatus, setSendStatus] = createSignal<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  let bodyTextareaRef: HTMLTextAreaElement | undefined
 
   const [tagPickerOpen, setTagPickerOpen] = createSignal(false)
   const [tagPickerTab, setTagPickerTab] = createSignal<'product' | 'nutrient'>('product')
   const [tagPickerSelected, setTagPickerSelected] = createSignal<Tag[]>([])
   const [tagPickerSearch, setTagPickerSearch] = createSignal('')
+  const [characterPickerOpen, setCharacterPickerOpen] = createSignal(false)
+  const [characterSearch, setCharacterSearch] = createSignal('')
+  const [notionCalloutOpen, setNotionCalloutOpen] = createSignal(false)
 
   const selected = () => state.memos.find((m) => m.id === selectedId())
 
@@ -38,9 +69,61 @@ const PageMemo: Component = () => {
     scheduleFirestoreSave(id, patch)
   }
 
+  function handleBodyKeyDown(event: KeyboardEvent & { currentTarget: HTMLTextAreaElement }) {
+    if (event.key === 'Enter' && event.ctrlKey && !event.altKey && !event.metaKey) {
+      const textarea = event.currentTarget
+      const next = escapeDialogueToNextParagraph(textarea.value, textarea.selectionStart)
+      if (next) {
+        event.preventDefault()
+        handleTextInput('body', next.value)
+        queueMicrotask(() => textarea.setSelectionRange(next.cursor, next.cursor))
+      }
+      return
+    }
+
+    if (event.altKey && !event.ctrlKey && !event.metaKey && event.key.toLowerCase() === 'h') {
+      event.preventDefault()
+      setNotionCalloutOpen(true)
+      return
+    }
+
+    if (event.key === 'Enter' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      const textarea = event.currentTarget
+      const indent = dialogueIndent(textarea.value, textarea.selectionStart)
+      if (indent !== null) {
+        event.preventDefault()
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const nextValue = `${textarea.value.slice(0, start)}\n${indent}${textarea.value.slice(end)}`
+        const nextCursor = start + 1 + indent.length
+        handleTextInput('body', nextValue)
+        queueMicrotask(() => textarea.setSelectionRange(nextCursor, nextCursor))
+      }
+      return
+    }
+
+    if (!event.ctrlKey || event.altKey || event.metaKey) return
+
+    const prefixes: Record<string, string | undefined> = {
+      '1': '# ',
+      '2': '## ',
+      '3': '### ',
+      '7': '- ',
+      '8': '1. ',
+    }
+    const prefix = prefixes[event.key]
+    if (!prefix) return
+
+    event.preventDefault()
+    const textarea = event.currentTarget
+    const next = formatCurrentLine(textarea.value, textarea.selectionStart, textarea.selectionEnd, prefix)
+    handleTextInput('body', next.value)
+    queueMicrotask(() => textarea.setSelectionRange(next.selectionStart, next.selectionEnd))
+  }
+
   async function addNewMemo() {
     const now = new Date()
-    const data = { title: '新しいメモ', body: '', tags: [], createdAt: now, updatedAt: now }
+    const data = { title: 'scenarioノート', body: '', tags: [], createdAt: now, updatedAt: now }
     const id = await addMemo(data)
     setSelectedId(id)
     if (isMobile()) setMobilePanel('editor')
@@ -64,6 +147,16 @@ const PageMemo: Component = () => {
       setSendStatus('error')
     }
   }
+
+  const SendIcon = () => (
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4 shrink-0" fill="none">
+      <path
+        d="M20.5 3.5 3.75 10.9c-.78.34-.75 1.46.05 1.76l6.18 2.31 2.32 6.19c.3.8 1.42.83 1.76.05L21.5 4.5c.27-.62-.38-1.27-1-.99Z"
+        fill="currentColor"
+      />
+      <path d="m10 15 4.2-4.2" stroke="#2563eb" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+  )
 
   function removeTag(tagName: string) {
     const id = selectedId()
@@ -91,6 +184,62 @@ const PageMemo: Component = () => {
     setTagPickerOpen(false)
     setTagPickerSelected([])
     setTagPickerSearch('')
+  }
+
+  function triggerAltD() {
+    const eventInit = { key: 'd', code: 'KeyD', altKey: true, bubbles: true, cancelable: true }
+    bodyTextareaRef?.dispatchEvent(new KeyboardEvent('keydown', eventInit))
+    window.dispatchEvent(new KeyboardEvent('keydown', eventInit))
+  }
+
+  function insertCharacterLine(name: string, options: { fromLineEnd?: boolean; triggerMic?: boolean } = {}) {
+    const memo = selected()
+    if (!memo?.id) return
+    const text = formatDialogueLine(name)
+    const textarea = bodyTextareaRef
+    const current = memo.body
+    const selectionStart = textarea?.selectionStart ?? current.length
+    const lineEndIndex = current.indexOf('\n', selectionStart)
+    const start = options.fromLineEnd ? (lineEndIndex === -1 ? current.length : lineEndIndex) : selectionStart
+    const end = options.fromLineEnd ? start : (textarea?.selectionEnd ?? current.length)
+    const before = current.slice(0, start)
+    const after = current.slice(end)
+    const separator = before && !before.endsWith('\n') ? '\n' : ''
+    const nextBody = `${before}${separator}${text}${after}`
+    const cursor = before.length + separator.length + text.length - 1
+    handleTextInput('body', nextBody)
+    setCharacterPickerOpen(false)
+    setCharacterSearch('')
+    queueMicrotask(() => {
+      bodyTextareaRef?.focus()
+      bodyTextareaRef?.setSelectionRange(cursor, cursor)
+      if (options.triggerMic) window.setTimeout(triggerAltD, 200)
+    })
+  }
+
+  function insertBlockAtCursor(text: string) {
+    const memo = selected()
+    if (!memo?.id) return
+    const textarea = bodyTextareaRef
+    const current = memo.body
+    const start = textarea?.selectionStart ?? current.length
+    const end = textarea?.selectionEnd ?? current.length
+    const before = current.slice(0, start)
+    const after = current.slice(end)
+    const prefix = before && !before.endsWith('\n') ? '\n\n' : ''
+    const suffix = after && !after.startsWith('\n') ? '\n\n' : '\n'
+    const nextBody = `${before}${prefix}${text}${suffix}${after}`
+    const nextCursor = before.length + prefix.length + text.length
+    handleTextInput('body', nextBody)
+    queueMicrotask(() => {
+      bodyTextareaRef?.focus()
+      bodyTextareaRef?.setSelectionRange(nextCursor, nextCursor)
+    })
+  }
+
+  const filteredCharacters = () => {
+    const q = characterSearch().trim().toLowerCase()
+    return state.nutrients.filter((item) => !q || `${item.name} ${item.description}`.toLowerCase().includes(q))
   }
 
   const List = () => (
@@ -167,6 +316,26 @@ const PageMemo: Component = () => {
       >
         {(memo) => (
           <div class="flex flex-col h-full overflow-hidden">
+            <div class="min-h-[55px] px-5 py-2 border-b border-nacc-border bg-white flex items-center justify-end gap-3 shrink-0">
+              <Show when={sendStatus() === 'sent'}>
+                <span class="text-xs text-green-600">送信済み</span>
+              </Show>
+              <Show when={sendStatus() === 'error'}>
+                <span class="text-xs text-red-500">
+                  {kanbanMemoInboxEnabled ? '送信失敗' : 'Firebase未設定'}
+                </span>
+              </Show>
+              <button
+                class="kanban-send-btn"
+                type="button"
+                disabled={sendStatus() === 'sending'}
+                onClick={sendSelectedToKanban}
+                title="カンバンのCodex相談Inboxへ送る"
+              >
+                <SendIcon />
+                <span>{sendStatus() === 'sending' ? '送信中...' : '送信'}</span>
+              </button>
+            </div>
             <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
               <input
                 type="text"
@@ -202,13 +371,24 @@ const PageMemo: Component = () => {
                 >
                   + タグ追加
                 </button>
+                <button
+                  class="text-xs px-2 py-1 rounded-full border border-dashed border-nacc-dark text-nacc-dark hover:bg-[#f5f0e8]"
+                  onClick={() => setCharacterPickerOpen(true)}
+                >
+                  + Character
+                </button>
               </div>
 
+              <CharacterInputSection onInsert={insertCharacterLine} />
+              <CalloutInputSection onInsert={insertBlockAtCursor} />
+
               <textarea
-                class="flex-1 min-h-64 text-sm text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
+                ref={bodyTextareaRef}
+                class="flex-1 min-h-64 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
                 placeholder="メモを入力..."
                 value={memo().body}
                 onInput={(e) => handleTextInput('body', e.currentTarget.value)}
+                onKeyDown={handleBodyKeyDown}
               />
 
               <div class="flex items-center justify-between text-xs text-gray-400">
@@ -218,25 +398,6 @@ const PageMemo: Component = () => {
                 >
                   🗑️ 削除
                 </button>
-                <div class="flex items-center gap-2">
-                  <Show when={sendStatus() === 'sent'}>
-                    <span class="text-green-600">送信済み</span>
-                  </Show>
-                  <Show when={sendStatus() === 'error'}>
-                    <span class="text-red-500">
-                      {kanbanMemoInboxEnabled ? '送信失敗' : 'Firebase未設定'}
-                    </span>
-                  </Show>
-                  <button
-                    class="kanban-send-btn"
-                    type="button"
-                    disabled={sendStatus() === 'sending'}
-                    onClick={sendSelectedToKanban}
-                    title="カンバンのCodex相談Inboxへ送る"
-                  >
-                    {sendStatus() === 'sending' ? '送信中...' : 'カンバンへ送る'}
-                  </button>
-                </div>
                 <span>自動保存 — {new Date(memo().updatedAt).toLocaleDateString('ja-JP')}</span>
               </div>
             </div>
@@ -372,6 +533,58 @@ const PageMemo: Component = () => {
           </div>
         </div>
       </Show>
+
+      {/* ── Character picker bottom sheet ── */}
+      <Show when={characterPickerOpen()}>
+        <div class="fixed inset-0 z-60 bg-black/30" onClick={() => setCharacterPickerOpen(false)} />
+        <div
+          class="fixed bottom-0 left-0 right-0 z-70 bg-white rounded-t-2xl shadow-2xl flex flex-col"
+          style={{ 'max-height': '64vh' }}
+        >
+          <div class="flex items-center justify-between px-5 pt-4 pb-0 shrink-0">
+            <span class="font-semibold text-sm">Characterを挿入</span>
+            <button
+              class="text-gray-400 hover:text-gray-600 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100"
+              onClick={() => setCharacterPickerOpen(false)}
+            >
+              ✕
+            </button>
+          </div>
+          <div class="px-5 pt-3 pb-0 shrink-0">
+            <input
+              type="search"
+              class="w-full text-sm bg-gray-50 border border-nacc-border rounded-lg px-3 py-2 outline-none"
+              placeholder="Characterを検索..."
+              value={characterSearch()}
+              onInput={(e) => setCharacterSearch(e.currentTarget.value)}
+            />
+          </div>
+          <div class="overflow-y-auto flex-1 p-3">
+            <For each={filteredCharacters()}>
+              {(character) => (
+                <button
+                  class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f9f8f6] transition-colors"
+                  onClick={() => insertCharacterLine(character.name)}
+                >
+                  <span class="w-8 h-8 rounded-full bg-[#e8dfd0] text-nacc-dark flex items-center justify-center text-xs font-bold">C</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm text-nacc-dark font-semibold truncate">{character.name.replace(/\s+Characters?$/i, '').trim() || character.name}</span>
+                    <span class="block text-xs text-gray-400 truncate">{character.description}</span>
+                  </span>
+                </button>
+              )}
+            </For>
+            <Show when={filteredCharacters().length === 0}>
+              <div class="text-center text-sm text-gray-300 py-8">Characterが見つかりません</div>
+            </Show>
+          </div>
+        </div>
+      </Show>
+      <NotionCalloutQuickInsert
+        open={notionCalloutOpen()}
+        onClose={() => setNotionCalloutOpen(false)}
+        onInsert={insertBlockAtCursor}
+      />
     </div>
   )
 }

@@ -1,0 +1,50 @@
+{
+  "registryId": "game_title_registry_20260618",
+  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "titles": [
+    {
+      "titleId": "realm_of_aether",
+      "title": "Realm of Aether",
+      "status": "prototype",
+      "engine": "AdventureEngine",
+      "progressPercent": 72,
+      "theme": "adventure",
+      "lastEditedAt": "2026-06-18T09:20:00+09:00",
+      "componentKey": "novelDialogueSceneEditor",
+      "latestSaveSlotId": "save_slot_realm_001"
+    },
+    {
+      "titleId": "steel_horizon",
+      "title": "Steel Horizon",
+      "status": "prototype",
+      "engine": "BattleEngine",
+      "progressPercent": 48,
+      "theme": "battle",
+      "lastEditedAt": "2026-06-17T22:10:00+09:00",
+      "componentKey": "battleScenarioSandbox",
+      "latestSaveSlotId": "save_slot_steel_001"
+    },
+    {
+      "titleId": "pixel_harvest",
+      "title": "Pixel Harvest",
+      "status": "planning",
+      "engine": "CollectionEngine",
+      "progressPercent": 31,
+      "theme": "collection",
+      "lastEditedAt": "2026-06-16T19:45:00+09:00",
+      "componentKey": "collectionLoopPlanner",
+      "latestSaveSlotId": "save_slot_pixel_001"
+    },
+    {
+      "titleId": "neon_district",
+      "title": "Neon District",
+      "status": "idea",
+      "engine": "AdventureEngine",
+      "progressPercent": 18,
+      "theme": "neon",
+      "lastEditedAt": "2026-06-15T21:12:00+09:00",
+      "componentKey": "emptyPrototypeWorkspace",
+      "latestSaveSlotId": null
+    }
+  ]
+}

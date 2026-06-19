@@ -6,6 +6,7 @@ type NavItem = { page: Page; label: string; icon: string }
 
 const PAGE_NAV: NavItem[] = [
   { page: 'upnote', label: 'UPNOTE', icon: 'UN' },
+  { page: 'scenarioBook', label: 'ScenarioBook', icon: 'SB' },
   { page: 'memo', label: '旧メモ', icon: '📝' },
 ]
 const DB_NAV: NavItem[] = [

@@ -1,0 +1,15 @@
+{
+  "registryId": "migration_queue_20260618",
+  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "items": [
+    {
+      "migrationId": "migration_100_gamecollection_pending_scan",
+      "sourcePath": "C:/202604_claude_workspace/100_gamecollection",
+      "title": "100_gamecollection inventory pending scan",
+      "targetEngine": "undecided",
+      "status": "pending_scan",
+      "componentKeys": [],
+      "notes": "直接移植しない。ComponentView、依存、素材参照を棚卸しする。"
+    }
+  ]
+}

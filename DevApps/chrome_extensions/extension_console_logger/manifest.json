@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Console Log Exporter",
+  "version": "0.1.0",
+  "description": "Capture localhost console logs and export them as JSON or Codex-ready text.",
+  "permissions": ["storage"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://localhost/*", "http://127.0.0.1/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["http://localhost/*", "http://127.0.0.1/*"]
+    }
+  ],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Console Log Exporter",
+    "default_popup": "popup.html"
+  }
+}

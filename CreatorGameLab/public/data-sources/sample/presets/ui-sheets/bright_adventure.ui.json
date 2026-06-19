@@ -1,0 +1,36 @@
+{
+  "uiSheetId": "bright_adventure",
+  "label": "Bright Adventure",
+  "tokens": {
+    "background": "#f4f7f2",
+    "surface": "#ffffff",
+    "surfaceRaised": "#edf3ea",
+    "text": "#1b2524",
+    "mutedText": "#64716f",
+    "accent": "#2e9f85",
+    "warning": "#b9852d",
+    "success": "#4d985f",
+    "border": "#cdd9d4",
+    "radius": 8
+  },
+  "button": {
+    "height": 42,
+    "radius": 7,
+    "variant": "filled-accent"
+  },
+  "dialog": {
+    "position": "bottom",
+    "background": "surface",
+    "textSize": 16,
+    "speakerSize": 14
+  },
+  "settings": {
+    "panelStyle": "clean-panel",
+    "density": "comfortable"
+  },
+  "background": {
+    "treatment": "full-image-clear",
+    "gridOverlay": false
+  },
+  "notes": "明るい冒険・ファンタジー向けUI。"
+}

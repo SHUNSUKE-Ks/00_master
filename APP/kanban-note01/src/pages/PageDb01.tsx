@@ -37,7 +37,7 @@ const TagsPopover: Component<{
       onClick={(e) => e.stopPropagation()}
     >
       <div class="text-xs font-semibold text-gray-500 mb-2">
-        {props.col === 'symptoms' ? '🔴 病名/症状' : '🟢 効果・効能'}
+        {props.col === 'symptoms' ? 'State' : 'Plot'}
       </div>
       <div class="flex flex-wrap gap-1 mb-2 min-h-6">
         <For each={items()}>
@@ -100,7 +100,7 @@ const RelationPopover: Component<{
       onClick={(e) => e.stopPropagation()}
     >
       <div class="px-3 py-2.5 border-b border-nacc-border text-xs font-semibold text-gray-500 shrink-0">
-        🌿 成分DB リンク — {selected().length}件選択中
+        Character DB link — {selected().length}件選択中
       </div>
       <div class="overflow-y-auto flex-1 p-2">
         <For each={state.nutrients}>
@@ -218,7 +218,7 @@ const MemoPanelOverlay: Component<{
 
 const TypeBadge: Component<{ type: string }> = (props) => (
   <span class="text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 rounded-full px-2.5 py-0.5">
-    {props.type || 'note'}
+    {props.type || 'scenario'}
   </span>
 )
 
@@ -335,7 +335,7 @@ const TableView: Component<{
                               type="text"
                               class="w-full max-w-36 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 rounded-full px-2.5 py-1 outline-none focus:border-nacc-gold"
                               value={product.category}
-                              onInput={(e) => props.onUpdate(product.id, { category: e.currentTarget.value.trim() || 'note' })}
+                              onInput={(e) => props.onUpdate(product.id, { category: e.currentTarget.value.trim() || 'scenario' })}
                             />
                           </div>
                         )
@@ -482,7 +482,7 @@ const TableView: Component<{
             class="flex items-center gap-2 px-4 py-2 text-xs text-gray-400 hover:bg-gray-50 cursor-pointer transition-colors border-t border-dashed border-nacc-border"
             onClick={() => addProduct()}
           >
-            <span>+</span> 新しい行を追加
+            <span>+</span> 新しいTitleを追加
           </div>
         </div>
       </div>
@@ -595,7 +595,7 @@ const DetailView: Component<{ products: Product[] }> = (props) => {
           fallback={
             <div class="flex flex-col items-center justify-center h-full text-[#ccc] gap-2">
               <span class="text-5xl">💊</span>
-              <span class="text-sm">ノート項目を選択してください</span>
+              <span class="text-sm">Titleを選択してください</span>
             </div>
           }
         >
@@ -626,16 +626,16 @@ const DetailView: Component<{ products: Product[] }> = (props) => {
                 </div>
               </Show>
 
-              <DetailSection title="症状">
+              <DetailSection title="State">
                 <TagList items={product().symptoms} color="red" />
               </DetailSection>
-              <DetailSection title="効果・効能">
+              <DetailSection title="Plot">
                 <TagList items={product().effects} color="green" />
               </DetailSection>
-              <DetailSection title="主な成分">
+              <DetailSection title="Characters">
                 <TagList items={product().ingredients} color="blue" />
               </DetailSection>
-              <DetailSection title="関連成分DB">
+              <DetailSection title="Linked Character DB">
                 <div class="flex flex-wrap gap-2">
                   <For each={product().nutrientIds}>
                     {(nid) => {
@@ -699,7 +699,7 @@ const IndexView: Component<{ products: Product[] }> = (props) => (
       {/* Header — 品目 col: 40% on mobile, fixed 288px on md+ */}
       <div class="flex border-b-2 border-nacc-border bg-nacc-light sticky top-0 z-10">
         <div class="w-[40%] md:w-72 shrink-0 px-3 md:px-5 py-2 md:py-3 text-[11px] md:text-xs font-bold text-gray-500 tracking-wider uppercase border-r border-nacc-border">
-          品目
+          Title
         </div>
         <div class="flex-1 px-3 md:px-5 py-2 md:py-3 text-[11px] md:text-xs font-bold text-gray-500 tracking-wider uppercase">
           Summary
@@ -713,7 +713,7 @@ const IndexView: Component<{ products: Product[] }> = (props) => (
             class="flex border-b border-nacc-border last:border-none hover:bg-[#fffbf5] transition-colors"
             classList={{ 'bg-[#fafaf8]': i() % 2 === 1 }}
           >
-            {/* 品目 — ID (S01 etc.) は非表示 */}
+            {/* Title — ID is hidden */}
             <div class="w-[40%] md:w-72 shrink-0 px-2 py-3 md:px-5 md:py-5 border-r border-nacc-border flex flex-col gap-1.5 md:gap-2 justify-start">
               <p class="font-bold text-nacc-gold text-[12px] md:text-sm leading-snug">{product.name}</p>
               <TypeBadge type={product.category} />
@@ -767,14 +767,14 @@ const TagList: Component<{ items: string[]; color: keyof typeof COLOR_MAP }> = (
 // ── Page Root ──────────────────────────────────────────────────────────────
 const PageDb01: Component<Props> = (props) => {
   const [categoryFilter, setCategoryFilter] = createSignal<CategoryFilter>('all')
-  const [newType, setNewType] = createSignal('note')
+  const [newType, setNewType] = createSignal('scenario')
   const [memoPanelOpen, setMemoPanelOpen] = createSignal(false)
   const [memoPanelProduct, setMemoPanelProduct] = createSignal<Product | null>(null)
 
   const typeCounts = createMemo(() => {
     const map = new Map<string, number>()
     props.products.forEach((product) => {
-      const type = product.category?.trim() || 'note'
+      const type = product.category?.trim() || 'scenario'
       map.set(type, (map.get(type) ?? 0) + 1)
     })
     return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b, 'ja'))
@@ -783,7 +783,7 @@ const PageDb01: Component<Props> = (props) => {
   const filteredProducts = createMemo(() => {
     const f = categoryFilter()
     if (f === 'all') return props.products
-    return props.products.filter((p) => (p.category?.trim() || 'note') === f)
+    return props.products.filter((p) => (p.category?.trim() || 'scenario') === f)
   })
 
   function handleRowSelect(product: Product) {
@@ -810,7 +810,7 @@ const PageDb01: Component<Props> = (props) => {
             />
           </h1>
           <div class="db-page-subtitle text-xs text-gray-500 mt-0.5">
-            Generic note database scaffold ·{' '}
+            Scenario title database ·{' '}
             <span class="font-medium">{props.products.length}件</span>
           </div>
         </div>

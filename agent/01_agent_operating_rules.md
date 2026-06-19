@@ -35,4 +35,3 @@ C:\00_master\GAME
 - 思いつきをいきなり本実装に混ぜない。
 - Layout、Scaffold、Buildを同じタスクに混ぜない。
 - 既存素材、既存DB、既存Indexを見ずに新しい構造を作らない。
-

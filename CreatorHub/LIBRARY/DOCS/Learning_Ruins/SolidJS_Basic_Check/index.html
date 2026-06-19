@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SolidJS 基本概念チェック</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body id="top">
+    <header class="app-header">
+      <div>
+        <p class="label">Learning Ruins / SolidJS</p>
+        <h1>SolidJS 基本概念チェック</h1>
+      </div>
+      <button id="resetButton" class="icon-button" type="button" aria-label="チェックをリセット">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h10a6 6 0 1 1-5.2 9" />
+          <path d="M4 7l4-4M4 7l4 4" />
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="progress-panel" aria-labelledby="progressTitle">
+        <div>
+          <h2 id="progressTitle">目次</h2>
+          <p>各項目を開いて、説明できたらチェック。</p>
+        </div>
+        <div class="progress-ring" aria-label="進捗">
+          <span id="progressNumber">0%</span>
+        </div>
+      </section>
+
+      <nav id="toc" class="toc-list" aria-label="SolidJS 基本概念の目次"></nav>
+
+      <section id="lesson" class="lesson" aria-live="polite"></section>
+    </main>
+
+    <footer class="bottom-nav" aria-label="ページ操作">
+      <button id="prevButton" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+        前へ
+      </button>
+      <a href="#top" id="topLink">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+        目次
+      </a>
+      <button id="nextButton" type="button">
+        次へ
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+      </button>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

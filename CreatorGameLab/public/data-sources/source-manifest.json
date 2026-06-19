@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "creator-game-lab.data-source.v1",
+  "activeSource": "sample",
+  "sources": [
+    {
+      "id": "sample",
+      "label": "Sample CreatorGameLab Data",
+      "basePath": "/data-sources/sample/devindex",
+      "description": "Scaffold確認用の小さなサンプルデータ。"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "registryId": "layout_profile_registry_20260619",
+  "updatedAt": "2026-06-19T00:00:00+09:00",
+  "profiles": [
+    {
+      "layoutProfileId": "android_portrait_standard",
+      "label": "Android Portrait Standard",
+      "targetDevice": "android",
+      "orientation": "portrait",
+      "aspectHint": "9:16",
+      "status": "ready",
+      "summary": "スマホ縦画面向け。片手操作と下部Navを前提にする。"
+    },
+    {
+      "layoutProfileId": "android_landscape_standard",
+      "label": "Android Landscape Standard",
+      "targetDevice": "android",
+      "orientation": "landscape",
+      "aspectHint": "16:9",
+      "status": "ready",
+      "summary": "スマホ横画面向け。ゲーム画面と操作UIを横に広く使う。"
+    },
+    {
+      "layoutProfileId": "desktop_editor_standard",
+      "label": "Desktop Editor Standard",
+      "targetDevice": "desktop",
+      "orientation": "landscape",
+      "aspectHint": "16:10",
+      "status": "planned",
+      "summary": "PC編集画面向け。InspectorやAsset Panelを併用する。"
+    }
+  ]
+}

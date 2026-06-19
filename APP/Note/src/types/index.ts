@@ -78,7 +78,52 @@ export type NotebookPage = {
   order: number
 }
 
-export type Page = 'memo' | 'upnote' | 'db01' | 'db02' | 'db03' | 'db10' | 'blog' | 'notebook' | 'trash' | 'gallery' | 'devstudio'
+export type ScenarioBookCharacter = {
+  id: string
+  name: string
+  role?: string
+}
+
+export type ScenarioBookTitle = {
+  id: string
+  title: string
+}
+
+export type ScenarioBookWord = {
+  id: string
+  titleId: string
+  label: string
+  content: string
+  relationIds: string[]
+}
+
+export type ScenarioBookSnippetKind = 'term' | 'devTag' | 'prompt'
+
+export type ScenarioBookSnippet = {
+  id: string
+  kind: ScenarioBookSnippetKind
+  label: string
+  content: string
+}
+
+export type ScenarioBookEvent = {
+  id: string
+  title: string
+  body: string
+  cover?: string
+  coverType: 'none' | 'product' | 'upload'
+  characters: ScenarioBookCharacter[]
+  titleDb: ScenarioBookTitle[]
+  wordDb: ScenarioBookWord[]
+  recentWordIds: string[]
+  fixedTags: string[]
+  snippets: ScenarioBookSnippet[]
+  tags: string[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type Page = 'memo' | 'upnote' | 'scenarioBook' | 'db01' | 'db02' | 'db03' | 'db10' | 'blog' | 'notebook' | 'trash' | 'gallery' | 'devstudio'
 export type BlogMode = 'memo' | 'view'
 export type FontSize = 's' | 'm' | 'l' | 'xl'
 export type FontSizePx = { s: 13; m: 16; l: 19; xl: 22 }

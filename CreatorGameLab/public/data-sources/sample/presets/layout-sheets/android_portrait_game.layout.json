@@ -1,0 +1,39 @@
+{
+  "layoutSheetId": "android_portrait_game",
+  "label": "Android Portrait Game",
+  "targetDevice": "android",
+  "orientation": "portrait",
+  "aspectHint": "9:16",
+  "safeArea": {
+    "top": 24,
+    "right": 12,
+    "bottom": 28,
+    "left": 12
+  },
+  "regions": {
+    "stage": {
+      "anchor": "top",
+      "height": "58vh",
+      "padding": 12
+    },
+    "dialogue": {
+      "anchor": "bottom",
+      "height": "28vh",
+      "padding": 14
+    },
+    "hud": {
+      "anchor": "top",
+      "height": 48
+    },
+    "controls": {
+      "anchor": "bottom",
+      "height": 72
+    }
+  },
+  "navigation": {
+    "mode": "bottom-icons",
+    "iconSize": 22,
+    "label": "hidden"
+  },
+  "notes": "スマホ縦画面用。ステージより会話/操作導線を重視する。"
+}

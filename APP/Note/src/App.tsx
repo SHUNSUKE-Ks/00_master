@@ -9,6 +9,7 @@ import PageDb03 from './pages/PageDb03'
 import PageDb10 from './pages/PageDb10'
 import PageBlog from './pages/PageBlog'
 import PageMemo from './pages/PageMemo'
+import PageScenarioBook from './pages/PageScenarioBook'
 import PageUpnote from './pages/PageUpnote'
 import PageTrash from './pages/PageTrash'
 import PageNotebook from './pages/PageNotebook'
@@ -61,6 +62,9 @@ const MainApp: Component = () => (
         </Show>
         <Show when={state.page === 'upnote'}>
           <PageUpnote />
+        </Show>
+        <Show when={state.page === 'scenarioBook'}>
+          <PageScenarioBook />
         </Show>
         <Show when={state.page === 'trash'}>
           <PageTrash />

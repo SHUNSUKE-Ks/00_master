@@ -1,26 +1,72 @@
-import { type Component, For } from 'solid-js'
-import { state, navigate } from '../store'
+import { type Component, createSignal, For, Show } from 'solid-js'
+import { state, setState, navigate } from '../store'
 import type { Page } from '../types'
 
 type NavItem = { page: Page; label: string; icon: string }
 
 const PAGE_NAV: NavItem[] = [
-  { page: 'upnote', label: 'UPNOTE', icon: 'UN' },
-  { page: 'memo', label: '旧メモ', icon: '📝' },
+  { page: 'memo', label: 'scenarioノート', icon: '📝' },
 ]
 const DB_NAV: NavItem[] = [
-  { page: 'db01', label: 'DB01 Note DB', icon: '📦' },
-  { page: 'db02', label: 'DB02 Tag DB', icon: '🌿' },
-  { page: 'db03', label: 'DB03 Relation', icon: '🧪' },
-  { page: 'db10', label: 'DB10 Status', icon: '🏥' },
+  { page: 'db01', label: 'Title DB', icon: 'T' },
+  { page: 'db02', label: 'Character DB', icon: 'C' },
 ]
-const NOTEBOOK_NAV: NavItem[] = [
-  { page: 'blog',     label: 'ブログ記事',   icon: '📓' },
-  { page: 'notebook', label: 'ノートブック', icon: '📚' },
-]
-const DEV_NAV: NavItem[] = [
-  { page: 'devstudio', label: 'DevStudio', icon: 'DS' },
-]
+const NotebookToggle: Component = () => {
+  const [open, setOpen] = createSignal(true)
+
+  function selectNotebook(id: string) {
+    const nb = state.notebooks.find((item) => item.id === id)
+    setState({
+      selectedNotebookId: id,
+      selectedNotebookPageId: null,
+    })
+    navigate('notebook')
+    if (nb?.pages.length === 0) setState({ selectedNotebookPageId: null })
+  }
+
+  return (
+    <div>
+      <button
+        class="nav-btn w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-left transition-colors"
+        classList={{
+          'bg-nacc-light font-medium text-nacc-dark': state.page === 'notebook',
+          'text-[#555] hover:bg-[#f5f4f1]': state.page !== 'notebook',
+        }}
+        onClick={() => {
+          setOpen((value) => !value)
+          if (state.page !== 'notebook') navigate('notebook')
+        }}
+      >
+        <span>📚</span>
+        <span class="truncate">ノートブック</span>
+        <span class="ml-auto text-xs text-gray-400">{open() ? '⌃' : '⌄'}</span>
+      </button>
+      <Show when={open()}>
+        <div class="mt-1 ml-5 flex flex-col gap-0.5">
+          <For each={state.notebooks}>
+            {(nb) => (
+              <button
+                class="w-full flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs transition-colors"
+                classList={{
+                  'bg-[#f5f0e8] text-nacc-dark font-medium': state.selectedNotebookId === nb.id,
+                  'text-gray-500 hover:bg-[#f9f8f6]': state.selectedNotebookId !== nb.id,
+                }}
+                onClick={() => selectNotebook(nb.id!)}
+              >
+                <span class="w-5 h-5 rounded overflow-hidden bg-[#0b1f3a] text-white text-[10px] flex items-center justify-center shrink-0">
+                  <Show when={nb.cover} fallback={<span>{nb.title.slice(0, 1)}</span>}>
+                    <img src={nb.cover} alt="" class="w-full h-full object-cover" />
+                  </Show>
+                </span>
+                <span class="truncate">{nb.title}</span>
+              </button>
+            )}
+          </For>
+        </div>
+      </Show>
+    </div>
+  )
+}
 
 const NavBtn: Component<{ item: NavItem }> = (props) => (
   <button
@@ -56,7 +102,7 @@ const Sidebar: Component = () => (
           <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          クイックメモ
+          scenarioメモ
         </button>
       </div>
 
@@ -69,10 +115,8 @@ const Sidebar: Component = () => (
         <For each={DB_NAV}>{(item) => <NavBtn item={item} />}</For>
 
         <SectionLabel label="ノートブック" />
-        <For each={NOTEBOOK_NAV}>{(item) => <NavBtn item={item} />}</For>
+        <NotebookToggle />
 
-        <SectionLabel label="開発" />
-        <For each={DEV_NAV}>{(item) => <NavBtn item={item} />}</For>
       </nav>
 
       {/* Trash */}
@@ -101,7 +145,7 @@ const Sidebar: Component = () => (
           <div class="w-5 h-5 rounded-full bg-nacc-gold/20 flex items-center justify-center text-nacc-gold font-bold text-xs">
             N
           </div>
-          <span>note00 user</span>
+          <span>Note_Story user</span>
         </div>
       </div>
     </aside>

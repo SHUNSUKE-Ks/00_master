@@ -1,0 +1,42 @@
+{
+  "layoutSheetId": "wide_landscape_game",
+  "label": "Wide Landscape Game",
+  "targetDevice": "pc_android_ipad",
+  "orientation": "landscape",
+  "aspectHint": "16:9",
+  "safeArea": {
+    "top": 16,
+    "right": 20,
+    "bottom": 16,
+    "left": 20
+  },
+  "regions": {
+    "stage": {
+      "anchor": "center",
+      "width": "72vw",
+      "height": "100vh",
+      "padding": 16
+    },
+    "dialogue": {
+      "anchor": "bottom",
+      "width": "72vw",
+      "height": "24vh",
+      "padding": 16
+    },
+    "sidePanel": {
+      "anchor": "right",
+      "width": "28vw",
+      "height": "100vh"
+    },
+    "controls": {
+      "anchor": "bottom-right",
+      "height": 64
+    }
+  },
+  "navigation": {
+    "mode": "side-or-bottom-icons",
+    "iconSize": 22,
+    "label": "auto"
+  },
+  "notes": "PC、Android横、iPad横で使う想定。ステージと情報パネルを並べる。"
+}

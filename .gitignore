@@ -13,6 +13,8 @@ build/
 *.log
 .cache/
 .tmp/
+.codex-remote-attachments/
 
 # Existing independent app repository
 DevApps/kanban_June/
+CreatorHub/DEV/KeyDeck/

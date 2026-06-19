@@ -37,8 +37,8 @@ const Toggle: Component<{ checked: boolean; disabled?: boolean; onChange: () => 
 
 const SettingsPanel: Component = () => {
   const dbPageMap = {
-    db01: { label: 'DB01 Note',     cols: () => state.db01Columns, toggle: toggleDb01Column },
-    db02: { label: 'DB02 Tag',      cols: () => state.db02Columns, toggle: toggleDb02Column },
+    db01: { label: 'Title DB',      cols: () => state.db01Columns, toggle: toggleDb01Column },
+    db02: { label: 'Character DB',  cols: () => state.db02Columns, toggle: toggleDb02Column },
     db03: { label: 'DB03 Relation', cols: () => state.db03Columns, toggle: toggleDb03Column },
     db10: { label: 'DB10 症状',   cols: () => state.db10Columns, toggle: toggleDb10Column },
   } as const

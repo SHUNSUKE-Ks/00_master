@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "hook",
+  "id": "reportCommand",
+  "name": "Report Command",
+  "version": "0.1.0",
+  "status": "active",
+  "trigger": {
+    "type": "manual-command",
+    "phrases": ["Report", "report", "レポート", "報告"]
+  },
+  "outputTargets": {
+    "primary": "C:\\00_master\\DevApps\\kanban_June\\docs",
+    "index": "C:\\00_master\\DevApps\\kanban_June\\docs\\report_access_index_2026-06-18.md",
+    "agentReports": "C:\\00_master\\Brain\\Reports",
+    "inbox": "C:\\00_master\\Brain\\Inbox"
+  },
+  "format": {
+    "style": "ai-readable-compact",
+    "requiredSections": [
+      "meta",
+      "summary",
+      "actions",
+      "decisions",
+      "issues",
+      "verification",
+      "next",
+      "links"
+    ]
+  },
+  "entry": "README.md"
+}

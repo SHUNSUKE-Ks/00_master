@@ -1,0 +1,27 @@
+{
+  "agentId": "creator_game_lab_agent",
+  "projectId": "creator_game_lab",
+  "displayName": "CreatorGameLab Agent",
+  "status": "ready",
+  "scope": [
+    "C:/00_master/CreatorGameLab",
+    "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab",
+    "C:/00_master/DevApps/kanban_June/docs"
+  ],
+  "mustRead": [
+    "C:/00_master/agent/README.md",
+    "C:/00_master/agent/01_agent_operating_rules.md",
+    "C:/00_master/agent/02_report_policy.md",
+    "C:/00_master/agent/05_planning_to_scaffold_flow.md",
+    "C:/00_master/CreatorGameLab/agent/creator_game_lab_agent_profile.md",
+    "C:/00_master/CreatorGameLab/agent/taskticket_watch.md",
+    "C:/00_master/CreatorGameLab/agent/kanban_reporting.md"
+  ],
+  "reportRequired": true,
+  "reportDir": "C:/00_master/DevApps/kanban_June/docs",
+  "taskTicketDir": "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/taskticket",
+  "doNotEditWithoutInstruction": [
+    "C:/00_master/APP/novelEngine",
+    "C:/00_master/APP/Note"
+  ]
+}

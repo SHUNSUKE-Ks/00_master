@@ -1,0 +1,35 @@
+{
+  "devLayerId": "devlayer_novel_engine_one_json_v1_1_default",
+  "targetEngineModelId": "novel_engine_one_json_v1_1",
+  "targetSourcePath": "C:/00_master/APP/novelEngine",
+  "mode": "overlay",
+  "version": "0.1.0",
+  "description": "novelEngine本体を直接編集せず、CreatorGameLab側からUI値と差し替えデータを重ねるための初期DevLayer。",
+  "overrides": {
+    "scenario": {
+      "source": "public-data-source",
+      "targetFile": "src/data/scenario/scenario_main.json",
+      "activeScenarioId": "sample_title_scenario"
+    },
+    "ui": {
+      "titleScreen": {
+        "showStartButton": true,
+        "startButtonLabel": "Start",
+        "layoutDensity": "mobile-comfort"
+      },
+      "novelScreen": {
+        "dialogueBoxPosition": "bottom",
+        "fontScale": 1,
+        "tapToAdvance": true
+      }
+    },
+    "audio": {
+      "bgmEnabled": false,
+      "seEnabled": false
+    }
+  },
+  "notes": [
+    "このJSONは設計用の初期案。本体novelEngineへ自動反映する処理は未実装。",
+    "将来はDevLayerを読み、adapterがnovelEngineへpropsまたは生成JSONとして渡す。"
+  ]
+}

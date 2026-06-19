@@ -1,0 +1,51 @@
+{
+  "registryId": "component_view_registry_20260618",
+  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "components": [
+    {
+      "componentKey": "dashboardPanelPreview",
+      "label": "Dashboard Panel Preview",
+      "status": "ready",
+      "targetWorkspace": "CreatorGameLab",
+      "targetEngine": null,
+      "summary": "作業再開パネルの表示と選択状態を確認する。",
+      "migrationStatus": "local"
+    },
+    {
+      "componentKey": "novelDialogueSceneEditor",
+      "label": "Novel Dialogue Scene Editor",
+      "status": "placeholder",
+      "targetWorkspace": "NovelGameWorkspace",
+      "targetEngine": "AdventureEngine",
+      "summary": "会話シーン、選択肢、探索メモを編集する予定。",
+      "migrationStatus": "not_started"
+    },
+    {
+      "componentKey": "battleScenarioSandbox",
+      "label": "Battle Scenario Sandbox",
+      "status": "placeholder",
+      "targetWorkspace": "NovelGameWorkspace",
+      "targetEngine": "BattleEngine",
+      "summary": "戦闘前後のシナリオ接続を検証する予定。",
+      "migrationStatus": "not_started"
+    },
+    {
+      "componentKey": "collectionLoopPlanner",
+      "label": "Collection Loop Planner",
+      "status": "placeholder",
+      "targetWorkspace": "NovelGameWorkspace",
+      "targetEngine": "CollectionEngine",
+      "summary": "素材収集と報酬ループを整理する予定。",
+      "migrationStatus": "not_started"
+    },
+    {
+      "componentKey": "emptyPrototypeWorkspace",
+      "label": "Empty Prototype Workspace",
+      "status": "ready",
+      "targetWorkspace": "CreatorGameLab",
+      "targetEngine": null,
+      "summary": "未実装ComponentのFallback。",
+      "migrationStatus": "local"
+    }
+  ]
+}

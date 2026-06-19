@@ -1,0 +1,105 @@
+{
+  "registryId": "engine_sandbox_registry_20260618",
+  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "sandboxes": [
+    {
+      "sandboxId": "sandbox_adventure_engine",
+      "label": "AdventureEngine",
+      "engineId": "AdventureEngine",
+      "status": "ready",
+      "summary": "ノベル、会話、探索、分岐を検証する。",
+      "componentKey": "emptyPrototypeWorkspace",
+      "targetPath": "C:/00_master/GAME/AdventureEngine",
+      "models": [
+        {
+          "modelId": "novel_engine_one_json_v1_1",
+          "label": "One JSON NovelEngine",
+          "version": "1.1.0",
+          "status": "ready",
+          "summary": "C:/00_master/APP/novelEngineを第一号Engine Modelとして扱う。scenario_main.json差し替えで短編ノベルを確認する。",
+          "sourcePath": "C:/00_master/APP/novelEngine",
+          "adapterKind": "devlayer-overlay",
+          "devLayerSupport": true
+        },
+        {
+          "modelId": "adventure_novel_core",
+          "label": "Novel Core",
+          "version": "0.1.0",
+          "status": "ready",
+          "summary": "会話、選択肢、探索を中心にした標準モデル。"
+        },
+        {
+          "modelId": "adventure_exploration_plus",
+          "label": "Exploration Plus",
+          "version": "0.2.0",
+          "status": "planned",
+          "summary": "マップ探索とクエスト分岐を強める予定のモデル。"
+        }
+      ]
+    },
+    {
+      "sandboxId": "sandbox_battle_engine",
+      "label": "BattleEngine",
+      "engineId": "BattleEngine",
+      "status": "planned",
+      "summary": "戦闘、ステータス、報酬イベントを検証する。",
+      "componentKey": "emptyPrototypeWorkspace",
+      "targetPath": "C:/00_master/GAME/BattleEngine",
+      "models": [
+        {
+          "modelId": "battle_turn_core",
+          "label": "Turn Core",
+          "version": "0.1.0",
+          "status": "ready",
+          "summary": "ターン制バトルの最小モデル。"
+        },
+        {
+          "modelId": "battle_srpg_grid",
+          "label": "SRPG Grid",
+          "version": "0.1.0",
+          "status": "planned",
+          "summary": "グリッド移動と地形補正を扱う予定のモデル。"
+        }
+      ]
+    },
+    {
+      "sandboxId": "sandbox_collection_engine",
+      "label": "CollectionEngine",
+      "engineId": "CollectionEngine",
+      "status": "planned",
+      "summary": "素材、収集、クラフト、進行ループを検証する。",
+      "componentKey": "emptyPrototypeWorkspace",
+      "targetPath": "C:/00_master/GAME/CollectionEngine",
+      "models": [
+        {
+          "modelId": "collection_loop_core",
+          "label": "Loop Core",
+          "version": "0.1.0",
+          "status": "ready",
+          "summary": "素材収集、報酬、進行テーブルの標準モデル。"
+        },
+        {
+          "modelId": "collection_crafting_plus",
+          "label": "Crafting Plus",
+          "version": "0.2.0",
+          "status": "planned",
+          "summary": "クラフト分岐とインベントリ拡張を扱う予定のモデル。"
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "testId": "test_empty_project",
+      "label": "Empty Project",
+      "summary": "初期状態だけの安全な試験室。",
+      "componentKey": "emptyPrototypeWorkspace"
+    },
+    {
+      "testId": "test_ui_layout",
+      "label": "UI Layout",
+      "summary": "tile-windowとDashboard導線の確認。",
+      "componentKey": "dashboardPanelPreview"
+    }
+  ]
+}

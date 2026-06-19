@@ -4,17 +4,17 @@ import type { Page } from '../types'
 import { exportLocalWorkspace } from '../dataBridge/localExport'
 
 const PAGE_LABELS: Record<Page, string> = {
-  memo:     '📝 メモ',
+  memo:     'scenarioノート',
   upnote:   'UPNOTE',
-  db01:     'DB01 Note DB',
-  db02:     'DB02 Tag DB',
+  db01:     'Title DB',
+  db02:     'Character DB',
   db03:     'DB03 Relation',
   db10:     'DB10 Status',
   blog:     '📓 ブログ',
   notebook: '📚 ノートブック',
   trash:    '🗑️ ごみ箱',
   gallery:  '🖼 ギャラリー',
-  devstudio: 'DevStudio',
+  devstudio: 'Scenario Board',
 }
 
 const Header: Component = () => {
@@ -44,14 +44,15 @@ const Header: Component = () => {
       {/* Logo + DB View dropdown (DB pages only) */}
       <div class="relative">
         <button
-          class="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+          class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#0b1f3a] text-white hover:bg-[#12345f] transition-colors shadow-sm"
           onClick={() => setViewMenuOpen((v) => !v)}
         >
-          <span class="font-bold text-sm tracking-tight">
-            note<span class="text-nacc-gold">00</span>
+          <span class="font-bold text-sm tracking-tight">Note_Story</span>
+          <span class="hidden sm:inline text-[10px] font-semibold rounded-full bg-white/12 px-1.5 py-0.5 text-blue-100">
+            scenarioノート
           </span>
           <svg
-            class="w-3 h-3 text-gray-400 transition-transform"
+            class="w-3 h-3 text-blue-100 transition-transform"
             classList={{ 'rotate-180': viewMenuOpen() }}
             fill="none" stroke="currentColor" viewBox="0 0 24 24"
           >
@@ -64,7 +65,7 @@ const Header: Component = () => {
             class="absolute left-0 top-10 bg-white border border-nacc-border rounded-xl shadow-lg w-60 overflow-hidden z-50"
           >
             <div class="px-3 py-2 text-xs text-gray-400 font-medium border-b border-nacc-border">
-              note00 Menu
+              Note_Story Menu
             </div>
             <div class="p-1.5 flex flex-col gap-0.5">
               <button
@@ -73,8 +74,8 @@ const Header: Component = () => {
               >
                 <span>DS</span>
                 <div>
-                  <div class="font-medium">DevStudio</div>
-                  <div class="text-xs text-gray-400">実装計画とKanbanを見る</div>
+                  <div class="font-medium">Scenario Board</div>
+                  <div class="text-xs text-gray-400">シナリオTODOを分解する</div>
                 </div>
                 <Show when={state.page === 'devstudio'}>
                   <span class="ml-auto text-nacc-gold text-xs">✓</span>

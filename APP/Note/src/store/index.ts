@@ -1,5 +1,18 @@
 import { createStore } from 'solid-js/store'
-import type { Page, BlogMode, FontSize, Blog, Memo, Notebook, Product, Nutrient, Symptom, DbView, ColumnDef } from '../types'
+import type {
+  Page,
+  BlogMode,
+  FontSize,
+  Blog,
+  Memo,
+  Notebook,
+  Product,
+  Nutrient,
+  Symptom,
+  DbView,
+  ColumnDef,
+  ScenarioBookEvent,
+} from '../types'
 import { PRODUCTS } from '../db/products'
 import { NUTRIENTS } from '../db/nutrients'
 import { SYMPTOMS } from '../db/symptoms'
@@ -37,6 +50,7 @@ export type AppState = {
   blogs: Blog[]
   trashBlogs: Blog[]
   notebooks: Notebook[]
+  scenarioBooks: ScenarioBookEvent[]
   db01Columns: ColumnDef[]
   db02Columns: ColumnDef[]
   db03Columns: ColumnDef[]
@@ -91,6 +105,56 @@ export const DB10_COLUMNS_DEFAULT: ColumnDef[] = [
 
 const INITIAL_BLOGS: Blog[] = []
 
+const INITIAL_SCENARIO_BOOKS: ScenarioBookEvent[] = [
+  {
+    id: 'scenario-sample-001',
+    title: 'Scene 01 - 出会い',
+    body: 'ナレーション：夕暮れの駅前。\nレムナント：「ここから先は、記録に残しておこう」\nラテル：「会話ログがそのままシナリオになるなら、あとで迷わないね」',
+    coverType: 'none',
+    characters: [
+      { id: 'char-remnant', name: 'レムナント', role: '主人公' },
+      { id: 'char-ratel', name: 'ラテル', role: '相棒' },
+      { id: 'char-narration', name: 'ナレーション', role: '地の文' },
+    ],
+    titleDb: [
+      { id: 'title-character', title: 'Character' },
+      { id: 'title-place', title: 'Place' },
+      { id: 'title-system', title: 'System' },
+      { id: 'title-other', title: 'その他' },
+    ],
+    wordDb: [
+      { id: 'word-remnant', titleId: 'title-character', label: 'レムナント', content: 'レムナント：「」', relationIds: [] },
+      { id: 'word-ratel', titleId: 'title-character', label: 'ラテル', content: 'ラテル：「」', relationIds: [] },
+      { id: 'word-narration', titleId: 'title-character', label: 'ナレーション', content: 'ナレーション：', relationIds: [] },
+      { id: 'word-station', titleId: 'title-place', label: '駅前', content: '場所：駅前', relationIds: [] },
+      { id: 'word-choice', titleId: 'title-system', label: '選択肢', content: '選択肢：\n- ', relationIds: [] },
+    ],
+    recentWordIds: ['word-remnant', 'word-ratel', 'word-narration'],
+    fixedTags: [
+      'fx_fade_in',
+      'fx_fade_out',
+      'mood_lonely',
+      'bgm_forest',
+      'se_page',
+      'bg_village',
+      'face_normal',
+      'ev_character_join',
+      'flag_seen_intro',
+      'memo_key_event',
+    ],
+    snippets: [
+      { id: 'term-event-flag', kind: 'term', label: 'イベントフラグ', content: 'イベントフラグ：' },
+      { id: 'term-choice', kind: 'term', label: '選択肢', content: '選択肢：\n- ' },
+      { id: 'tag-draft', kind: 'devTag', label: '#draft', content: '#draft' },
+      { id: 'tag-review', kind: 'devTag', label: '#review', content: '#review' },
+      { id: 'prompt-tone', kind: 'prompt', label: '口調確認', content: 'プロンプト：この会話のキャラクター口調を確認する。' },
+    ],
+    tags: ['event', 'conversation-log'],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+
 const [state, setState] = createStore<AppState>({
   page: 'db01',
   galleryReturnPage: 'db01',
@@ -113,6 +177,7 @@ const [state, setState] = createStore<AppState>({
   blogs: INITIAL_BLOGS,
   trashBlogs: [],
   notebooks: [],
+  scenarioBooks: INITIAL_SCENARIO_BOOKS,
   db01Columns: DB01_COLUMNS_DEFAULT,
   db02Columns: DB02_COLUMNS_DEFAULT,
   db03Columns: DB03_COLUMNS_DEFAULT,
@@ -379,4 +444,68 @@ export function updateNotebook(id: string, patch: Partial<Omit<Notebook, 'id'>>)
 export async function deleteNotebook(id: string): Promise<void> {
   if (firebaseEnabled) await deleteNotebookFs(id)
   setState('notebooks', (prev) => prev.filter((n) => n.id !== id))
+}
+
+// ── ScenarioBook CRUD ────────────────────────────────────────────────────────
+
+export function addScenarioBookEvent(): string {
+  const now = new Date()
+  const id = `scenario-${now.getTime()}`
+  setState('scenarioBooks', (prev) => [
+    {
+      id,
+      title: '新しいイベント',
+      body: 'ナレーション：',
+      coverType: 'none',
+      characters: [
+        { id: `char-${now.getTime()}-narration`, name: 'ナレーション', role: '地の文' },
+      ],
+      titleDb: [
+        { id: `title-${now.getTime()}-character`, title: 'Character' },
+        { id: `title-${now.getTime()}-system`, title: 'System' },
+        { id: `title-${now.getTime()}-other`, title: 'その他' },
+      ],
+      wordDb: [
+        {
+          id: `word-${now.getTime()}-narration`,
+          titleId: `title-${now.getTime()}-character`,
+          label: 'ナレーション',
+          content: 'ナレーション：',
+          relationIds: [],
+        },
+      ],
+      recentWordIds: [],
+      fixedTags: [
+        'fx_fade_in',
+        'fx_fade_out',
+        'mood_happy',
+        'mood_lonely',
+        'bgm_forest',
+        'se_page',
+        'bg_village',
+        'face_normal',
+        'memo_key_event',
+      ],
+      snippets: [
+        { id: `snippet-${now.getTime()}-choice`, kind: 'term', label: '選択肢', content: '選択肢：\n- ' },
+        { id: `snippet-${now.getTime()}-draft`, kind: 'devTag', label: '#draft', content: '#draft' },
+        { id: `snippet-${now.getTime()}-prompt`, kind: 'prompt', label: '整合性確認', content: 'プロンプト：このイベントの会話ログを確認する。' },
+      ],
+      tags: [],
+      createdAt: now,
+      updatedAt: now,
+    },
+    ...prev,
+  ])
+  return id
+}
+
+export function updateScenarioBookEvent(id: string, patch: Partial<Omit<ScenarioBookEvent, 'id' | 'createdAt'>>) {
+  setState('scenarioBooks', (prev) =>
+    prev.map((event) => (event.id === id ? { ...event, ...patch, updatedAt: new Date() } : event))
+  )
+}
+
+export function deleteScenarioBookEvent(id: string) {
+  setState('scenarioBooks', (prev) => prev.filter((event) => event.id !== id))
 }

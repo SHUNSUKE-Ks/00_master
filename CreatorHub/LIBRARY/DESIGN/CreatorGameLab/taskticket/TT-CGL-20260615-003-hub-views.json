@@ -2,8 +2,10 @@
   "ticketId": "TT-CGL-20260615-003-hub-views",
   "projectId": "creator_game_lab",
   "phase": "build",
+  "status": "implemented",
+  "implementedAt": "2026-06-18",
   "title": "Hub View 4画面を_devindexから描画する",
-  "scope": "TitleSelectView、EngineSandboxView、DevSaveLoadView、ComponentRegistryViewを作る。",
+  "scope": "DashboardView、TitleSelectView、EngineSandboxView、DevSaveLoadView、ComponentRegistryViewを作る。",
   "acceptance": [
     "Title Selectでタイトルを選択できる",
     "Engine SandboxでAdventure/Battle/Collection/Isolated Testを選択できる",
@@ -17,9 +19,11 @@
     "CG_COMPONENT_ROW"
   ],
   "outputFiles": [
+    "C:/00_master/CreatorGameLab/src/views/DashboardView.tsx",
     "C:/00_master/CreatorGameLab/src/views/TitleSelectView.tsx",
     "C:/00_master/CreatorGameLab/src/views/EngineSandboxView.tsx",
     "C:/00_master/CreatorGameLab/src/views/DevSaveLoadView.tsx",
     "C:/00_master/CreatorGameLab/src/views/ComponentRegistryView.tsx"
-  ]
+  ],
+  "implementationNotes": "今回のテーマに合わせ、作業再開Dashboardを初期画面として追加。各パネルはWorkspace Placeholderへ遷移する。"
 }

@@ -182,7 +182,7 @@ const TableView: Component<{
             class="flex items-center gap-2 px-4 py-2 text-xs text-gray-400 hover:bg-gray-50 cursor-pointer transition-colors border-t border-dashed border-nacc-border"
             onClick={() => addNutrient()}
           >
-            <span>+</span> 新しいタグを追加
+            <span>+</span> 新しいCharacterを追加
           </div>
         </div>
       </div>
@@ -231,7 +231,7 @@ const DetailView: Component<{ nutrients: Nutrient[] }> = (props) => {
         <div class="p-3 border-b border-nacc-border">
           <input
             type="search"
-            placeholder="タグを検索..."
+            placeholder="Characterを検索..."
             class="w-full px-3 py-1.5 text-xs rounded-lg border border-nacc-border bg-white outline-none focus:border-nacc-gold"
             value={search()}
             onInput={(e) => setSearch(e.currentTarget.value)}
@@ -249,7 +249,7 @@ const DetailView: Component<{ nutrients: Nutrient[] }> = (props) => {
                 onClick={() => setSelected(nutrient)}
               >
                 <div class="w-8 h-8 rounded-full bg-[#e8dfd0] flex items-center justify-center text-sm shrink-0">
-                  🧬
+                  C
                 </div>
                 <div class="min-w-0">
                   <p class="text-xs font-semibold text-nacc-gold truncate leading-tight">
@@ -269,28 +269,28 @@ const DetailView: Component<{ nutrients: Nutrient[] }> = (props) => {
           when={selected()}
           fallback={
             <div class="flex flex-col items-center justify-center h-full text-[#ccc] gap-2">
-              <span class="text-5xl">🧬</span>
-              <span class="text-sm">タグを選択してください</span>
+              <span class="text-5xl">C</span>
+              <span class="text-sm">Characterを選択してください</span>
             </div>
           }
         >
           {(nutrient) => (
             <div class="max-w-2xl mx-auto slide-in">
               <div class="w-14 h-14 rounded-2xl bg-[#f5f0e8] flex items-center justify-center text-3xl mb-4">
-                🧬
+                C
               </div>
               <h1 class="text-xl font-bold text-nacc-dark mb-0.5">{nutrient().name}</h1>
               <p class="text-xs text-[#999] mb-5">{nutrient().id}</p>
 
               <div class="mb-5">
-                <h2 class="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">説明</h2>
+                <h2 class="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">Profile</h2>
                 <p class="text-sm text-nacc-dark leading-relaxed bg-white rounded-xl p-4 border border-nacc-border">
                   {nutrient().description}
                 </p>
               </div>
 
               <div class="mb-5">
-                <h2 class="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">リンクされたNote</h2>
+                <h2 class="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">Linked Titles</h2>
                 <div class="flex flex-wrap gap-2">
                   <For each={state.products.filter((p) => p.nutrientIds.includes(nutrient().id))}>
                     {(p) => (
@@ -305,7 +305,7 @@ const DetailView: Component<{ nutrients: Nutrient[] }> = (props) => {
               <Show when={linkedMemos(nutrient()).length > 0}>
                 <div class="mt-6 pt-5 border-t border-nacc-border">
                   <h2 class="text-xs font-semibold text-[#999] uppercase tracking-wider mb-3">
-                    🔗 リンクされたメモ・記事
+                    Linked memos
                   </h2>
                   <div class="flex flex-col gap-2">
                     <For each={linkedMemos(nutrient())}>
@@ -354,7 +354,7 @@ const PageDb02: Component<Props> = (props) => {
             />
           </h1>
           <div class="text-xs text-gray-500 mt-0.5">
-            タグ・参照用データベース ·{' '}
+            Scenario character database ·{' '}
             <span class="font-medium">{props.nutrients.length}件</span>
           </div>
         </div>

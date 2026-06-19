@@ -1,0 +1,36 @@
+{
+  "uiSheetId": "novel_soft_dark",
+  "label": "Novel Soft Dark",
+  "tokens": {
+    "background": "#090d12",
+    "surface": "#131922",
+    "surfaceRaised": "#1b232e",
+    "text": "#eef4f8",
+    "mutedText": "#9aa8b7",
+    "accent": "#5be5e2",
+    "warning": "#f5bb48",
+    "success": "#71c878",
+    "border": "#2d3846",
+    "radius": 8
+  },
+  "button": {
+    "height": 42,
+    "radius": 7,
+    "variant": "outline-accent"
+  },
+  "dialog": {
+    "position": "bottom",
+    "background": "surfaceRaised",
+    "textSize": 16,
+    "speakerSize": 14
+  },
+  "settings": {
+    "panelStyle": "tile-window",
+    "density": "comfortable"
+  },
+  "background": {
+    "treatment": "image-with-dark-edge",
+    "gridOverlay": false
+  },
+  "notes": "ノベル向けの暗色UI。CreatorGameLabの現在の雰囲気に近い。"
+}

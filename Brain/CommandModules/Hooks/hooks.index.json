@@ -1,6 +1,17 @@
 {
   "schemaVersion": "0.1.0",
   "kind": "hook-index",
-  "updatedAt": "2026-06-12",
-  "modules": []
+  "updatedAt": "2026-06-18",
+  "modules": [
+    {
+      "id": "reportCommand",
+      "name": "Report Command",
+      "version": "0.1.0",
+      "status": "active",
+      "trigger": "Report",
+      "path": "C:\\00_master\\Brain\\CommandModules\\Hooks\\modules\\reportCommand",
+      "entry": "README.md",
+      "manifest": "hook.json"
+    }
+  ]
 }
