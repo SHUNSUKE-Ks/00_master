@@ -112,18 +112,35 @@ const DOCS = [
 const PageDevStudio: Component = () => {
   const [activeView, setActiveView] = createSignal<'board' | 'docs'>('board')
   const [activeDocId, setActiveDocId] = createSignal('plan')
+  const [activeLane, setActiveLane] = createSignal<Task['lane']>('Inbox')
+  const [touchStartX, setTouchStartX] = createSignal<number | null>(null)
   const activeDoc = createMemo(() => DOCS.find((doc) => doc.id === activeDocId()) ?? DOCS[0])
   const progress = createMemo(() => Math.round(TASKS.reduce((sum, task) => sum + task.progress, 0) / TASKS.length))
+  const laneTaskCount = (lane: Task['lane']) => TASKS.filter((task) => task.lane === lane).length
+  const moveLane = (direction: 1 | -1) => {
+    const current = LANES.indexOf(activeLane())
+    const next = Math.min(LANES.length - 1, Math.max(0, current + direction))
+    setActiveLane(LANES[next])
+  }
+  const handleBoardTouchEnd = (event: TouchEvent) => {
+    const start = touchStartX()
+    const end = event.changedTouches[0]?.clientX
+    setTouchStartX(null)
+    if (start == null || end == null) return
+    const delta = end - start
+    if (Math.abs(delta) < 48) return
+    moveLane(delta < 0 ? 1 : -1)
+  }
 
   return (
     <div class="h-full bg-nacc-light overflow-hidden flex flex-col">
-      <div class="px-6 py-4 bg-white border-b border-nacc-border shrink-0">
-        <div class="flex items-center justify-between gap-4">
-          <div>
+      <div class="devstudio-header px-6 py-4 bg-white border-b border-nacc-border shrink-0">
+        <div class="devstudio-header-row flex items-center justify-between gap-4">
+          <div class="devstudio-title-block">
             <h1 class="text-xl font-bold text-nacc-dark">Scenario Board</h1>
             <p class="text-xs text-gray-500 mt-1">Kanban_Juneから受けた親タスクを、シーン・キャラ・本文TODOへ分解する場所。</p>
           </div>
-          <div class="flex items-center gap-3">
+          <div class="devstudio-header-tools flex items-center gap-3">
             <div class="mode-pill">
               <button classList={{ active: activeView() === 'board' }} onClick={() => setActiveView('board')}>
                 Board
@@ -132,7 +149,7 @@ const PageDevStudio: Component = () => {
                 Docs
               </button>
             </div>
-            <div class="w-72">
+            <div class="devstudio-progress w-72">
             <div class="flex justify-between text-xs text-gray-500 mb-1">
               <span>Scenario Progress</span>
               <span class="font-semibold text-nacc-dark">{progress()}%</span>
@@ -145,13 +162,33 @@ const PageDevStudio: Component = () => {
         </div>
       </div>
 
+      <div class="devstudio-lane-tabs" classList={{ hidden: activeView() !== 'board' }}>
+        <For each={LANES}>
+          {(lane) => (
+            <button
+              type="button"
+              classList={{ active: activeLane() === lane }}
+              onClick={() => setActiveLane(lane)}
+            >
+              <span>{LANE_LABELS[lane]}</span>
+              <small>{laneTaskCount(lane)}</small>
+            </button>
+          )}
+        </For>
+      </div>
+
       <div
-        class="grid grid-cols-5 gap-3 p-4 flex-1 bg-[#fbfaf8] overflow-x-auto"
+        class="devstudio-board grid grid-cols-5 gap-3 p-4 flex-1 bg-[#fbfaf8] overflow-x-auto"
         classList={{ hidden: activeView() !== 'board' }}
+        onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
+        onTouchEnd={handleBoardTouchEnd}
       >
         <For each={LANES}>
           {(lane) => (
-            <section class="min-w-44 bg-white border border-nacc-border rounded-xl p-3 overflow-y-auto">
+            <section
+              class="devstudio-lane min-w-44 bg-white border border-nacc-border rounded-xl p-3 overflow-y-auto"
+              classList={{ active: activeLane() === lane }}
+            >
               <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">{LANE_LABELS[lane]}</h2>
               <div class="flex flex-col gap-2">
                 <For each={TASKS.filter((task) => task.lane === lane)}>

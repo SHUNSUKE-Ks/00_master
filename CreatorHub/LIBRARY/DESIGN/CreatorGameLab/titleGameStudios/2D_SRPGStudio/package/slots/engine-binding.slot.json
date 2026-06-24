@@ -1,0 +1,27 @@
+{
+  "slotId": "slot_engine_binding",
+  "schemaVersion": "creator-game-lab.engine-binding-slot.v0.1",
+  "status": "candidate",
+  "engines": {
+    "adventure": {
+      "engineId": "AdventureEngine",
+      "modelId": "adventure_novel_core",
+      "version": "0.1.0",
+      "status": "candidate"
+    },
+    "battle": {
+      "engineId": "BattleEngine",
+      "modelId": "battle_2d_srpg_ver_1_1",
+      "label": "2D_SRPG_BattleEngine_Ver1.1",
+      "version": "1.1.0",
+      "status": "candidate",
+      "sourcePath": "C:/Users/enjoy/InBox2026/InBox0601/blenderTest06"
+    },
+    "collection": {
+      "engineId": "CollectionEngine",
+      "modelId": "collection_reward_core",
+      "version": "0.1.0",
+      "status": "candidate"
+    }
+  }
+}

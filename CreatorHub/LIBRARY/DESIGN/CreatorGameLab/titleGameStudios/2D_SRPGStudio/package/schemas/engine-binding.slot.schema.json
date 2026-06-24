@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.engine-binding-slot.schema.v0.1",
+  "title": "Engine Binding Slot",
+  "type": "object",
+  "required": ["slotId", "schemaVersion", "status", "engines"],
+  "properties": {
+    "slotId": { "const": "slot_engine_binding" },
+    "schemaVersion": { "const": "creator-game-lab.engine-binding-slot.v0.1" },
+    "status": { "type": "string" },
+    "engines": {
+      "type": "object",
+      "required": ["adventure", "battle", "collection"],
+      "properties": {
+        "adventure": { "type": "object" },
+        "battle": { "type": "object" },
+        "collection": { "type": "object" }
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.title-game-studio-package.schema.v0.1",
+  "title": "TitleGameStudio Package",
+  "type": "object",
+  "required": ["schemaVersion", "packageId", "studioId", "title", "studioKind", "slots"],
+  "properties": {
+    "schemaVersion": { "const": "creator-game-lab.title-game-studio-package.v0.1" },
+    "packageId": { "type": "string" },
+    "studioId": { "type": "string" },
+    "title": { "type": "string" },
+    "studioKind": { "type": "string" },
+    "status": { "type": "string" },
+    "purpose": { "type": "string" },
+    "entry": { "type": "object" },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slotId", "label", "kind", "required", "status", "file", "schema", "dependsOn"],
+        "properties": {
+          "slotId": { "type": "string" },
+          "label": { "type": "string" },
+          "kind": { "type": "string" },
+          "required": { "type": "boolean" },
+          "status": { "type": "string" },
+          "file": { "type": "string" },
+          "schema": { "type": "string" },
+          "dependsOn": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "viewStateLayers": { "type": "object" },
+    "updatedAt": { "type": "string" }
+  }
+}

@@ -3,11 +3,13 @@ import type { Tag } from '../types'
 import { PRODUCTS } from '../db/products'
 import { NUTRIENTS } from '../db/nutrients'
 import { state, setState, addMemo, updateMemo, deleteMemo } from '../store'
-import { kanbanMemoInboxEnabled, sendMemoToKanbanMemoInbox } from '../db/firebase'
+import { kanbanMemoInboxEnabled, sendMemoToKanbanMemoInbox, sendScenarioFragmentToDevStudio } from '../db/firebase'
 import CharacterInputSection from '../components/CharacterInputSection'
 import CalloutInputSection from '../components/CalloutInputSection'
+import ScenarioInputSection from '../components/ScenarioInputSection'
 import NotionCalloutQuickInsert from '../components/NotionCalloutQuickInsert'
 import { dialogueIndent, escapeDialogueToNextParagraph, formatDialogueLine } from '../utils/dialogueFormat'
+import { cursorOffsetForScenarioBlock, formatScenarioBlock, type ScenarioBlockKind } from '../utils/scenarioFormat'
 
 let saveTimer: ReturnType<typeof setTimeout>
 
@@ -44,6 +46,8 @@ const PageMemo: Component = () => {
   const isMobile = () => window.innerWidth < 768
   const [mobilePanel, setMobilePanel] = createSignal<'list' | 'editor'>('list')
   const [sendStatus, setSendStatus] = createSignal<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [devStudioStatus, setDevStudioStatus] = createSignal<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [devStudioInfo, setDevStudioInfo] = createSignal<{ id?: string; sentAt?: string; message?: string } | null>(null)
   let bodyTextareaRef: HTMLTextAreaElement | undefined
 
   const [tagPickerOpen, setTagPickerOpen] = createSignal(false)
@@ -70,6 +74,26 @@ const PageMemo: Component = () => {
   }
 
   function handleBodyKeyDown(event: KeyboardEvent & { currentTarget: HTMLTextAreaElement }) {
+    if (event.altKey && !event.ctrlKey && !event.metaKey) {
+      const shortcuts: Record<string, ScenarioBlockKind | undefined> = {
+        q: 'pillar',
+        w: 'direction',
+        e: 'dialogue',
+      }
+      const kind = shortcuts[event.key.toLowerCase()]
+      if (kind) {
+        console.info('[NoteStory Shortcut] scenario memo', {
+          key: event.key,
+          code: event.code,
+          kind,
+          isTrusted: event.isTrusted,
+        })
+        event.preventDefault()
+        insertScenarioBlock(kind)
+        return
+      }
+    }
+
     if (event.key === 'Enter' && event.ctrlKey && !event.altKey && !event.metaKey) {
       const textarea = event.currentTarget
       const next = escapeDialogueToNextParagraph(textarea.value, textarea.selectionStart)
@@ -132,6 +156,8 @@ const PageMemo: Component = () => {
   function selectMemo(id: string) {
     setSelectedId(id)
     setSendStatus('idle')
+    setDevStudioStatus('idle')
+    setDevStudioInfo(null)
     if (isMobile()) setMobilePanel('editor')
   }
 
@@ -145,6 +171,28 @@ const PageMemo: Component = () => {
     } catch (error) {
       console.warn('[Kanban MemoInbox] send failed:', error)
       setSendStatus('error')
+    }
+  }
+
+  async function sendSelectedToDevStudio() {
+    const memo = selected()
+    if (!memo || devStudioStatus() === 'sending') return
+    setDevStudioStatus('sending')
+    setDevStudioInfo(null)
+    try {
+      const item = await sendScenarioFragmentToDevStudio({
+        sourceMemoId: memo.id,
+        title: memo.title || 'scenario fragment',
+        body: memo.body,
+        tags: memo.tags.map((tag) => tag.name),
+      })
+      setDevStudioStatus('sent')
+      setDevStudioInfo({ id: item.id, sentAt: item.updatedAt })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.warn('[DevStudio scenario_fragment] memo send failed:', error)
+      setDevStudioStatus('error')
+      setDevStudioInfo({ message })
     }
   }
 
@@ -197,11 +245,12 @@ const PageMemo: Component = () => {
     if (!memo?.id) return
     const text = formatDialogueLine(name)
     const textarea = bodyTextareaRef
-    const current = memo.body
-    const selectionStart = textarea?.selectionStart ?? current.length
+    const escaped = textarea ? escapeDialogueToNextParagraph(memo.body, textarea.selectionStart) : null
+    const current = escaped?.value ?? memo.body
+    const selectionStart = escaped?.cursor ?? textarea?.selectionStart ?? current.length
     const lineEndIndex = current.indexOf('\n', selectionStart)
     const start = options.fromLineEnd ? (lineEndIndex === -1 ? current.length : lineEndIndex) : selectionStart
-    const end = options.fromLineEnd ? start : (textarea?.selectionEnd ?? current.length)
+    const end = options.fromLineEnd || escaped ? start : (textarea?.selectionEnd ?? current.length)
     const before = current.slice(0, start)
     const after = current.slice(end)
     const separator = before && !before.endsWith('\n') ? '\n' : ''
@@ -234,6 +283,28 @@ const PageMemo: Component = () => {
     queueMicrotask(() => {
       bodyTextareaRef?.focus()
       bodyTextareaRef?.setSelectionRange(nextCursor, nextCursor)
+    })
+  }
+
+  function insertScenarioBlock(kind: ScenarioBlockKind) {
+    const memo = selected()
+    if (!memo?.id) return
+    const text = formatScenarioBlock(kind)
+    const textarea = bodyTextareaRef
+    const escaped = textarea ? escapeDialogueToNextParagraph(memo.body, textarea.selectionStart) : null
+    const current = escaped?.value ?? memo.body
+    const start = escaped?.cursor ?? textarea?.selectionStart ?? current.length
+    const end = escaped ? start : textarea?.selectionEnd ?? current.length
+    const before = current.slice(0, start)
+    const after = current.slice(end)
+    const prefix = before && !before.endsWith('\n') ? '\n' : ''
+    const suffix = after && !after.startsWith('\n') ? '\n' : ''
+    const nextBody = `${before}${prefix}${text}${suffix}${after}`
+    const cursor = before.length + prefix.length + cursorOffsetForScenarioBlock(kind)
+    handleTextInput('body', nextBody)
+    queueMicrotask(() => {
+      bodyTextareaRef?.focus()
+      bodyTextareaRef?.setSelectionRange(cursor, cursor)
     })
   }
 
@@ -325,6 +396,16 @@ const PageMemo: Component = () => {
                   {kanbanMemoInboxEnabled ? '送信失敗' : 'Firebase未設定'}
                 </span>
               </Show>
+              <Show when={devStudioStatus() === 'sent'}>
+                <span class="text-xs text-green-600" title={devStudioInfo()?.id}>
+                  sent_to_devstudio {devStudioInfo()?.sentAt}
+                </span>
+              </Show>
+              <Show when={devStudioStatus() === 'error'}>
+                <span class="text-xs text-red-500" title={devStudioInfo()?.message}>
+                  DevStudio送信失敗
+                </span>
+              </Show>
               <button
                 class="kanban-send-btn"
                 type="button"
@@ -334,6 +415,16 @@ const PageMemo: Component = () => {
               >
                 <SendIcon />
                 <span>{sendStatus() === 'sending' ? '送信中...' : '送信'}</span>
+              </button>
+              <button
+                class="devstudio-send-btn"
+                type="button"
+                disabled={devStudioStatus() === 'sending'}
+                onClick={sendSelectedToDevStudio}
+                title="現在のメモをscenario_fragmentとしてNovelEngine DevStudioへ送る"
+              >
+                <SendIcon />
+                <span>{devStudioStatus() === 'sending' ? '送信中...' : 'DevStudioへ送信'}</span>
               </button>
             </div>
             <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
@@ -379,6 +470,7 @@ const PageMemo: Component = () => {
                 </button>
               </div>
 
+              <ScenarioInputSection onInsert={insertScenarioBlock} />
               <CharacterInputSection onInsert={insertCharacterLine} />
               <CalloutInputSection onInsert={insertBlockAtCursor} />
 

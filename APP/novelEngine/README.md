@@ -42,6 +42,24 @@ src/DevStudio/
 docs/scenario_delivery_schema.schema.json
 ```
 
-## Vol1.1 で実装しないもの
+## DevStudio Layer / Character DB
 
-背景、立ち絵、BGM、SE、選択肢、フラグ、セーブ、ロード、AssetManager、ScenarioManager、CollectionManager、PWA設定。
+`src/DevStudio` は、Engine本体にかぶせる開発確認Layerとして扱います。
+
+Character DB、立ち絵、顔Icon、サンプル画像の載せ方は次を参照します。
+
+```txt
+docs/devstudio_character_asset_layer_rules_2026-06-20.md
+```
+
+素材パスを変更したら、次で確認します。
+
+```bash
+npm run smoke:assets
+```
+
+## Vol1.1 でまだ本実装しないもの
+
+選択肢、フラグ、セーブ、ロード、AssetManager、ScenarioManager、CollectionManager、PWA設定。
+
+背景、立ち絵、BGMは初期素材と確認用実装を持ちます。SEは `planned` としてDBに残し、未配置はSmoke TestでWARN扱いにします。

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.todo-slot.schema.v0.1",
+  "title": "TitleGameStudio TODO Slot",
+  "type": "object",
+  "required": ["slotId", "schemaVersion", "status", "title", "purpose", "deliveryItems", "groups"],
+  "properties": {
+    "slotId": { "type": "string" },
+    "schemaVersion": { "const": "creator-game-lab.todo-slot.v0.1" },
+    "status": { "type": "string" },
+    "title": { "type": "string" },
+    "purpose": { "type": "string" },
+    "progressTarget": { "type": "string" },
+    "milestones": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/milestoneItem" }
+    },
+    "deliveryItems": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/checkItem" }
+    },
+    "nextTasks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/taskItem" }
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["heading", "summary", "items"],
+        "properties": {
+          "heading": { "type": "string" },
+          "summary": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/checkItem" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "checkItem": {
+      "type": "object",
+      "required": ["key", "text", "done"],
+      "properties": {
+        "key": { "type": "string" },
+        "text": { "type": "string" },
+        "prop": { "type": "string" },
+        "done": { "type": "boolean" }
+      }
+    },
+    "milestoneItem": {
+      "type": "object",
+      "required": ["milestoneId", "key", "title", "summary", "status", "clearCondition", "childTodos"],
+      "properties": {
+        "milestoneId": { "type": "string" },
+        "key": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "status": { "type": "string" },
+        "clearCondition": { "type": "string" },
+        "nextHref": { "type": "string" },
+        "nextLabel": { "type": "string" },
+        "childTodos": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/checkItem" }
+        }
+      }
+    },
+    "taskItem": {
+      "type": "object",
+      "required": ["taskId", "key", "title", "summary", "status", "output"],
+      "properties": {
+        "taskId": { "type": "string" },
+        "key": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "status": { "type": "string" },
+        "output": { "type": "string" },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string" },
+              { "type": "string" }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

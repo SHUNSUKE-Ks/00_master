@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.screen-layout-slot.schema.v0.1",
+  "title": "Screen Layout Slot",
+  "type": "object",
+  "required": ["slotId", "schemaVersion", "status", "screens"],
+  "properties": {
+    "slotId": { "const": "slot_screen_layout" },
+    "schemaVersion": { "const": "creator-game-lab.screen-layout-slot.v0.1" },
+    "status": { "type": "string" },
+    "screens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["screenId", "label", "layers", "states"],
+        "properties": {
+          "screenId": { "type": "string" },
+          "label": { "type": "string" },
+          "orientation": { "type": "string" },
+          "layers": { "type": "array", "items": { "type": "string" } },
+          "states": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

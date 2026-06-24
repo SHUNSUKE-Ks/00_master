@@ -16,6 +16,23 @@ const [talkIndex, setTalkIndex] = createSignal(initial.talkIndex ?? 0);
 
 const currentScene = createMemo(() => scenario.scenes?.[sceneIndex()] ?? null);
 const currentTalk = createMemo(() => normalizeTalk(getTalk(currentScene(), talkIndex())));
+const currentChoice = createMemo(() => {
+  const scene = currentScene();
+  const talks = Array.isArray(scene?.talk) ? scene.talk : [];
+  if (!scene?.choice) return null;
+  return talkIndex() >= talks.length - 1 ? scene.choice : null;
+});
+
+function goToScene(sceneId) {
+  const nextIndex = scenario.scenes?.findIndex((scene) => scene.id === sceneId) ?? -1;
+  if (nextIndex < 0) {
+    setScreen("END");
+    setPhase("END");
+    return;
+  }
+  setSceneIndex(nextIndex);
+  setTalkIndex(0);
+}
 
 function startGame() {
   setScreen("NOVEL");
@@ -38,6 +55,18 @@ function nextTalk() {
     return;
   }
 
+  if (scene.choice) return;
+
+  if (Object.hasOwn(scene, "next")) {
+    if (scene.next) {
+      goToScene(scene.next);
+      return;
+    }
+    setScreen("END");
+    setPhase("END");
+    return;
+  }
+
   if (sceneIndex() + 1 < scenario.scenes.length) {
     setSceneIndex((index) => index + 1);
     setTalkIndex(0);
@@ -55,6 +84,15 @@ function resetGame() {
   setTalkIndex(initial.talkIndex ?? 0);
 }
 
+function chooseOption(option) {
+  if (!option?.next) {
+    setScreen("END");
+    setPhase("END");
+    return;
+  }
+  goToScene(option.next);
+}
+
 export const gameStore = {
   scenario,
   screen,
@@ -63,7 +101,9 @@ export const gameStore = {
   talkIndex,
   currentScene,
   currentTalk,
+  currentChoice,
   startGame,
   nextTalk,
+  chooseOption,
   resetGame
 };

@@ -1,0 +1,28 @@
+{
+  "slotId": "slot_screen_layout",
+  "schemaVersion": "creator-game-lab.screen-layout-slot.v0.1",
+  "status": "draft",
+  "screens": [
+    {
+      "screenId": "map",
+      "label": "Map",
+      "orientation": "landscape",
+      "layers": ["background", "route", "marker", "player_status", "overlay"],
+      "states": ["idle", "marker_focus", "mission_preview", "route_confirm"]
+    },
+    {
+      "screenId": "conversation",
+      "label": "Conversation",
+      "orientation": "landscape",
+      "layers": ["background", "character", "dialogue_ui", "log_ui", "overlay"],
+      "states": ["reading", "log_open", "auto_play", "skip_confirm", "choice_open"]
+    },
+    {
+      "screenId": "battle",
+      "label": "Battle",
+      "orientation": "landscape",
+      "layers": ["battlefield", "grid", "unit", "range_overlay", "command_ui", "player_status"],
+      "states": ["player_idle", "move_preview", "target_select", "command_open", "action_preview", "enemy_turn"]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { Box, Database, Gamepad2, Gauge, LayoutDashboard, MonitorPlay, Save, Settings } from "lucide-solid";
+import { Box, Database, Gamepad2, Gauge, LayoutDashboard, MonitorPlay, PanelsTopLeft, Save, Settings } from "lucide-solid";
 import type { LabState, ViewPhase } from "../state/labState";
 
 type NavItem = {
@@ -12,6 +12,7 @@ const navItems: NavItem[] = [
   { id: "titleSelect", label: "Title Select", icon: Gamepad2 },
   { id: "engineSandbox", label: "Engine Sandbox", icon: Box },
   { id: "devSaveLoad", label: "Dev Save / Load", icon: Save },
+  { id: "titleGameStudios", label: "Title Studios", icon: PanelsTopLeft },
   { id: "componentRegistry", label: "Component Registry", icon: Database },
 ];
 

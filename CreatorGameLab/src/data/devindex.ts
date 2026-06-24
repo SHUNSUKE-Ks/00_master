@@ -9,6 +9,7 @@ import type {
   GameTitle,
   LayoutProfile,
   MigrationItem,
+  TitleGameStudio,
 } from "./schema";
 
 const manifestPath = "/data-sources/source-manifest.json";
@@ -31,12 +32,13 @@ async function loadDevindex(): Promise<DevindexData> {
   }
 
   const base = source.basePath.replace(/\/$/, "");
-  const [titleRegistry, engineRegistry, layoutRegistry, saveRegistry, componentRegistry, migrationRegistry] = await Promise.all([
+  const [titleRegistry, engineRegistry, layoutRegistry, saveRegistry, componentRegistry, titleStudioRegistry, migrationRegistry] = await Promise.all([
     loadJson<{ titles?: GameTitle[] }>(`${base}/game-title.registry.json`),
     loadJson<{ sandboxes?: EngineSandbox[]; tests?: EngineTest[] }>(`${base}/engine-sandbox.registry.json`),
     loadJson<{ profiles?: LayoutProfile[] }>(`${base}/layout-profile.registry.json`),
     loadJson<{ slots?: DevSaveSlot[] }>(`${base}/dev-save-slots.json`),
     loadJson<{ components?: ComponentView[] }>(`${base}/component-view.registry.json`),
+    loadJson<{ studios?: TitleGameStudio[] }>(`${base}/title-game-studio.registry.json`),
     loadJson<{ items?: MigrationItem[] }>(`${base}/migration-queue.registry.json`),
   ]);
 
@@ -48,6 +50,7 @@ async function loadDevindex(): Promise<DevindexData> {
     layoutProfiles: layoutRegistry.profiles ?? [],
     saveSlots: saveRegistry.slots ?? [],
     components: componentRegistry.components ?? [],
+    titleStudios: titleStudioRegistry.studios ?? [],
     migrations: migrationRegistry.items ?? [],
   };
 
@@ -59,6 +62,7 @@ async function loadDevindex(): Promise<DevindexData> {
     layoutProfiles: data.layoutProfiles.length,
     saveSlots: data.saveSlots.length,
     components: data.components.length,
+    titleStudios: data.titleStudios.length,
   });
 
   return data;
@@ -90,4 +94,5 @@ export type {
   GameTitle,
   LayoutProfile,
   MigrationItem,
+  TitleGameStudio,
 };

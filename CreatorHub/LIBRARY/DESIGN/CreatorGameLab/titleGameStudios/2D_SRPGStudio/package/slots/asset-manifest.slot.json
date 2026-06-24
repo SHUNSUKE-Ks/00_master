@@ -1,0 +1,56 @@
+{
+  "slotId": "slot_asset_manifest",
+  "schemaVersion": "creator-game-lab.asset-manifest-slot.v0.1",
+  "status": "draft",
+  "assets": [
+    {
+      "assetId": "bg_world_map_01",
+      "kind": "background",
+      "screen": "map",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/background/bg_world_map_01.png",
+      "role": "base_layer"
+    },
+    {
+      "assetId": "bg_conversation_dock_01",
+      "kind": "background",
+      "screen": "conversation",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/background/bg_conversation_dock_01.png",
+      "role": "base_layer"
+    },
+    {
+      "assetId": "bg_battle_field_forest_01",
+      "kind": "background",
+      "screen": "battle",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/background/bg_battle_field_forest_01.png",
+      "role": "base_layer"
+    },
+    {
+      "assetId": "player_walk_default_alpha",
+      "kind": "character_sprite",
+      "screen": "map",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/character/player_walk_default_alpha.png",
+      "role": "walk_default"
+    },
+    {
+      "assetId": "player_battle_action_alpha",
+      "kind": "character_sprite",
+      "screen": "battle",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/character/player_battle_action_alpha.png",
+      "role": "battle_action"
+    },
+    {
+      "assetId": "ui_player_status_panel_alpha",
+      "kind": "ui",
+      "screen": "map,battle",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/ui/ui_player_status_panel_alpha.png",
+      "role": "active_player_status"
+    },
+    {
+      "assetId": "obj_srpg_marker_set_alpha",
+      "kind": "object",
+      "screen": "map,battle",
+      "path": "C:/00_master/APP/novelEngine/public/assets/srpg/object/obj_srpg_marker_set_alpha.png",
+      "role": "marker_cursor_range"
+    }
+  ]
+}

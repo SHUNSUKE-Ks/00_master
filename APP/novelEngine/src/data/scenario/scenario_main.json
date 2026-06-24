@@ -1,15 +1,26 @@
 {
   "meta": {
-    "projectName": "SolidJS_NovelEngine_Vol1.1",
+    "projectName": "未来を打ち直す鍛冶屋",
     "version": "1.1",
     "format": "one_json_novel",
-    "language": "ja"
+    "language": "ja",
+    "sourceFormat": "scenario_oneshot",
+    "sourceEpisode": 1
   },
-  "title": "魔女の森",
+  "title": "未来を打ち直す鍛冶屋",
+  "titleScreen": {
+    "title": "未来を打ち直す鍛冶屋",
+    "subtitle": "壊れた未来を、炉の火でもう一度打ち直す。",
+    "startButtonLabel": "はじめる",
+    "tags": [
+      "bg_title",
+      "bgm_title"
+    ]
+  },
   "engine": {
     "startScreen": "TITLE",
     "startPhase": "TITLE",
-    "startScene": "scene_forest_entrance"
+    "startScene": "scene_001"
   },
   "screenFlow": [
     {
@@ -39,81 +50,177 @@
   },
   "scenes": [
     {
-      "id": "scene_forest_entrance",
-      "scene": "森入口",
+      "id": "scene_001",
+      "scene": "村入口の夜",
       "phase": "PLAYING",
       "tags": [
-        "bg_forest_entrance",
-        "mood_lonely",
-        "bgm_forest"
+        "bg_village_gate_night",
+        "char_blacksmith_boy",
+        "face_normal",
+        "char_mia",
+        "face_worried",
+        "bgm_tension_low",
+        "fx_fog_slow",
+        "cam_slow_zoom"
       ],
       "talk": [
         {
           "id": "talk_001",
-          "speaker": "騎士",
-          "text": "ここが魔女の森か……。",
+          "speaker": "ミア",
+          "text": "また魔物の足音が近づいてる…",
           "tags": [
-            "char_knight",
-            "face_knight_serious",
-            "memo_need_knight_standing"
+            "char_mia",
+            "face_worried"
           ]
         },
         {
           "id": "talk_002",
-          "speaker": "少女",
-          "text": "怖くないの？",
+          "speaker": "主人公",
+          "text": "門はもたない。けど、まだ直せる。",
           "tags": [
-            "char_girl",
-            "face_girl_worried",
-            "memo_need_girl_standing"
+            "char_blacksmith_boy",
+            "face_serious",
+            "se_hammer_light"
           ]
-        }
-      ],
-      "next": "scene_forest_deep"
-    },
-    {
-      "id": "scene_forest_deep",
-      "scene": "森の奥",
-      "phase": "PLAYING",
-      "tags": [
-        "bg_forest_deep",
-        "fx_fog_slow",
-        "se_step_grass",
-        "flag_enter_forest"
-      ],
-      "talk": [
+        },
         {
           "id": "talk_003",
-          "speaker": "騎士",
-          "text": "妹を救うためなら、恐れるものはない。",
+          "speaker": "ミア",
+          "text": "戦うの？",
           "tags": [
-            "char_knight",
-            "face_knight_angry"
+            "char_mia",
+            "face_worried"
           ]
         },
         {
           "id": "talk_004",
-          "speaker": "少女",
-          "text": "それなら、森の奥まで案内してあげる。",
+          "speaker": "主人公",
+          "text": "違う。守る道具を作るんだ。",
           "tags": [
-            "char_girl",
-            "face_girl_normal",
-            "ev_guide_to_forest"
+            "char_blacksmith_boy",
+            "face_serious"
+          ]
+        }
+      ],
+      "choice": {
+        "id": "choice_001",
+        "text": "主人公は何を優先する？",
+        "options": [
+          {
+            "id": "option_01",
+            "label": "壊れた門を補強する",
+            "next": "scene_002",
+            "setFlags": [
+              "flag_gate_repaired"
+            ],
+            "tags": [
+              "ev_repair_gate",
+              "se_hammer_heavy"
+            ]
+          },
+          {
+            "id": "option_02",
+            "label": "ミアを偵察に向かわせる",
+            "next": "scene_003",
+            "setFlags": [
+              "flag_mia_scout"
+            ],
+            "tags": [
+              "ev_mia_scout",
+              "se_footstep_fast"
+            ]
+          }
+        ]
+      },
+      "next": null
+    },
+    {
+      "id": "scene_002",
+      "scene": "打ち直された門",
+      "phase": "PLAYING",
+      "tags": [
+        "bg_village_gate_night",
+        "char_blacksmith_boy",
+        "face_determined",
+        "flag_gate_repaired",
+        "bgm_hope_small",
+        "se_fire_crackle"
+      ],
+      "talk": [
+        {
+          "id": "talk_001",
+          "speaker": "主人公",
+          "text": "武器じゃなくても、誰かを守れる。",
+          "tags": [
+            "char_blacksmith_boy",
+            "face_determined"
+          ]
+        },
+        {
+          "id": "talk_002",
+          "speaker": "主人公",
+          "text": "父さんの炉は、そのためにあるんだ。",
+          "tags": [
+            "char_blacksmith_boy",
+            "face_determined",
+            "fx_spark_small"
+          ]
+        }
+      ],
+      "next": null
+    },
+    {
+      "id": "scene_003",
+      "scene": "闇に走るミア",
+      "phase": "PLAYING",
+      "tags": [
+        "bg_forest_edge_night",
+        "char_mia",
+        "face_serious",
+        "flag_mia_scout",
+        "bgm_danger",
+        "fx_shadow_move"
+      ],
+      "talk": [
+        {
+          "id": "talk_001",
+          "speaker": "ミア",
+          "text": "匂いが二つ…正面は囮だ。",
+          "tags": [
+            "char_mia",
+            "face_serious"
+          ]
+        },
+        {
+          "id": "talk_002",
+          "speaker": "ミア",
+          "text": "本隊は森の裏から来てる！",
+          "tags": [
+            "char_mia",
+            "face_surprised",
+            "se_alert"
           ]
         }
       ],
       "next": null
     }
   ],
+  "assetPrompts": {
+    "bg_village_gate_night": "warm dark fantasy anime background, small medieval village gate at night, damaged wooden gate, mist, lantern light, cinematic composition, high detail, 16:9",
+    "bg_forest_edge_night": "warm dark fantasy anime background, edge of a dark forest near a village, moonlight, fog, suspicious shadows between trees, high detail, 16:9",
+    "char_blacksmith_boy": "warm fantasy anime character, young blacksmith boy, demi-human blood hint, simple work clothes, leather apron, short messy hair, determined eyes, full body, transparent background",
+    "char_mia": "warm fantasy anime character, cheerful scout girl, agile, short cloak, light leather gear, sharp eyes, slightly catlike sense impression, full body, transparent background"
+  },
   "assetOrderHint": {
-    "purpose": "Vol1.1では未使用。将来の素材発注用にtagsから抽出する。",
+    "purpose": "scenario_oneshotから採用。DevStudio Asset Workshopで素材発注へ接続する。",
     "categories": [
       "Backgrounds",
       "Characters",
       "Faces",
       "BGM",
       "SE",
-      "FX"
+      "FX",
+      "UI"
     ]
   }
 }

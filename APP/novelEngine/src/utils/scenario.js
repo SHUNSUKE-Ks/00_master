@@ -42,10 +42,13 @@ export function categorizeScenarioTags(scenario) {
     bgm: [],
     se: [],
     fx: [],
+    cam: [],
     mood: [],
     flag: [],
     ev: [],
+    req: [],
     memo: [],
+    fn: [],
     ui: [],
     other: []
   };

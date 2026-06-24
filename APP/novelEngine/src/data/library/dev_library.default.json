@@ -1,10 +1,11 @@
 {
   "meta": {
     "id": "dev_library_default",
-    "version": "0.4.0",
+    "version": "0.4.5",
     "purpose": "CodexとDevStudioが初期状態で参照する制作DB。キャラクター、背景、UI、音、仮素材方針を一枚で管理する。",
     "format": "one_json_dev_library",
-    "language": "ja"
+    "language": "ja",
+    "lastTaskTicket": "TT-NE-WS-002"
   },
   "policy": {
     "defaultAssetMode": "png_initial_for_visuals_svg_for_ui",
@@ -63,7 +64,7 @@
       "description": "失われた妹を探して魔女の森へ入る若い騎士。",
       "defaultFace": "face_knight_serious",
       "defaultStanding": "asset_char_knight_sheet_png",
-      "assetPath": "/assets/packs/fantasy_novel_default/characters/char_knight_neutral.png",
+      "assetPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
       "standingVariants": [
         "neutral",
         "serious",
@@ -71,12 +72,177 @@
         "gentle_smile"
       ],
       "standingAssets": {
-        "neutral": "/assets/packs/fantasy_novel_default/characters/char_knight_neutral.png",
-        "serious": "/assets/packs/fantasy_novel_default/characters/char_knight_serious.png",
-        "angry_battle": "/assets/packs/fantasy_novel_default/characters/char_knight_angry_battle.png",
-        "gentle_smile": "/assets/packs/fantasy_novel_default/characters/char_knight_gentle_smile.png"
+        "neutral": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
+        "serious": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_serious_safe.png",
+        "angry_battle": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_angry_battle_safe.png",
+        "gentle_smile": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_gentle_smile_safe.png"
       },
-      "tags": ["char_knight", "face_knight_neutral", "face_knight_serious", "face_knight_angry", "face_knight_smile"]
+      "faceAssets": [
+        {
+          "id": "face_knight_neutral",
+          "label": "通常",
+          "standingVariant": "neutral",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_knight_neutral_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_neutral_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        },
+        {
+          "id": "face_knight_serious",
+          "label": "真剣",
+          "standingVariant": "serious",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_knight_serious_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_serious_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_serious_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_serious_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        },
+        {
+          "id": "face_knight_angry",
+          "label": "怒り",
+          "standingVariant": "angry_battle",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_knight_angry_battle_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_angry_battle_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_angry_battle_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_angry_battle_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        },
+        {
+          "id": "face_knight_smile",
+          "label": "微笑",
+          "standingVariant": "gentle_smile",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_knight_gentle_smile_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_gentle_smile_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_gentle_smile_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_gentle_smile_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        }
+      ],
+      "assetSlots": {
+        "standing": {
+          "default": "standing_knight_neutral",
+          "items": [
+            {
+              "id": "standing_knight_neutral",
+              "label": "通常立ち絵",
+              "variant": "neutral",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_knight_neutral.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_neutral_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            },
+            {
+              "id": "standing_knight_serious",
+              "label": "真剣立ち絵",
+              "variant": "serious",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_serious_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_knight_serious.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_serious_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_serious_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            },
+            {
+              "id": "standing_knight_angry_battle",
+              "label": "戦闘立ち絵",
+              "variant": "angry_battle",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_angry_battle_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_knight_angry_battle.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_angry_battle_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_angry_battle_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            },
+            {
+              "id": "standing_knight_gentle_smile",
+              "label": "微笑立ち絵",
+              "variant": "gentle_smile",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_gentle_smile_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_knight_gentle_smile.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_gentle_smile_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_gentle_smile_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            }
+          ]
+        },
+        "faceIcons": {
+          "default": "face_knight_serious",
+          "items": [
+            {
+              "id": "face_knight_neutral",
+              "label": "通常",
+              "variant": "neutral",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_knight_neutral_face_icon.png",
+              "usage": "conversation_log_menu"
+            },
+            {
+              "id": "face_knight_serious",
+              "label": "真剣",
+              "variant": "serious",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_knight_serious_face_icon.png",
+              "usage": "conversation_log_menu"
+            },
+            {
+              "id": "face_knight_angry",
+              "label": "怒り",
+              "variant": "angry_battle",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_knight_angry_battle_face_icon.png",
+              "usage": "conversation_log_menu"
+            },
+            {
+              "id": "face_knight_smile",
+              "label": "微笑",
+              "variant": "gentle_smile",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_knight_gentle_smile_face_icon.png",
+              "usage": "conversation_log_menu"
+            }
+          ]
+        },
+        "costumes": {
+          "default": "costume_knight_travel_armor",
+          "items": [
+            {
+              "id": "costume_knight_travel_armor",
+              "label": "旅装鎧",
+              "status": "placeholder",
+              "notes": "現在の立ち絵に含まれる標準衣装。将来の衣装差分はこのslotへ追加する。"
+            }
+          ]
+        },
+        "hairstyles": {
+          "default": "hair_knight_default",
+          "items": [
+            {
+              "id": "hair_knight_default",
+              "label": "標準髪型",
+              "status": "placeholder",
+              "notes": "現在の立ち絵に含まれる標準髪型。将来の髪型差分はこのslotへ追加する。"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "char_knight",
+        "face_knight_neutral",
+        "face_knight_serious",
+        "face_knight_angry",
+        "face_knight_smile"
+      ],
+      "processingStatus": "cutout_ready_from_safe",
+      "assetProcessing": {
+        "rawPath": "/assets/packs/fantasy_novel_default/characters/char_knight_neutral.png",
+        "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_neutral_safe.png",
+        "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png",
+        "processingStatus": "cutout_ready_from_safe",
+        "manualRequired": false,
+        "notes": "TT-NE-WS-002: existing characters_safe PNG was promoted into demo/cutout lanes until real raw/cutout processing is added."
+      },
+      "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_knight_neutral_safe.png",
+      "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_knight_neutral_safe.png"
     },
     {
       "id": "char_girl",
@@ -85,7 +251,7 @@
       "description": "森の入口で騎士に出会い、奥へ案内する不思議な少女。",
       "defaultFace": "face_girl_normal",
       "defaultStanding": "asset_char_heroine_sheet_png",
-      "assetPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_neutral.png",
+      "assetPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
       "standingVariants": [
         "neutral",
         "worried",
@@ -93,12 +259,178 @@
         "mysterious_serious"
       ],
       "standingAssets": {
-        "neutral": "/assets/packs/fantasy_novel_default/characters/char_heroine_neutral.png",
-        "worried": "/assets/packs/fantasy_novel_default/characters/char_heroine_worried.png",
-        "gentle_smile": "/assets/packs/fantasy_novel_default/characters/char_heroine_gentle_smile.png",
-        "mysterious_serious": "/assets/packs/fantasy_novel_default/characters/char_heroine_mysterious_serious.png"
+        "neutral": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
+        "worried": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_worried_safe.png",
+        "gentle_smile": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_gentle_smile_safe.png",
+        "mysterious_serious": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_mysterious_serious_safe.png"
       },
-      "tags": ["char_girl", "char_heroine", "face_girl_normal", "face_girl_worried", "face_girl_smile", "face_girl_serious"]
+      "faceAssets": [
+        {
+          "id": "face_girl_normal",
+          "label": "通常",
+          "standingVariant": "neutral",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_neutral_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_neutral_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        },
+        {
+          "id": "face_girl_worried",
+          "label": "不安",
+          "standingVariant": "worried",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_worried_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_worried_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_worried_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_worried_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        },
+        {
+          "id": "face_girl_smile",
+          "label": "微笑",
+          "standingVariant": "gentle_smile",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_gentle_smile_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_gentle_smile_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_gentle_smile_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_gentle_smile_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        },
+        {
+          "id": "face_girl_serious",
+          "label": "神秘",
+          "standingVariant": "mysterious_serious",
+          "iconPath": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_mysterious_serious_face_icon.png",
+          "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_mysterious_serious_safe.png",
+          "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_mysterious_serious_safe.png",
+          "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_mysterious_serious_safe.png",
+          "processingStatus": "cutout_ready_from_safe"
+        }
+      ],
+      "assetSlots": {
+        "standing": {
+          "default": "standing_heroine_neutral",
+          "items": [
+            {
+              "id": "standing_heroine_neutral",
+              "label": "通常立ち絵",
+              "variant": "neutral",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_neutral.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_neutral_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            },
+            {
+              "id": "standing_heroine_worried",
+              "label": "不安立ち絵",
+              "variant": "worried",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_worried_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_worried.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_worried_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_worried_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            },
+            {
+              "id": "standing_heroine_gentle_smile",
+              "label": "微笑立ち絵",
+              "variant": "gentle_smile",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_gentle_smile_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_gentle_smile.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_gentle_smile_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_gentle_smile_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            },
+            {
+              "id": "standing_heroine_mysterious_serious",
+              "label": "神秘立ち絵",
+              "variant": "mysterious_serious",
+              "path": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_mysterious_serious_safe.png",
+              "source": "characters_cutout",
+              "rawPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_mysterious_serious.png",
+              "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_mysterious_serious_safe.png",
+              "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_mysterious_serious_safe.png",
+              "processingStatus": "cutout_ready_from_safe"
+            }
+          ]
+        },
+        "faceIcons": {
+          "default": "face_girl_normal",
+          "items": [
+            {
+              "id": "face_girl_normal",
+              "label": "通常",
+              "variant": "neutral",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_neutral_face_icon.png",
+              "usage": "conversation_log_menu"
+            },
+            {
+              "id": "face_girl_worried",
+              "label": "不安",
+              "variant": "worried",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_worried_face_icon.png",
+              "usage": "conversation_log_menu"
+            },
+            {
+              "id": "face_girl_smile",
+              "label": "微笑",
+              "variant": "gentle_smile",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_gentle_smile_face_icon.png",
+              "usage": "conversation_log_menu"
+            },
+            {
+              "id": "face_girl_serious",
+              "label": "神秘",
+              "variant": "mysterious_serious",
+              "path": "/assets/packs/fantasy_novel_default/face_icons/char_heroine_mysterious_serious_face_icon.png",
+              "usage": "conversation_log_menu"
+            }
+          ]
+        },
+        "costumes": {
+          "default": "costume_heroine_forest_cloak",
+          "items": [
+            {
+              "id": "costume_heroine_forest_cloak",
+              "label": "森の外套",
+              "status": "placeholder",
+              "notes": "現在の立ち絵に含まれる標準衣装。将来の衣装差分はこのslotへ追加する。"
+            }
+          ]
+        },
+        "hairstyles": {
+          "default": "hair_heroine_default",
+          "items": [
+            {
+              "id": "hair_heroine_default",
+              "label": "標準髪型",
+              "status": "placeholder",
+              "notes": "現在の立ち絵に含まれる標準髪型。将来の髪型差分はこのslotへ追加する。"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "char_girl",
+        "char_heroine",
+        "face_girl_normal",
+        "face_girl_worried",
+        "face_girl_smile",
+        "face_girl_serious"
+      ],
+      "processingStatus": "cutout_ready_from_safe",
+      "assetProcessing": {
+        "rawPath": "/assets/packs/fantasy_novel_default/characters/char_heroine_neutral.png",
+        "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_neutral_safe.png",
+        "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png",
+        "processingStatus": "cutout_ready_from_safe",
+        "manualRequired": false,
+        "notes": "TT-NE-WS-002: existing characters_safe PNG was promoted into demo/cutout lanes until real raw/cutout processing is added."
+      },
+      "demoPath": "/assets/packs/fantasy_novel_default/characters_demo/char_heroine_neutral_safe.png",
+      "cutoutPath": "/assets/packs/fantasy_novel_default/characters_cutout/char_heroine_neutral_safe.png"
     }
   ],
   "locations": [
@@ -108,7 +440,10 @@
       "description": "霧が薄く漂う森の入口。タイトルと序盤の舞台。",
       "defaultAsset": "asset_bg_forest_entrance_png",
       "assetPath": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_entrance_initial.png",
-      "tags": ["bg_forest_entrance", "mood_lonely"]
+      "tags": [
+        "bg_forest_entrance",
+        "mood_lonely"
+      ]
     },
     {
       "id": "bg_forest_deep",
@@ -116,7 +451,10 @@
       "description": "霧が濃く、先の見えない森の深部。",
       "defaultAsset": "asset_bg_forest_deep_png",
       "assetPath": "/assets/packs/fantasy_novel_default/backgrounds/bg_forest_deep_initial.png",
-      "tags": ["bg_forest_deep", "fx_fog_slow"]
+      "tags": [
+        "bg_forest_deep",
+        "fx_fog_slow"
+      ]
     }
   ],
   "assetOrder": {
@@ -286,5 +624,15 @@
         "usage": "共通ボタンクリック音"
       }
     }
+  },
+  "assetPathPolicy": {
+    "raw": "characters_raw or legacy characters source",
+    "demo": "characters_demo preview image",
+    "cutout": "characters_cutout transparent runtime image",
+    "runtimeFallback": [
+      "cutoutPath",
+      "demoPath",
+      "assetPath"
+    ]
   }
 }

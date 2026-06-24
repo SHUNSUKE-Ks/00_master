@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "agentroom.agent-run.v1",
+  "runId": "run_creator_game_lab_agent_TT-20260619-010-novel-engine-deliverables_20260620T015640Z",
+  "agentId": "creator_game_lab_agent",
+  "agentLabel": "CreatorGameLab Agent",
+  "sourceTask": "TT-20260619-010-novel-engine-deliverables",
+  "sourceProject": "project_creator_game_lab",
+  "status": "done",
+  "startedAt": "2026-06-20T01:56:40.435Z",
+  "finishedAt": "2026-06-20T01:56:50.910Z",
+  "cwd": "C:\\00_master",
+  "command": "node AgentRoom\\commands\\agent-task-start.mjs --agent creator_game_lab_agent --ticket TT-20260619-010-novel-engine-deliverables",
+  "promptPath": "C:\\00_master\\AgentRoom\\prompts\\run_creator_game_lab_agent_TT-20260619-010-novel-engine-deliverables_20260620T015640Z.md",
+  "logPath": "C:\\00_master\\AgentRoom\\logs\\run_creator_game_lab_agent_TT-20260619-010-novel-engine-deliverables_20260620T015640Z.md",
+  "reportPath": "C:\\00_master\\DevApps\\kanban_June\\docs\\tt-20260619-010-novel-engine-deliverables_creator_game_lab_agent_report_2026-06-20.md",
+  "expectedOutput": {
+    "reportTargetDir": "C:/00_master/DevApps/kanban_June/docs",
+    "reportTarget": "phase_report",
+    "acceptance": [
+      "scenario_main.jsonの完成形が説明されている",
+      "Character、背景、BGM、SEの必須項目が整理されている",
+      "成果物と保存先の一覧がある",
+      "GameLabへ渡す要素が明確"
+    ]
+  },
+  "changedFiles": [],
+  "verification": [
+    "agent-task-startでrun/prompt/logを生成し、agent-task-completeでKanban docsへTaskTicket Reportを保存できた。"
+  ],
+  "nextCandidates": []
+}

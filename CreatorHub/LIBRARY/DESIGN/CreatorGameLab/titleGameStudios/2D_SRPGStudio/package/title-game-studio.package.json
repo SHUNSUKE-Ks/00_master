@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "creator-game-lab.title-game-studio-package.v0.1",
+  "packageId": "title_game_studio_2d_srpg_001",
+  "packageVersion": "0.1.1",
+  "latest": true,
+  "versionLabel": "v0.1.1 draft",
+  "studioId": "studio_2d_srpg_001",
+  "title": "2D_SRPGStudio",
+  "studioKind": "srpg",
+  "status": "designing",
+  "purpose": "Engineより先にTitle単位の画面、素材、状態、Engine注文書を組み立てる単体HTML DevStudio package。",
+  "entry": {
+    "standaloneHtml": "../index.html",
+    "previewMode": "file_html"
+  },
+  "slots": [
+    {
+      "slotId": "slot_identity",
+      "label": "Identity",
+      "kind": "meta",
+      "required": true,
+      "status": "attached",
+      "file": "./title-game-studio.package.json",
+      "schema": "./schemas/title-game-studio-package.schema.json",
+      "dependsOn": []
+    },
+    {
+      "slotId": "slot_screen_layout",
+      "label": "Screen Layout",
+      "kind": "layout",
+      "required": true,
+      "status": "draft",
+      "file": "./slots/screen-layout.slot.json",
+      "schema": "./schemas/screen-layout.slot.schema.json",
+      "dependsOn": ["slot_identity"]
+    },
+    {
+      "slotId": "slot_asset_manifest",
+      "label": "Asset Manifest",
+      "kind": "asset",
+      "required": true,
+      "status": "draft",
+      "file": "./slots/asset-manifest.slot.json",
+      "schema": "./schemas/asset-manifest.slot.schema.json",
+      "dependsOn": ["slot_identity"]
+    },
+    {
+      "slotId": "slot_runtime_manifest",
+      "label": "Runtime Manifest",
+      "kind": "runtime",
+      "required": true,
+      "status": "draft",
+      "file": "./slots/runtime-manifest.slot.json",
+      "schema": "./schemas/runtime-manifest.slot.schema.json",
+      "dependsOn": ["slot_screen_layout", "slot_asset_manifest"]
+    },
+    {
+      "slotId": "slot_engine_binding",
+      "label": "Engine Binding",
+      "kind": "engine",
+      "required": true,
+      "status": "candidate",
+      "file": "./slots/engine-binding.slot.json",
+      "schema": "./schemas/engine-binding.slot.schema.json",
+      "dependsOn": ["slot_runtime_manifest"]
+    },
+    {
+      "slotId": "slot_fix_log",
+      "label": "Fix Log",
+      "kind": "review",
+      "required": false,
+      "status": "empty",
+      "file": "./slots/fix-log.slot.json",
+      "schema": "./schemas/fix-log.slot.schema.json",
+      "dependsOn": ["slot_asset_manifest"]
+    },
+    {
+      "slotId": "slot_todo_studio_build",
+      "label": "Studio Build TODO",
+      "kind": "todo",
+      "required": false,
+      "status": "draft",
+      "file": "./slots/todo-studio-build.slot.json",
+      "schema": "./schemas/todo.slot.schema.json",
+      "dependsOn": ["slot_identity"]
+    },
+    {
+      "slotId": "slot_todo_runtime_json",
+      "label": "Runtime JSON TODO",
+      "kind": "todo",
+      "required": false,
+      "status": "draft",
+      "file": "./slots/todo-runtime-json.slot.json",
+      "schema": "./schemas/todo.slot.schema.json",
+      "dependsOn": ["slot_screen_layout", "slot_asset_manifest", "slot_engine_binding"]
+    },
+    {
+      "slotId": "slot_engine_order",
+      "label": "Engine Order",
+      "kind": "handoff",
+      "required": false,
+      "status": "draft",
+      "file": "./slots/engine-order.slot.json",
+      "schema": "./schemas/engine-order.slot.schema.json",
+      "dependsOn": ["slot_engine_binding", "slot_fix_log"]
+    }
+  ],
+  "viewStateLayers": {
+    "appPhase": ["studio_design", "package_slot_attach", "engine_binding", "runtime_preview"],
+    "viewPhase": ["gallery", "screen_layout", "slot_manifest", "fix_log", "engine_order"],
+    "activeTarget": ["screen", "asset", "slot", "engine_slot", "fix_request"],
+    "viewMode": ["gallery", "slot_list", "detail", "manifest", "handoff"],
+    "interactionState": ["idle", "reviewing_image", "attaching_json", "writing_fix", "binding_engine"],
+    "overlayState": ["none", "image_lightbox", "slot_schema_preview", "engine_slot_picker", "fix_request_editor"]
+  },
+  "changeLog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-06-22",
+      "summary": "初期TitleGameStudio package scaffold。単体HTML、Studio工程TODO、Runtime JSON納品TODO、slot、schemaを追加。"
+    },
+    {
+      "version": "0.1.1",
+      "date": "2026-06-22",
+      "summary": "TODOデータをtodo.jsからslot JSONへ分離。todo.slot.schema.jsonを追加し、TODO HTMLをJSON読込方式へ更新。"
+    }
+  ],
+  "updatedAt": "2026-06-22T00:00:00+09:00"
+}

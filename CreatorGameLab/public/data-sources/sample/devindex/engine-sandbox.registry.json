@@ -1,6 +1,6 @@
 {
   "registryId": "engine_sandbox_registry_20260618",
-  "updatedAt": "2026-06-18T00:00:00+09:00",
+  "updatedAt": "2026-06-22T00:00:00+09:00",
   "sandboxes": [
     {
       "sandboxId": "sandbox_adventure_engine",
@@ -59,6 +59,16 @@
           "version": "0.1.0",
           "status": "planned",
           "summary": "グリッド移動と地形補正を扱う予定のモデル。"
+        },
+        {
+          "modelId": "battle_2d_srpg_ver_1_1",
+          "label": "2D_SRPG_BattleEngine_Ver1.1",
+          "version": "1.1.0",
+          "status": "planned",
+          "summary": "C:/Users/enjoy/InBox2026/InBox0601/blenderTest06を原本として扱うSRPG BattleEngine候補。Three.js/GLBの3D基盤に、2D_SRPGStudioで作成したMap、Conversation、Battle用2D素材をlayerとして載せる。",
+          "sourcePath": "C:/Users/enjoy/InBox2026/InBox0601/blenderTest06",
+          "adapterKind": "planned",
+          "devLayerSupport": true
         }
       ]
     },

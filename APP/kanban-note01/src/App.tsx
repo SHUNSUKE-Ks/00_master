@@ -8,11 +8,14 @@ import PageDb02 from './pages/PageDb02'
 import PageDb03 from './pages/PageDb03'
 import PageDb10 from './pages/PageDb10'
 import PageBlog from './pages/PageBlog'
+import PageStudy from './pages/PageStudy'
 import PageMemo from './pages/PageMemo'
 import PageUpnote from './pages/PageUpnote'
 import PageTrash from './pages/PageTrash'
 import PageNotebook from './pages/PageNotebook'
+import PageInbox from './pages/PageInbox'
 import PageDevStudio from './pages/PageDevStudio'
+import InboxComposer from './features/inbox/InboxComposer'
 import SettingsPanel from './components/SettingsPanel'
 import GalleryPanel from './components/GalleryPanel'
 import GalleryPage from './pages/gallery'
@@ -39,7 +42,9 @@ const MainApp: Component = () => (
         classList={{ show: state.sidebarOpen }}
         onClick={() => setState({ sidebarOpen: false })}
       />
-      <Sidebar />
+      <Show when={state.page !== 'notebook'}>
+        <Sidebar />
+      </Show>
       <main class="flex-1 overflow-hidden relative">
         <Show when={state.page === 'db01'}>
           <PageDb01 products={state.products} />
@@ -56,6 +61,9 @@ const MainApp: Component = () => (
         <Show when={state.page === 'blog'}>
           <PageBlog />
         </Show>
+        <Show when={state.page === 'study'}>
+          <PageStudy />
+        </Show>
         <Show when={state.page === 'memo'}>
           <PageMemo />
         </Show>
@@ -68,12 +76,16 @@ const MainApp: Component = () => (
         <Show when={state.page === 'notebook'}>
           <PageNotebook />
         </Show>
+        <Show when={state.page === 'inbox'}>
+          <PageInbox />
+        </Show>
         <Show when={state.page === 'devstudio'}>
           <PageDevStudio />
         </Show>
       </main>
       <SettingsPanel />
       <GalleryPanel />
+      <InboxComposer />
     </div>
   </div>
 )

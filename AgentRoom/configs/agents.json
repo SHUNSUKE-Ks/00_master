@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "agentroom.task-pull.v1",
+  "agents": [
+    {
+      "agentId": "creator_game_lab_agent",
+      "label": "CreatorGameLab Agent",
+      "projectIds": ["project_creator_game_lab"],
+      "ownedPaths": [
+        "C:/00_master/CreatorGameLab",
+        "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab",
+        "C:/00_master/DevApps/kanban_June/docs"
+      ],
+      "watchTags": ["creator_game_lab", "agent_pull_ready"],
+      "blockedTags": ["blocked_by_report"],
+      "doNotTouchPaths": [
+        "C:/00_master/APP/novelEngine",
+        "C:/00_master/APP/Note"
+      ],
+      "reportTargetDir": "C:/00_master/DevApps/kanban_June/docs",
+      "profilePath": "C:/00_master/CreatorGameLab/agent/creator_game_lab_agent_profile.md",
+      "taskWatchPath": "C:/00_master/CreatorGameLab/agent/taskticket_watch.md"
+    }
+  ]
+}

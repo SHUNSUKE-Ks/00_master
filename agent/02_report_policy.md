@@ -27,6 +27,14 @@ C:\00_master\GAME
 - 次のChatへ渡す引継ぎ
 - 技術スタッツへの登録
 
+## APP-first運用
+
+APP側の細かい実装、検証、UI確認、素材整理、試行錯誤は、毎回TaskTicket化しなくてよい。
+
+作業後に短いReportを残し、Kanban_June側でReview、進捗整理、次TODO整理、知識化を行う。
+
+TaskTicketは、複数日にまたがる作業、引き継ぎが必要な作業、Blockedになった作業、成果物定義が必要な作業だけに使う。
+
 ## Reportファイル名
 
 ```text
@@ -73,4 +81,3 @@ view_state_layering_technical_stat_2026-06-15.md
 
 - `C:\...`
 ```
-

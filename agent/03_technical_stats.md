@@ -6,7 +6,9 @@
 
 ここはScaffold資料とは別です。
 
-Scaffoldは、決まった設計をファイル、TODO、TaskTicketへ分解する工程です。
+Scaffoldは、決まった設計をファイル、TODO、console prefixへ分解する工程です。
+
+TaskTicketは、複数日にまたがる作業、引き継ぎが必要な作業、Blocked、成果物定義が必要な作業だけに使います。
 
 Technical Statsは、繰り返し使う技術パターンの目録です。
 
@@ -70,7 +72,9 @@ C:\Users\enjoy\Dropbox\00_secretary\docs\ClaudeCodeBook\scaffold
 C:\00_master\CreatorHub\LIBRARY\DEV_THINKING\CreatorGameLab\03_scaffold_to_taskticket_flow.md
 ```
 
-HTMLレイアウトと仕様が固まってから、ファイル構成、TODO、console prefix、TaskTicketに分解する。
+HTMLレイアウトと仕様が固まってから、ファイル構成、TODO、console prefixに分解する。
+
+必要な場合だけTaskTicketに分ける。
 
 ## 今後作るTemplate
 
@@ -79,4 +83,3 @@ HTMLレイアウトと仕様が固まってから、ファイル構成、TODO、
 - CreatorGameLab ScreenLayout Template
 - Kanban Report Template
 - Scaffold TaskTicket Template
-

@@ -1,0 +1,17 @@
+{
+  "slotId": "slot_runtime_manifest",
+  "schemaVersion": "creator-game-lab.runtime-manifest-slot.v0.1",
+  "status": "draft",
+  "sourceRuntimeManifest": "C:/00_master/APP/novelEngine/public/assets/srpg/srpg_runtime_manifest_v0_1.json",
+  "runtimeTargets": [
+    {
+      "target": "2D_SRPG_BattleEngine_Ver1.1",
+      "adapter": "planned",
+      "requiredInputs": ["slot_screen_layout", "slot_asset_manifest", "slot_engine_binding"]
+    }
+  ],
+  "notes": [
+    "最初のAcceptanceは2D素材をBattleEngine画面へlayerまたはbillboardとして表示すること。",
+    "Sprite frame座標は未確定。次にframe manifestへ分離する。"
+  ]
+}

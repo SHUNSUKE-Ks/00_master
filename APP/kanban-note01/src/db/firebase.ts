@@ -14,7 +14,7 @@ import {
   orderBy,
   Timestamp,
 } from 'firebase/firestore'
-import type { Memo, Blog, Notebook, Product, Nutrient } from '../types'
+import type { Memo, Blog, Notebook, Product, Nutrient, Page } from '../types'
 
 const firebaseConfig = {
   apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
@@ -99,11 +99,94 @@ type KanbanMemoArchiveItem = {
   updatedAt: string
   source: 'kanban-note01'
   sourceMemoId?: string
+  sourceNotebookId?: string
+  sourceNotebookTitle?: string
+  sourcePageId?: string
+  sourcePageTitle?: string
+  sourceFileName?: string
+}
+
+export type KanbanMemoSourceMeta = {
+  sourceNotebookId?: string
+  sourceNotebookTitle?: string
+  sourcePageId?: string
+  sourcePageTitle?: string
+  sourceFileName?: string
+}
+
+export type ScenarioFragmentStatus = 'inbox' | 'converted' | 'accepted' | 'needs_fix' | 'rejected'
+
+export type ScenarioFragmentInput = {
+  title: string
+  body: string
+  tags?: string[]
+  sourceMemoId?: string
+  sourceNotebookId?: string
+  sourceNotebookTitle?: string
+  sourcePageId?: string
+  sourcePageTitle?: string
+  sourceFileName?: string
+  targetTitleId?: string
+  targetTitle?: string
+}
+
+export type ScenarioFragmentItem = {
+  id: string
+  type: 'scenario_fragment'
+  source: 'kanban-note01'
+  target: 'novelEngine'
+  format: 'conversation_log_v0_1'
+  title: string
+  body: string
+  tags: string[]
+  status: ScenarioFragmentStatus
+  createdAt: string
+  updatedAt: string
+  sourceMemoId?: string
+  sourceNotebookId?: string
+  sourceNotebookTitle?: string
+  sourcePageId?: string
+  sourcePageTitle?: string
+  sourceFileName?: string
+  targetTitleId?: string
+  targetTitle?: string
+}
+
+export type IdeaInboxInput = {
+  id?: string
+  subject: string
+  body: string
+  tag?: string
+  relatedIdea?: string
+  sourceView?: Page
+  sourceNotebookId?: string
+  sourceNotebookTitle?: string
+  sourcePageId?: string
+  sourcePageTitle?: string
+}
+
+export type IdeaInboxItem = {
+  id: string
+  type: 'idea_inbox'
+  source: 'kanban-note01'
+  target: 'note_inbox'
+  subject: string
+  body: string
+  tag: string
+  relatedIdea?: string
+  sourceView?: Page
+  status: 'inbox'
+  createdAt: string
+  updatedAt: string
+  sourceNotebookId?: string
+  sourceNotebookTitle?: string
+  sourcePageId?: string
+  sourcePageTitle?: string
 }
 
 const KANBAN_MEMO_COLLECTION = import.meta.env.VITE_KANBAN_MEMO_COLLECTION || 'memoArchive'
 
-export async function sendMemoToKanbanMemoInbox(memo: Memo): Promise<KanbanMemoArchiveItem> {
+export async function sendMemoToKanbanMemoInbox(memo: Memo, meta: KanbanMemoSourceMeta = {}): Promise<KanbanMemoArchiveItem> {
   if (!kanbanMemoInboxEnabled) {
     throw new Error('Kanban MemoInbox sync is disabled. Set VITE_ENABLE_KANBAN_MEMO_SYNC=true.')
   }
@@ -120,9 +203,89 @@ export async function sendMemoToKanbanMemoInbox(memo: Memo): Promise<KanbanMemoA
     updatedAt: now,
     source: 'kanban-note01',
     sourceMemoId: memo.id,
+    sourceNotebookId: meta.sourceNotebookId,
+    sourceNotebookTitle: meta.sourceNotebookTitle,
+    sourcePageId: meta.sourcePageId,
+    sourcePageTitle: meta.sourcePageTitle,
+    sourceFileName: meta.sourceFileName,
   }
   await setDoc(doc(db, KANBAN_MEMO_COLLECTION, item.id), stripUndefined(item as unknown as Record<string, unknown>))
   return item
+}
+
+export async function sendScenarioFragmentToDevStudio(input: ScenarioFragmentInput): Promise<ScenarioFragmentItem> {
+  if (!kanbanMemoInboxEnabled) {
+    throw new Error('Kanban MemoInbox sync is disabled. Set VITE_ENABLE_KANBAN_MEMO_SYNC=true.')
+  }
+  const db = requireFirestore()
+  await ensureAnonymousUser()
+
+  const now = new Date().toISOString()
+  const tags = Array.from(new Set(['scenario', 'conversation_log', ...(input.tags ?? [])].filter(Boolean)))
+  const item: ScenarioFragmentItem = {
+    id: `scenario_fragment_${Date.now()}`,
+    type: 'scenario_fragment',
+    source: 'kanban-note01',
+    target: 'novelEngine',
+    format: 'conversation_log_v0_1',
+    title: input.title?.trim() || 'scenario fragment',
+    body: input.body?.trim() || '',
+    tags,
+    status: 'inbox',
+    createdAt: now,
+    updatedAt: now,
+    sourceMemoId: input.sourceMemoId,
+    sourceNotebookId: input.sourceNotebookId,
+    sourceNotebookTitle: input.sourceNotebookTitle,
+    sourcePageId: input.sourcePageId,
+    sourcePageTitle: input.sourcePageTitle,
+    sourceFileName: input.sourceFileName,
+    targetTitleId: input.targetTitleId,
+    targetTitle: input.targetTitle,
+  }
+  await setDoc(doc(db, KANBAN_MEMO_COLLECTION, item.id), stripUndefined(item as unknown as Record<string, unknown>))
+  return item
+}
+
+export async function sendIdeaInboxToFirebase(input: IdeaInboxInput): Promise<IdeaInboxItem> {
+  if (!kanbanMemoInboxEnabled) {
+    throw new Error('Kanban MemoInbox sync is disabled. Set VITE_ENABLE_KANBAN_MEMO_SYNC=true.')
+  }
+  const db = requireFirestore()
+  await ensureAnonymousUser()
+
+  const now = new Date().toISOString()
+  const id = input.id?.trim() || `idea_inbox_${Date.now()}`
+  const item: IdeaInboxItem = {
+    id,
+    type: 'idea_inbox',
+    source: 'kanban-note01',
+    target: 'note_inbox',
+    subject: input.subject?.trim() || 'No subject',
+    body: input.body?.trim() || '',
+    tag: input.tag?.trim() || '未分類',
+    relatedIdea: input.relatedIdea?.trim() || undefined,
+    sourceView: input.sourceView,
+    status: 'inbox',
+    createdAt: now,
+    updatedAt: now,
+    sourceNotebookId: input.sourceNotebookId,
+    sourceNotebookTitle: input.sourceNotebookTitle,
+    sourcePageId: input.sourcePageId,
+    sourcePageTitle: input.sourcePageTitle,
+  }
+  await setDoc(doc(db, KANBAN_MEMO_COLLECTION, item.id), stripUndefined(item as unknown as Record<string, unknown>), { merge: true })
+  return item
+}
+
+export async function fetchIdeaInboxItems(): Promise<IdeaInboxItem[]> {
+  const db = requireFirestore()
+  await ensureAnonymousUser()
+  const snap = await getDocs(collection(db, KANBAN_MEMO_COLLECTION))
+  return snap.docs
+    .map((entry) => ({ id: entry.id, ...fromFs(entry.data()) } as IdeaInboxItem))
+    .filter((item) => item.type === 'idea_inbox')
+    .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
 }
 
 // ── Blogs ────────────────────────────────────────────────────────────────────

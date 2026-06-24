@@ -1,0 +1,19 @@
+{
+  "slotId": "slot_engine_order",
+  "schemaVersion": "creator-game-lab.engine-order-slot.v0.1",
+  "status": "draft",
+  "orders": [
+    {
+      "orderId": "engine_order_srpg_billboard_001",
+      "targetEngineModel": "battle_2d_srpg_ver_1_1",
+      "summary": "2D_SRPGStudioのasset manifestを読み、Three.js scene上に2D spriteをbillboardまたはoverlay layerとして表示する。",
+      "acceptance": [
+        "battle screenでbg_battle_field_forest_01を表示できる",
+        "player_battle_action_alphaをunit placeholderとして表示できる",
+        "ui_player_status_panel_alphaを左側UIとして表示できる",
+        "asset pathとscreen layerの対応をconsole prefix [SRPG_ENGINE_ORDER] で確認できる"
+      ],
+      "status": "draft"
+    }
+  ]
+}

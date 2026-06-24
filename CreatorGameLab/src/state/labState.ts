@@ -6,6 +6,7 @@ export type ViewPhase =
   | "titleSelect"
   | "engineSandbox"
   | "devSaveLoad"
+  | "titleGameStudios"
   | "componentRegistry"
   | "activeWorkspace";
 export type ViewMode = "index" | "detail" | "preview";
@@ -17,6 +18,7 @@ export type ActiveTarget =
   | { kind: "game-title"; id: string; label: string; componentKey: string }
   | { kind: "engine-sandbox"; id: string; label: string; componentKey: string }
   | { kind: "dev-save-slot"; id: string; label: string; componentKey: string; routeState?: Record<string, unknown> }
+  | { kind: "title-game-studio"; id: string; label: string; componentKey: string; routeState?: Record<string, unknown> }
   | { kind: "component-view"; id: string; label: string; componentKey: string }
   | null;
 

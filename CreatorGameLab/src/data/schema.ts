@@ -97,6 +97,42 @@ export type ComponentView = {
   migrationStatus: string;
 };
 
+export type TitleGameStudio = {
+  studioId: string;
+  title: string;
+  status: "draft" | "designing" | "ready_for_engine_binding" | "connected" | string;
+  targetTitleId?: string;
+  summary: string;
+  studioKind: "srpg" | "novel" | "collection" | "hybrid" | string;
+  componentKey: string;
+  standaloneHtmlPath?: string;
+  packageManifestPath?: string;
+  runtimeManifestPath?: string;
+  designDocPath?: string;
+  progressPercent: number;
+  screenCount: number;
+  assetCount: number;
+  fixLogCount: number;
+  engineBinding: TitleStudioEngineBinding;
+  viewStateLayers: TitleStudioViewStateLayers;
+  updatedAt: string;
+};
+
+export type TitleStudioEngineBinding = {
+  adventure: EngineSelection;
+  battle: EngineSelection;
+  collection: EngineSelection;
+};
+
+export type TitleStudioViewStateLayers = {
+  appPhase: string[];
+  viewPhase: string[];
+  activeTarget: string[];
+  viewMode: string[];
+  interactionState: string[];
+  overlayState: string[];
+};
+
 export type MigrationItem = {
   migrationId: string;
   sourcePath: string;
@@ -115,6 +151,7 @@ export type DevindexData = {
   layoutProfiles: LayoutProfile[];
   saveSlots: DevSaveSlot[];
   components: ComponentView[];
+  titleStudios: TitleGameStudio[];
   migrations: MigrationItem[];
 };
 

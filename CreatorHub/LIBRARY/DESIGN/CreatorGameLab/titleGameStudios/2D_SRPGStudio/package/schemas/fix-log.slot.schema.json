@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.fix-log-slot.schema.v0.1",
+  "title": "Fix Log Slot",
+  "type": "object",
+  "required": ["slotId", "schemaVersion", "status", "logs"],
+  "properties": {
+    "slotId": { "const": "slot_fix_log" },
+    "schemaVersion": { "const": "creator-game-lab.fix-log-slot.v0.1" },
+    "status": { "type": "string" },
+    "logs": { "type": "array", "items": { "type": "object" } }
+  }
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2D_SRPGStudio / TitleGameStudio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="studio">
+      <header class="hero">
+        <p>TITLE GAME STUDIO / BEFORE ENGINE BINDING</p>
+        <h1>2D_SRPGStudio</h1>
+        <div class="hero-grid">
+          <section>
+            <h2>目的</h2>
+            <p>
+              GameLab WorkSpaceでは、ゲームEngineより先にTitleGameStudioを作り、
+              レイアウト、仕様、素材、画面Stateを決めてから novel / battle / collection Engine を当てる。
+            </p>
+          </section>
+          <section>
+            <h2>Engine候補</h2>
+            <ul>
+              <li>novel: 会話、ログ、選択肢</li>
+              <li>battle: SRPG map、行動、ターゲット選択</li>
+              <li>collection: 図鑑、報酬、実績</li>
+            </ul>
+          </section>
+        </div>
+      </header>
+
+      <section class="board">
+        <h2>Gallery / Generated Assets</h2>
+        <div id="gallery" class="gallery"></div>
+      </section>
+
+      <section class="board">
+        <h2>Package Slots / JSON Attach Space</h2>
+        <p>
+          DevStudioは単体HTMLの作業場であり、Gameに必要な情報はslotへJSONとしてattachする。
+          依存関係を満たしたslotからEngineへ渡す。
+        </p>
+        <div id="slots" class="slot-grid"></div>
+      </section>
+
+      <section class="board">
+        <h2>Layout / State Draft</h2>
+        <div class="state-grid">
+          <article>
+            <h3>Map</h3>
+            <p>idle / marker_focus / mission_preview / route_confirm</p>
+          </article>
+          <article>
+            <h3>Conversation</h3>
+            <p>reading / log_open / auto_play / skip_confirm / choice_open</p>
+          </article>
+          <article>
+            <h3>Battle</h3>
+            <p>player_idle / move_preview / target_select / command_open / action_preview / enemy_turn</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="board">
+        <h2>Next</h2>
+        <ol>
+          <li>画像ごとのFix Logを集める</li>
+          <li>画面StateごとのLayoutを決める</li>
+          <li>Sprite sheetのtrim済みframe座標JSONを作る</li>
+          <li>package slotごとにschemaを確定する</li>
+          <li>BattleEngine / NovelEngine / CollectionEngineとのAdapter方針を決める</li>
+        </ol>
+      </section>
+    </main>
+
+    <dialog id="preview">
+      <button id="close" type="button">Close</button>
+      <img id="previewImage" alt="" />
+      <h2 id="previewTitle"></h2>
+      <p id="previewNote"></p>
+    </dialog>
+
+    <script src="./studio.js"></script>
+  </body>
+</html>

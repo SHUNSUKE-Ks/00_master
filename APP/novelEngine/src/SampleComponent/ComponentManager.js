@@ -1,6 +1,14 @@
+import { standbyScreenSampleInfo } from "./StandbyScreen";
+import { conversationScreenSampleInfo } from "./ConversationScreen";
+import { conversationLogSamplesInfo } from "./ConversationLog";
 import { stepperTileWindowInfo } from "./Stepper";
 
-const componentRegistry = [stepperTileWindowInfo];
+const componentRegistry = [
+  standbyScreenSampleInfo,
+  conversationScreenSampleInfo,
+  conversationLogSamplesInfo,
+  stepperTileWindowInfo,
+];
 
 export function listSampleComponents() {
   return componentRegistry.map(({ component, props, ...info }) => info);

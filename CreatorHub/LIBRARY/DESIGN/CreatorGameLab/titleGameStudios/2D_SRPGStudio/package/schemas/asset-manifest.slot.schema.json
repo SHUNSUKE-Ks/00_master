@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.asset-manifest-slot.schema.v0.1",
+  "title": "Asset Manifest Slot",
+  "type": "object",
+  "required": ["slotId", "schemaVersion", "status", "assets"],
+  "properties": {
+    "slotId": { "const": "slot_asset_manifest" },
+    "schemaVersion": { "const": "creator-game-lab.asset-manifest-slot.v0.1" },
+    "status": { "type": "string" },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assetId", "kind", "screen", "path", "role"],
+        "properties": {
+          "assetId": { "type": "string" },
+          "kind": { "type": "string" },
+          "screen": { "type": "string" },
+          "path": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      }
+    }
+  }
+}

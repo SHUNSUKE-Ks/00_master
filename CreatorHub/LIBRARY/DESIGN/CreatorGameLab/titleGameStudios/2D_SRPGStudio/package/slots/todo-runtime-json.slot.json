@@ -1,0 +1,81 @@
+{
+  "slotId": "slot_todo_runtime_json",
+  "schemaVersion": "creator-game-lab.todo-slot.v0.1",
+  "status": "draft",
+  "title": "ゲームを動かすJSON TODO",
+  "purpose": "完成済みEngineへ渡すRuntime JSON納品TODO。Studioそのものを作る工程TODOとは分ける。",
+  "progressTarget": "runtime_json_delivery",
+  "deliveryItems": [
+    { "key": "screen", "text": "screen_layout.json: 画面、layer、state、safe area、UI配置", "done": false },
+    { "key": "scenario", "text": "scenario.json: scene、talk、choice、event、flag", "done": false },
+    { "key": "image", "text": "image_manifest.json: 背景、UI、Object、FXの参照と用途", "done": false },
+    { "key": "character", "text": "character_db.json: キャラID、立ち絵、face、sprite、role", "done": false },
+    { "key": "sprite", "text": "sprite_frames.json: 歩行、戦闘、表情などのframe座標", "done": false },
+    { "key": "audio", "text": "audio_manifest.json: BGM、SE、voice、loop設定", "done": false },
+    { "key": "battle", "text": "battle_setup.json: map、unit、job、skill、turn、win condition", "done": false },
+    { "key": "save", "text": "save_slots.json: resume point、進行flag、作業状態", "done": false }
+  ],
+  "groups": [
+    {
+      "heading": "Screen JSON",
+      "summary": "画面とUI layerをEngineへ伝える。",
+      "items": [
+        { "key": "画面", "prop": "screens[].screenId", "text": "map / conversation / battle / resultなどの画面ID。", "done": false },
+        { "key": "層", "prop": "screens[].layers[]", "text": "background / unit / object / ui / overlayなどの描画順。", "done": false },
+        { "key": "状態", "prop": "screens[].states[]", "text": "idle / target_select / log_openなどのView Phase。", "done": false },
+        { "key": "配置", "prop": "screens[].uiLayout", "text": "ボタン、HP、dialogue、footerなどの位置。", "done": false }
+      ]
+    },
+    {
+      "heading": "Scenario JSON",
+      "summary": "会話、分岐、イベント、flagをEngineへ渡す。",
+      "items": [
+        { "key": "場面", "prop": "scenes[].id", "text": "scene単位のIDとtitle。", "done": false },
+        { "key": "会話", "prop": "scenes[].talk[]", "text": "speaker、text、tags、voice、face変化。", "done": false },
+        { "key": "選択", "prop": "scenes[].choice", "text": "選択肢、next scene、setFlags、tags。", "done": false },
+        { "key": "演出", "prop": "scenes[].tags[]", "text": "bgm_ / se_ / fx_ / cam_ / ev_ / flag_。", "done": false }
+      ]
+    },
+    {
+      "heading": "Image JSON",
+      "summary": "画像素材の役割、screen、layer、差し替え候補を管理する。",
+      "items": [
+        { "key": "背景", "prop": "images[].kind=background", "text": "画面ごとのbase background。", "done": false },
+        { "key": "物体", "prop": "images[].kind=object", "text": "marker、cursor、props、rangeなど。", "done": false },
+        { "key": "UI", "prop": "images[].kind=ui", "text": "dialogue、status、command、result panel。", "done": false },
+        { "key": "差替", "prop": "images[].variants[]", "text": "draft、accepted、fix_requiredなどの差分。", "done": false }
+      ]
+    },
+    {
+      "heading": "Character JSON",
+      "summary": "キャラの見た目、face、sprite、ゲーム上の役割を分ける。",
+      "items": [
+        { "key": "人物", "prop": "characters[].id", "text": "char_で始まるキャラクターID。", "done": false },
+        { "key": "立絵", "prop": "characters[].standing", "text": "会話用立ち絵、透過済み画像。", "done": false },
+        { "key": "顔", "prop": "characters[].faces[]", "text": "face_normal / face_angryなどの表情ID。", "done": false },
+        { "key": "歩行", "prop": "characters[].sprites.walk", "text": "map上の歩行spriteとframe参照。", "done": false },
+        { "key": "戦闘", "prop": "characters[].sprites.battle", "text": "battle action spriteとframe参照。", "done": false }
+      ]
+    },
+    {
+      "heading": "Battle JSON",
+      "summary": "SRPGとして動かすための戦闘初期値とルール。",
+      "items": [
+        { "key": "地図", "prop": "battle.mapId", "text": "戦闘mapとgrid情報。", "done": false },
+        { "key": "部隊", "prop": "battle.units[]", "text": "unit、team、position、job、hp。", "done": false },
+        { "key": "技能", "prop": "battle.skills[]", "text": "attack、move、range、effect。", "done": false },
+        { "key": "勝利", "prop": "battle.winCondition", "text": "all_enemy_defeated / survive / captureなど。", "done": false }
+      ]
+    },
+    {
+      "heading": "Runtime Manifest",
+      "summary": "上記JSONの依存関係をまとめ、Engine adapterへ渡す。",
+      "items": [
+        { "key": "依存", "prop": "runtime.dependencies[]", "text": "screen、scenario、image、character、battleの依存。", "done": false },
+        { "key": "順序", "prop": "runtime.loadOrder[]", "text": "Engineが読む順番。", "done": false },
+        { "key": "検証", "prop": "runtime.validation[]", "text": "schema検証、必須asset検査、missing link検査。", "done": false },
+        { "key": "接続", "prop": "runtime.engineBinding", "text": "Adventure / Battle / CollectionのmodelIdとversion。", "done": false }
+      ]
+    }
+  ]
+}

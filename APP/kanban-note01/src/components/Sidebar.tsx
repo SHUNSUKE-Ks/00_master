@@ -1,5 +1,5 @@
-import { type Component, createSignal, For, Show } from 'solid-js'
-import { state, setState, navigate } from '../store'
+import { type Component, For } from 'solid-js'
+import { state, navigate } from '../store'
 import type { Page } from '../types'
 
 type NavItem = { page: Page; label: string; icon: string }
@@ -11,63 +11,6 @@ const DB_NAV: NavItem[] = [
   { page: 'db01', label: 'Title DB', icon: 'T' },
   { page: 'db02', label: 'Character DB', icon: 'C' },
 ]
-const NotebookToggle: Component = () => {
-  const [open, setOpen] = createSignal(true)
-
-  function selectNotebook(id: string) {
-    const nb = state.notebooks.find((item) => item.id === id)
-    setState({
-      selectedNotebookId: id,
-      selectedNotebookPageId: null,
-    })
-    navigate('notebook')
-    if (nb?.pages.length === 0) setState({ selectedNotebookPageId: null })
-  }
-
-  return (
-    <div>
-      <button
-        class="nav-btn w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-left transition-colors"
-        classList={{
-          'bg-nacc-light font-medium text-nacc-dark': state.page === 'notebook',
-          'text-[#555] hover:bg-[#f5f4f1]': state.page !== 'notebook',
-        }}
-        onClick={() => {
-          setOpen((value) => !value)
-          if (state.page !== 'notebook') navigate('notebook')
-        }}
-      >
-        <span>📚</span>
-        <span class="truncate">ノートブック</span>
-        <span class="ml-auto text-xs text-gray-400">{open() ? '⌃' : '⌄'}</span>
-      </button>
-      <Show when={open()}>
-        <div class="mt-1 ml-5 flex flex-col gap-0.5">
-          <For each={state.notebooks}>
-            {(nb) => (
-              <button
-                class="w-full flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs transition-colors"
-                classList={{
-                  'bg-[#f5f0e8] text-nacc-dark font-medium': state.selectedNotebookId === nb.id,
-                  'text-gray-500 hover:bg-[#f9f8f6]': state.selectedNotebookId !== nb.id,
-                }}
-                onClick={() => selectNotebook(nb.id!)}
-              >
-                <span class="w-5 h-5 rounded overflow-hidden bg-[#0b1f3a] text-white text-[10px] flex items-center justify-center shrink-0">
-                  <Show when={nb.cover} fallback={<span>{nb.title.slice(0, 1)}</span>}>
-                    <img src={nb.cover} alt="" class="w-full h-full object-cover" />
-                  </Show>
-                </span>
-                <span class="truncate">{nb.title}</span>
-              </button>
-            )}
-          </For>
-        </div>
-      </Show>
-    </div>
-  )
-}
-
 const NavBtn: Component<{ item: NavItem }> = (props) => (
   <button
     class="nav-btn w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-left transition-colors"
@@ -78,13 +21,13 @@ const NavBtn: Component<{ item: NavItem }> = (props) => (
     data-page={props.item.page}
     onClick={() => navigate(props.item.page)}
   >
-    <span>{props.item.icon}</span>
-    <span class="truncate">{props.item.label}</span>
+    <span class="sidebar-icon">{props.item.icon}</span>
+    <span class="sidebar-label truncate">{props.item.label}</span>
   </button>
 )
 
 const SectionLabel: Component<{ label: string }> = (props) => (
-  <div class="text-xs font-semibold text-[#aaa] px-2 py-1 mt-3">{props.label}</div>
+  <div class="sidebar-section-label text-xs font-semibold text-[#aaa] px-2 py-1 mt-3">{props.label}</div>
 )
 
 const Sidebar: Component = () => (
@@ -102,7 +45,7 @@ const Sidebar: Component = () => (
           <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          scenarioメモ
+          <span class="sidebar-label">scenarioメモ</span>
         </button>
       </div>
 
@@ -115,7 +58,17 @@ const Sidebar: Component = () => (
         <For each={DB_NAV}>{(item) => <NavBtn item={item} />}</For>
 
         <SectionLabel label="ノートブック" />
-        <NotebookToggle />
+        <button
+          class="nav-btn w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-left transition-colors"
+          classList={{
+            'bg-nacc-light font-medium text-nacc-dark': state.page === 'notebook',
+            'text-[#555] hover:bg-[#f5f4f1]': state.page !== 'notebook',
+          }}
+          onClick={() => navigate('notebook')}
+        >
+          <span class="sidebar-icon">📚</span>
+          <span class="sidebar-label truncate">ノートブック</span>
+        </button>
 
       </nav>
 
@@ -130,9 +83,9 @@ const Sidebar: Component = () => (
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
-          <span>ごみ箱</span>
+          <span class="sidebar-label">ごみ箱</span>
           {state.trashBlogs.length > 0 && (
-            <span class="ml-auto text-xs bg-red-100 text-red-500 rounded-full px-1.5 py-0.5 font-medium min-w-5 text-center">
+            <span class="sidebar-label ml-auto text-xs bg-red-100 text-red-500 rounded-full px-1.5 py-0.5 font-medium min-w-5 text-center">
               {state.trashBlogs.length}
             </span>
           )}
@@ -145,7 +98,7 @@ const Sidebar: Component = () => (
           <div class="w-5 h-5 rounded-full bg-nacc-gold/20 flex items-center justify-center text-nacc-gold font-bold text-xs">
             N
           </div>
-          <span>Note_Story user</span>
+          <span class="sidebar-label">Note_Story user</span>
         </div>
       </div>
     </aside>

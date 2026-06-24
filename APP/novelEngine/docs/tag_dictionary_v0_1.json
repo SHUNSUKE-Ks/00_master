@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "id": "novel_engine_tag_dictionary",
+    "version": "0.1",
+    "purpose": "AIと人間が共通で使用するNovelEngine演出辞書。scenario_oneshotとscenario_mainの両方で参照する。",
+    "executionOrder": [
+      "ui_",
+      "bg_",
+      "char_",
+      "face_",
+      "bgm_",
+      "se_",
+      "fx_",
+      "cam_",
+      "ev_",
+      "flag_",
+      "req_",
+      "memo_",
+      "fn_"
+    ]
+  },
+  "groups": {
+    "bgm": {
+      "prefix": "bgm_",
+      "items": {
+        "bgm_title": "タイトル曲",
+        "bgm_peaceful": "日常",
+        "bgm_forest": "森",
+        "bgm_tension": "緊張",
+        "bgm_battle": "戦闘",
+        "bgm_boss": "ボス",
+        "bgm_sad": "悲しい",
+        "bgm_mystery": "謎",
+        "bgm_hope": "希望",
+        "bgm_end": "エンディング"
+      }
+    },
+    "se": {
+      "prefix": "se_",
+      "items": {
+        "se_click": "ボタン",
+        "se_next": "次へ",
+        "se_open": "開く",
+        "se_close": "閉じる",
+        "se_item": "アイテム",
+        "se_magic": "魔法",
+        "se_attack": "攻撃",
+        "se_damage": "ダメージ",
+        "se_heal": "回復",
+        "se_complete": "完了"
+      }
+    },
+    "background": {
+      "prefix": "bg_",
+      "items": {
+        "bg_title": "タイトル",
+        "bg_village": "村",
+        "bg_village_night": "夜の村",
+        "bg_forest": "森",
+        "bg_town": "街",
+        "bg_castle": "城",
+        "bg_room": "部屋",
+        "bg_school": "学校",
+        "bg_night": "夜空"
+      }
+    },
+    "character": {
+      "prefix": "char_",
+      "items": {
+        "char_hero": "主人公",
+        "char_heroine": "ヒロイン",
+        "char_knight": "騎士",
+        "char_witch": "魔女",
+        "char_npc": "NPC"
+      }
+    },
+    "face": {
+      "prefix": "face_",
+      "items": {
+        "face_normal": "通常",
+        "face_happy": "笑顔",
+        "face_sad": "悲しい",
+        "face_angry": "怒り",
+        "face_surprised": "驚き",
+        "face_thinking": "考える",
+        "face_shy": "照れ"
+      }
+    },
+    "fx": {
+      "prefix": "fx_",
+      "items": {
+        "fx_fade_in": "フェードイン",
+        "fx_fade_out": "フェードアウト",
+        "fx_flash": "白フラッシュ",
+        "fx_blackout": "暗転",
+        "fx_fog_slow": "霧",
+        "fx_shake_small": "小揺れ",
+        "fx_shake_big": "大揺れ",
+        "fx_bloom": "発光",
+        "fx_rain": "雨",
+        "fx_snow": "雪"
+      }
+    },
+    "camera": {
+      "prefix": "cam_",
+      "items": {
+        "cam_zoom_in": "ズーム",
+        "cam_zoom_out": "縮小",
+        "cam_zoom_slow": "ゆっくりズーム",
+        "cam_pan_left": "左移動",
+        "cam_pan_right": "右移動",
+        "cam_pan_up": "上移動",
+        "cam_pan_down": "下移動"
+      }
+    },
+    "ui": {
+      "prefix": "ui_",
+      "items": {
+        "ui_show_dialog": "会話表示",
+        "ui_hide_dialog": "会話非表示",
+        "ui_show_name": "名前表示",
+        "ui_show_choice": "選択肢",
+        "ui_show_backlog": "ログ",
+        "ui_show_menu": "メニュー"
+      }
+    },
+    "event": {
+      "prefix": "ev_",
+      "items": {
+        "ev_next_scene": "次シーン",
+        "ev_branch": "分岐",
+        "ev_unlock": "解放",
+        "ev_reward": "報酬",
+        "ev_game_start": "ゲーム開始",
+        "ev_game_end": "ゲーム終了"
+      }
+    },
+    "flag": {
+      "prefix": "flag_",
+      "items": {
+        "flag_hero_join": "主人公加入",
+        "flag_witch_join": "魔女加入",
+        "flag_route_a": "Aルート",
+        "flag_route_b": "Bルート",
+        "flag_good_end": "GoodEnd",
+        "flag_bad_end": "BadEnd"
+      }
+    },
+    "requirement": {
+      "prefix": "req_",
+      "items": {
+        "req_item_key": "鍵所持",
+        "req_level_5": "Lv5以上",
+        "req_flag_clear": "クリア済",
+        "req_route_a": "Aルート条件"
+      }
+    },
+    "memo": {
+      "prefix": "memo_",
+      "items": {
+        "memo_world": "世界観",
+        "memo_character": "人物",
+        "memo_item": "アイテム",
+        "memo_keyword": "用語"
+      }
+    },
+    "function": {
+      "prefix": "fn_",
+      "items": {
+        "fn_save": "セーブ",
+        "fn_load": "ロード",
+        "fn_auto": "オート",
+        "fn_skip": "スキップ",
+        "fn_backlog": "バックログ",
+        "fn_title": "タイトルへ戻る",
+        "fn_retry": "リトライ",
+        "fn_home": "ホームへ戻る"
+      }
+    }
+  }
+}

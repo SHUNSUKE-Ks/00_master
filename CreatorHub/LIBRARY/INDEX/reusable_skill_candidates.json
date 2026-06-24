@@ -1,6 +1,6 @@
 {
   "registryId": "reusable_skill_candidates_20260615",
-  "updatedAt": "2026-06-15T00:00:00+09:00",
+  "updatedAt": "2026-06-21T22:10:00+09:00",
   "storageRoot": "C:/00_master/CreatorHub/LIBRARY/REUSE",
   "policyDoc": "C:/00_master/DevApps/kanban_June/docs/reusable_skill_escape_policy_2026-06-15.md",
   "skillCandidates": [
@@ -23,6 +23,36 @@
       "input": ["targetUse", "engine", "referenceAssets", "styleNotes"],
       "output": ["order draft", "image prompt", "acceptance checklist"],
       "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/skill-candidates/asset_prompt_order.md"
+    },
+    {
+      "id": "skill_candidate_note_to_devstudio_scenario_fragment",
+      "title": "NoteからDevStudioへscenario_fragment送信",
+      "status": "candidate",
+      "repeatCount": 1,
+      "summary": "kanban-note01 / Noteで書いた会話ログやページ本文をFirebase memoArchive経由でNovelEngine DevStudioへ送る。",
+      "input": ["noteText", "pageText", "conversation_log_v0_1", "target=novelEngine"],
+      "output": ["memoArchive scenario_fragment", "DevStudio inbox candidate", "scenario_oneshot conversion candidate"],
+      "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/skill-candidates/note_to_devstudio_scenario_fragment.md"
+    },
+    {
+      "id": "skill_candidate_novelengine_tag_dictionary_workflow",
+      "title": "NovelEngine TAG辞書共有Workflow",
+      "status": "candidate",
+      "repeatCount": 1,
+      "summary": "novelEngine_tags.mdとtag_dictionary_v0_1.jsonを使い、Scenario作成Chat、Note、DevStudio、runtimeのTAG指定を揃える。",
+      "input": ["novelEngine_tags.md", "tag_dictionary_v0_1.json", "scenario_oneshot", "conversation_log_v0_1"],
+      "output": ["TAG usage rule", "DevStudio Tags view", "copyable markdown/json", "schema/runtime gap list"],
+      "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/skill-candidates/novelengine_tag_dictionary_workflow.md"
+    },
+    {
+      "id": "skill_candidate_image_asset_review_fix_log_workflow",
+      "title": "画像素材レビュー修正依頼ログWorkflow",
+      "status": "candidate",
+      "repeatCount": 1,
+      "summary": "生成画像を画面別Galleryで確認し、画像IDごとのコメントをFix Logとして蓄積し、Markdown修正依頼へまとめる。",
+      "input": ["imageFiles", "imageId", "screen", "state", "layer", "reviewComment"],
+      "output": ["image comments", "fix request log", "copyable markdown", "regeneration notes"],
+      "notesPath": "C:/00_master/CreatorHub/LIBRARY/REUSE/skill-candidates/image_asset_review_fix_log_workflow.md"
     }
   ],
   "taskPatterns": [
@@ -35,4 +65,3 @@
     }
   ]
 }
-

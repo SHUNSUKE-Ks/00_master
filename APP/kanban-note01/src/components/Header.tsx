@@ -11,7 +11,9 @@ const PAGE_LABELS: Record<Page, string> = {
   db03:     'DB03 Relation',
   db10:     'DB10 Status',
   blog:     '📓 ブログ',
+  study:    'Study',
   notebook: '📚 ノートブック',
+  inbox:    'InBox DB',
   trash:    '🗑️ ごみ箱',
   gallery:  '🖼 ギャラリー',
   devstudio: 'Scenario Board',
@@ -26,6 +28,23 @@ const Header: Component = () => {
     navigate('devstudio')
     closeViewMenu()
   }
+  function goToNotebook(notebookId?: string) {
+    const notebook = notebookId ? state.notebooks.find((item) => item.id === notebookId) : undefined
+    const firstContentPage = notebook?.pages.find((page) => page.id !== 'inbox-tag-db' && page.id !== 'inbox-archive') ?? notebook?.pages[0]
+    setState({
+      selectedNotebookId: notebookId ?? state.selectedNotebookId,
+      selectedNotebookPageId: firstContentPage?.id ?? null,
+    })
+    navigate('notebook')
+    closeViewMenu()
+  }
+  function goToDb() {
+    setState({ dbView: 'index' })
+    navigate('db01')
+    closeViewMenu()
+  }
+
+  const activeNotebookId = () => state.page === 'notebook' ? state.selectedNotebookId : null
 
   return (
     <header class="h-12 bg-white border-b border-nacc-border flex items-center px-3 gap-2 shrink-0 z-50 relative">
@@ -33,6 +52,7 @@ const Header: Component = () => {
       {/* Hamburger */}
       <button
         class="p-1.5 rounded hover:bg-gray-100 active:bg-gray-200 active:scale-95 text-gray-500 shrink-0 transition-all"
+        classList={{ 'hidden': state.page === 'notebook' }}
         onClick={() => setState({ sidebarOpen: !state.sidebarOpen })}
         aria-label="メニュー"
       >
@@ -62,12 +82,26 @@ const Header: Component = () => {
 
         <Show when={viewMenuOpen()}>
           <div
-            class="absolute left-0 top-10 bg-white border border-nacc-border rounded-xl shadow-lg w-60 overflow-hidden z-50"
+            class="absolute left-0 top-10 bg-white border border-nacc-border rounded-xl shadow-lg w-72 max-w-[calc(100vw-1.5rem)] overflow-hidden z-50"
           >
             <div class="px-3 py-2 text-xs text-gray-400 font-medium border-b border-nacc-border">
               Note_Story Menu
             </div>
             <div class="p-1.5 flex flex-col gap-0.5">
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => { navigate('inbox'); closeViewMenu() }}
+              >
+                <span>IN</span>
+                <div>
+                  <div class="font-medium">InBox</div>
+                  <div class="text-xs text-gray-400">改善案・相談メモを受ける</div>
+                </div>
+                <Show when={state.page === 'inbox'}>
+                  <span class="ml-auto text-nacc-gold text-xs">✓</span>
+                </Show>
+              </button>
+
               <button
                 class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
                 onClick={goToDevStudio}
@@ -78,6 +112,46 @@ const Header: Component = () => {
                   <div class="text-xs text-gray-400">シナリオTODOを分解する</div>
                 </div>
                 <Show when={state.page === 'devstudio'}>
+                  <span class="ml-auto text-nacc-gold text-xs">✓</span>
+                </Show>
+              </button>
+
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => goToNotebook('story-ideas')}
+              >
+                <span>SN</span>
+                <div>
+                  <div class="font-medium">シナリオノート</div>
+                  <div class="text-xs text-gray-400">本文・アイディア・会話ログを書く</div>
+                </div>
+                <Show when={activeNotebookId() === 'story-ideas'}>
+                  <span class="ml-auto text-nacc-gold text-xs">✓</span>
+                </Show>
+              </button>
+
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => { navigate('study'); closeViewMenu() }}
+              >
+                <span>ST</span>
+                <div>
+                  <div class="font-medium">Study</div>
+                  <div class="text-xs text-gray-400">Note開発の技術Cardを読む</div>
+                </div>
+                <Show when={state.page === 'study'}><span class="ml-auto text-nacc-gold text-xs">✓</span></Show>
+              </button>
+
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={goToDb}
+              >
+                <span>DB</span>
+                <div>
+                  <div class="font-medium">DB</div>
+                  <div class="text-xs text-gray-400">Title / Character DB</div>
+                </div>
+                <Show when={isDbPage()}>
                   <span class="ml-auto text-nacc-gold text-xs">✓</span>
                 </Show>
               </button>
@@ -171,6 +245,17 @@ const Header: Component = () => {
 
       {/* Right: search (desktop) + gallery + settings */}
       <div class="ml-auto flex items-center gap-1.5">
+        <button
+          class="global-inbox-header-btn"
+          type="button"
+          onClick={() => setState({ inboxComposerOpen: true })}
+          title="現在の画面からGlobal InBoxへ送る"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+            <path d="M20.5 3.5 3.75 10.9c-.78.34-.75 1.46.05 1.76l6.18 2.31 2.32 6.19c.3.8 1.42.83 1.76.05L21.5 4.5c.27-.62-.38-1.27-1-.99Z" fill="currentColor" />
+          </svg>
+          <span>InBox</span>
+        </button>
         <div class="hidden sm:flex items-center gap-1.5 bg-gray-100 rounded-lg px-2.5 py-1.5 text-xs text-gray-400 w-36">
           <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

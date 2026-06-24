@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2D_SRPGStudio Runtime JSON TODO</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="studio todo-page">
+      <header class="hero todo-hero">
+        <div>
+          <p>TITLE GAME STUDIO / RUNTIME JSON DELIVERY</p>
+          <h1>ゲームを動かすJSON TODO</h1>
+          <span>Game Engineが完成している前提で、納品するJSONと構成プロパティを整理する。</span>
+        </div>
+        <section class="progress-tile" aria-label="進捗率">
+          <strong id="runtimeProgress">0%</strong>
+          <div class="progress-line"><i id="runtimeProgressBar"></i></div>
+          <small id="runtimeProgressText">0 / 0 done</small>
+        </section>
+      </header>
+
+      <section class="board">
+        <div class="todo-head">
+          <h2>納品JSON一覧</h2>
+          <a href="./todo.html">Studio工程TODOへ戻る</a>
+        </div>
+        <aside class="delivery-callout">
+          <h3>納品するJSON</h3>
+          <p>完成済みEngineに渡すアイテム。screen、scenario、image、characterなど、ゲームを動かすためのJSON。</p>
+          <div id="runtimeDeliveryList" class="delivery-list"></div>
+        </aside>
+        <div id="runtimeTodoList" class="todo-list"></div>
+      </section>
+
+      <section class="board">
+        <h2>前提</h2>
+        <p>
+          このTODOは、2D_SRPGStudioそのものを作る工程ではなく、完成済みのEngineへ渡すゲームデータを作るためのもの。
+          Engine実装TODO、Studio実装TODO、Runtime JSON納品TODOは分けて扱う。
+        </p>
+      </section>
+    </main>
+
+    <script src="./runtime-json-todo.js"></script>
+  </body>
+</html>

@@ -699,6 +699,138 @@ small {
   overflow-wrap: anywhere;
 }
 
+.title-studio-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.title-studio-card {
+  display: grid;
+  gap: 14px;
+}
+
+.title-studio-card-head {
+  align-items: start;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title-studio-card-head span,
+.engine-binding-list span {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.title-studio-card-head h2 {
+  font-size: 22px;
+  margin: 4px 0 0;
+}
+
+.title-studio-card-head strong,
+.engine-binding-list em {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-style: normal;
+  padding: 5px 8px;
+}
+
+.studio-metrics {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.studio-metrics div,
+.engine-binding-list div {
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.studio-metrics b {
+  display: block;
+  font-size: 22px;
+}
+
+.studio-metrics span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.engine-binding-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.engine-binding-list strong {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12px;
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+.studio-paths {
+  display: grid;
+  gap: 6px;
+}
+
+.studio-paths code,
+.workspace-studio-summary code {
+  background: #0c111a;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+  padding: 8px;
+}
+
+.studio-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.studio-actions button {
+  align-items: center;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  padding: 9px 12px;
+}
+
+.studio-actions button:hover {
+  border-color: var(--accent);
+}
+
+.workspace-studio-summary {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.workspace-studio-summary h3 {
+  margin: 0;
+}
+
 @media (max-width: 1120px) {
   .lab-shell {
     grid-template-columns: 78px minmax(0, 1fr);
@@ -724,6 +856,7 @@ small {
   }
 
   .title-grid,
+  .title-studio-grid,
   .work-panel-grid,
   .engine-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -788,8 +921,11 @@ small {
   }
 
   .title-grid,
+  .title-studio-grid,
   .work-panel-grid,
   .engine-grid,
+  .engine-binding-list,
+  .studio-metrics,
   .wireframe-row {
     grid-template-columns: 1fr;
   }

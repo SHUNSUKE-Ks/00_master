@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2D_SRPGStudio TODO / TitleGameStudio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="studio todo-page">
+      <header class="hero todo-hero">
+        <div>
+          <p>TITLE GAME STUDIO / TODO</p>
+          <h1>2D_SRPGStudio 工程TODO</h1>
+          <span>工程を因数分解し、slot、素材、画面、Engine注文書へ分けて進める。</span>
+        </div>
+        <section class="progress-tile" aria-label="進捗率">
+          <strong id="todoProgress">0%</strong>
+          <div class="progress-line"><i id="todoProgressBar"></i></div>
+          <small id="todoProgressText">0 / 0 done</small>
+        </section>
+      </header>
+
+      <section class="board milestone-board">
+        <div class="todo-head">
+          <h2>Milestone Stepper</h2>
+          <button id="resetMilestone" type="button">Reset</button>
+        </div>
+        <div id="milestoneStepper" class="milestone-stepper"></div>
+        <div id="milestoneDetail" class="milestone-detail"></div>
+      </section>
+
+      <section class="board next-task-board">
+        <div class="todo-head">
+          <h2>次にやるTask</h2>
+          <button id="resetNextTask" type="button">Reset</button>
+        </div>
+        <div id="nextTaskActive" class="next-task-active"></div>
+        <div id="nextTaskList" class="next-task-list"></div>
+      </section>
+
+      <section class="board">
+        <div class="todo-head">
+          <h2>工程一覧</h2>
+          <div class="todo-links">
+            <a href="./runtime-json-todo.html">Runtime JSON TODO</a>
+            <a href="./index.html">Studioへ戻る</a>
+          </div>
+        </div>
+        <aside class="delivery-callout">
+          <h3>納品物チェックリスト</h3>
+          <p>クエストで言う納品アイテム。これが揃うと、Engine側やKanbanへ渡せる。</p>
+          <div id="deliveryList" class="delivery-list"></div>
+        </aside>
+        <div id="todoList" class="todo-list"></div>
+      </section>
+
+      <section class="board">
+        <h2>キー方針</h2>
+        <p>
+          画面上のキーは日本語の漢字2〜4文字を優先する。AIやJSONの内部IDは英語snake_caseにして、
+          人間の確認速度と機械処理の安定性を分ける。
+        </p>
+        <div class="concept-grid">
+          <article>
+            <h3>対象 + 処理</h3>
+            <p><b>Code摘出</b> / <b>JSON分離</b> / <b>仕様化</b> のように、何をどうするかで名前を付ける。</p>
+          </article>
+          <article>
+            <h3>State変化</h3>
+            <p><b>Code内包 → JSON分離</b> / <b>TODO → 仕様</b> / <b>仕様 → Component</b> のように変化を書く。</p>
+          </article>
+          <article>
+            <h3>入力概念</h3>
+            <p><b>引数</b> は必要情報、<b>分割</b> は情報の切り出し、<b>返却</b> は納品物として扱う。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="./todo.js"></script>
+  </body>
+</html>

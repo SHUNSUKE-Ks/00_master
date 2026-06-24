@@ -16,7 +16,8 @@ Spec
   画面ごとの仕様書を書く
 
 Scaffold
-  フォルダー、ファイル、TODO、console prefix、TaskTicketへ分解する
+  フォルダー、ファイル、TODO、console prefixを決める
+  必要な場合だけTaskTicketへ分解する
 
 Build
   SolidJSなどで実装する
@@ -25,7 +26,28 @@ Review
   動作確認、見た目確認、Report
 
 Done
-  IndexとReportへ登録
+  Reportへ登録し、Kanban_JuneでReviewする
+```
+
+## APP-first Cycle
+
+APP側の開発は、細かい作業ごとにTaskTicket化せず、作業後のReportからKanban_Juneが整理する。
+
+```text
+APP work
+  実装、検証、素材整理、UI確認、試行錯誤
+
+Report
+  何をしたか、何が残ったか、次に何が必要かを短く残す
+
+Kanban review
+  進捗、未解決、次TODOを整理する
+
+Reuse review
+  Skill / Workflow / Command / Template 候補にする
+
+TaskTicket
+  必要なものだけ正式化する
 ```
 
 ## Kanban Lane案
@@ -75,4 +97,16 @@ TaskTicketへ進める条件:
 - acceptanceがある
 - console checkがある
 - 1つのTicketで終わる範囲に分かれている
+- 複数日にまたがる、引き継ぎが必要、Blocked、または成果物定義が必要
 
+短いAPP内修正、試行錯誤、UI確認、素材整理、検証はTaskTicket化を待たずに進めてよい。
+
+## 再利用Review
+
+Doneで終わりにせず、同じ作業が2回以上出そうなものは次の候補として残す。
+
+- AgentSkill
+- Workflow
+- Command
+- Template
+- Schema

@@ -6,6 +6,7 @@ import { DashboardView } from "./views/DashboardView";
 import { TitleSelectView } from "./views/TitleSelectView";
 import { EngineSandboxView } from "./views/EngineSandboxView";
 import { DevSaveLoadView } from "./views/DevSaveLoadView";
+import { TitleGameStudiosView } from "./views/TitleGameStudiosView";
 import { ComponentRegistryView } from "./views/ComponentRegistryView";
 import { WorkspacePlaceholderView } from "./views/WorkspacePlaceholderView";
 
@@ -39,6 +40,9 @@ export default function App() {
         </Match>
         <Match when={lab.viewPhase() === "devSaveLoad"}>
           <DevSaveLoadView lab={lab} data={devindex()!} />
+        </Match>
+        <Match when={lab.viewPhase() === "titleGameStudios"}>
+          <TitleGameStudiosView lab={lab} data={devindex()!} />
         </Match>
         <Match when={lab.viewPhase() === "componentRegistry"}>
           <ComponentRegistryView lab={lab} data={devindex()!} />

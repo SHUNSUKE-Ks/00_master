@@ -1,0 +1,200 @@
+{
+  "slotId": "slot_todo_studio_build",
+  "schemaVersion": "creator-game-lab.todo-slot.v0.1",
+  "status": "draft",
+  "title": "2D_SRPGStudio 工程TODO",
+  "purpose": "2D_SRPGStudioそのものを作るための工程TODO。Engineへ渡すRuntime JSON納品TODOとは分ける。",
+  "progressTarget": "studio_build",
+  "milestones": [
+    {
+      "milestoneId": "ms_studio_base",
+      "key": "基盤",
+      "title": "Studio基盤",
+      "summary": "単体HTML、素材表示、package rootを用意する。",
+      "status": "done",
+      "clearCondition": "index.html / styles.css / studio.js / assets が揃う",
+      "nextHref": "./todo.html",
+      "nextLabel": "工程TODO",
+      "childTodos": [
+        { "key": "HTML", "text": "単体HTMLでStudio本体を開ける。", "done": true },
+        { "key": "素材", "text": "HTTP表示でも画像が映るようassets配下に置く。", "done": true },
+        { "key": "包体", "text": "package manifestを作る。", "done": true }
+      ]
+    },
+    {
+      "milestoneId": "ms_todo_package",
+      "key": "工程",
+      "title": "TODO package",
+      "summary": "工程TODO、次Task、納品物、schemaをslot JSON化する。",
+      "status": "done",
+      "clearCondition": "todo-studio-build.slot.json / todo-runtime-json.slot.json / todo.slot.schema.json が揃う",
+      "nextHref": "./todo.html",
+      "nextLabel": "工程TODO",
+      "childTodos": [
+        { "key": "摘出", "text": "TODO配列をCode内包からJSON分離へ変更する。", "done": true },
+        { "key": "型定", "text": "TODO slot schemaを用意する。", "done": true },
+        { "key": "読込", "text": "HTMLがslot JSONを読んで描画する。", "done": true }
+      ]
+    },
+    {
+      "milestoneId": "ms_save_resume",
+      "key": "保存",
+      "title": "Save / Load接続",
+      "summary": "GameLabからstudioId、packageId、activeSlotId、activeTaskIdを保存して再開する。",
+      "status": "next",
+      "clearCondition": "CreatorGameLabのSave SlotがactiveSlotId / activeTaskIdを持つ",
+      "nextHref": "./todo.html",
+      "nextLabel": "保存Task",
+      "childTodos": [
+        { "key": "Slot", "text": "activeSlotIdを保存対象に追加する。", "done": false },
+        { "key": "Task", "text": "activeTaskIdを保存対象に追加する。", "done": false },
+        { "key": "再開", "text": "Workspace復帰時に対象TODOへ戻る。", "done": false }
+      ]
+    },
+    {
+      "milestoneId": "ms_runtime_delivery",
+      "key": "納品",
+      "title": "Runtime JSON納品",
+      "summary": "完成済みEngineへ渡すscreen / scenario / image / character / battle JSONを整える。",
+      "status": "ready",
+      "clearCondition": "Runtime JSON納品TODOの必須JSONがschemaを通る",
+      "nextHref": "./runtime-json-todo.html",
+      "nextLabel": "Runtime JSON TODO",
+      "childTodos": [
+        { "key": "画面", "text": "screen_layout.jsonを整える。", "done": false },
+        { "key": "人物", "text": "character_db.jsonを整える。", "done": false },
+        { "key": "戦闘", "text": "battle_setup.jsonを整える。", "done": false }
+      ]
+    },
+    {
+      "milestoneId": "ms_engine_bind",
+      "key": "接続",
+      "title": "Engine接続",
+      "summary": "2D_SRPG_BattleEngine_Ver1.1へRuntime JSONと素材を渡す。",
+      "status": "later",
+      "clearCondition": "BattleEngine側でruntime manifestとasset manifestを読める",
+      "nextHref": "./index.html",
+      "nextLabel": "Studio本体",
+      "childTodos": [
+        { "key": "注文", "text": "engine-order.slot.jsonを更新する。", "done": false },
+        { "key": "表示", "text": "2D spriteをBattleEngineで表示する。", "done": false },
+        { "key": "検証", "text": "最小battle sceneで確認する。", "done": false }
+      ]
+    }
+  ],
+  "deliveryItems": [
+    { "key": "HTML", "text": "単体で開けるTitleGameStudio HTML", "done": true },
+    { "key": "包体", "text": "title-game-studio.package.json", "done": true },
+    { "key": "Slot", "text": "screen / asset / runtime / engine / fix / order のslot JSON", "done": true },
+    { "key": "Schema", "text": "slotごとのschema JSON", "done": true },
+    { "key": "素材", "text": "Map / Conversation / Battle / Character / UI / Object素材一覧", "done": true },
+    { "key": "注文", "text": "Engine側へ渡す注文書", "done": false },
+    { "key": "修正", "text": "画像ごとのFix Log", "done": false },
+    { "key": "保存", "text": "GameLab Save / Loadで再開するためのactive slot情報", "done": false }
+  ],
+  "nextTasks": [
+    {
+      "taskId": "task_todo_slot_externalize",
+      "key": "摘出",
+      "title": "Code摘出: TODO配列をJSONへ分離",
+      "summary": "State: Code内包 → JSON分離。todo.js内の配列を package/slots/todo-studio-build.slot.json と todo-runtime-json.slot.json へ移す。",
+      "status": "done",
+      "output": "todo slot JSON / todo slot schema",
+      "refs": [
+        ["工程TODO HTML", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/todo.html"],
+        ["工程TODO Script", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/todo.js"],
+        ["Runtime JSON TODO Script", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/runtime-json-todo.js"],
+        ["Package Manifest", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/package/title-game-studio.package.json"]
+      ]
+    },
+    {
+      "taskId": "task_todo_schema",
+      "key": "型定",
+      "title": "TODO slot schemaを作成",
+      "summary": "工程TODOとRuntime JSON納品TODOを共通schemaで検証できるようにする。",
+      "status": "done",
+      "output": "package/schemas/todo.slot.schema.json",
+      "refs": [
+        ["TODO Slot Schema", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/package/schemas/todo.slot.schema.json"],
+        ["Package Schema", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/package/schemas/title-game-studio-package.schema.json"]
+      ]
+    },
+    {
+      "taskId": "task_html_load_json",
+      "key": "読込",
+      "title": "HTMLからTODO JSONを読み込む",
+      "summary": "単体HTMLのままslot JSONを読み、表示だけHTML/JSに任せる。file://でブロックされる場合は静的サーバーか埋め込みビルドを使う。",
+      "status": "done",
+      "output": "todo.html / runtime-json-todo.html update",
+      "refs": [
+        ["工程TODO HTML", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/todo.html"],
+        ["Runtime JSON TODO HTML", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/runtime-json-todo.html"]
+      ]
+    },
+    {
+      "taskId": "task_save_active_slot",
+      "key": "保存",
+      "title": "GameLab Save / LoadへactiveSlotId追加",
+      "summary": "作業再開時にstudioId、packageId、activeSlotId、activeTaskIdを持てるようにする。",
+      "status": "next",
+      "output": "CreatorGameLab save slot schema update",
+      "refs": [
+        ["GameLab Save Slots", "C:/00_master/CreatorGameLab/public/data-sources/sample/devindex/dev-save-slots.json"],
+        ["GameLab Schema", "C:/00_master/CreatorGameLab/src/data/schema.ts"],
+        ["Package Manifest", "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/package/title-game-studio.package.json"]
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "heading": "要素分解",
+      "summary": "TitleGameStudio packageに必要な要素を、slot単位へ分ける。",
+      "items": [
+        { "key": "目的", "text": "このTitleGameStudioで作るゲーム体験と範囲を一文で固定する。", "done": true },
+        { "key": "画面", "text": "Map / Conversation / Battle / Resultなど必要画面を列挙する。", "done": true },
+        { "key": "素材", "text": "背景、Character、Object、UI、FXをasset manifestへ分ける。", "done": true },
+        { "key": "状態", "text": "App Phase / View Phase / Active Target / View Mode / Interaction / Overlayを整理する。", "done": false }
+      ]
+    },
+    {
+      "heading": "Slot設計",
+      "summary": "JsonSlotStudioの再設計として、schema付きJSONをattachする空間を作る。",
+      "items": [
+        { "key": "本体", "text": "title-game-studio.package.jsonでpackage identityとslot一覧を持つ。", "done": true },
+        { "key": "依存", "text": "dependsOnでslot同士の依存を先に見えるようにする。", "done": true },
+        { "key": "検証", "text": "各slot JSONをschemaで検証する手順を決める。", "done": false },
+        { "key": "保存", "text": "GameLab Save / LoadがstudioId、packageId、activeSlotIdを保持できるようにする。", "done": false }
+      ]
+    },
+    {
+      "heading": "画面設計",
+      "summary": "Engine接続前に、見た目と遷移をHTMLで確認できる状態にする。",
+      "items": [
+        { "key": "一覧", "text": "Galleryで生成済み画像を画面別に確認する。", "done": true },
+        { "key": "遷移", "text": "Map、Conversation、Battleの画面遷移ラフを用意する。", "done": false },
+        { "key": "差分", "text": "画面StateごとのUI差分をカード化する。", "done": false },
+        { "key": "修正", "text": "画像ごとのFix Logをslotへ保存する。", "done": false }
+      ]
+    },
+    {
+      "heading": "素材整備",
+      "summary": "2D素材をEngineが読みやすい単位へ切り出す。",
+      "items": [
+        { "key": "背景", "text": "Map / Conversation / Battle背景をbase layerとして固定する。", "done": true },
+        { "key": "歩行", "text": "Player walk spriteのframe座標JSONを作る。", "done": false },
+        { "key": "戦闘", "text": "Battle action spriteのframe座標JSONを作る。", "done": false },
+        { "key": "UI", "text": "Player status、command、dialogue UIを部品化する。", "done": false }
+      ]
+    },
+    {
+      "heading": "Engine注文",
+      "summary": "2D_SRPG_BattleEngine_Ver1.1へまとめて渡す注文書を作る。",
+      "items": [
+        { "key": "接続", "text": "engine-binding.slot.jsonでBattleEngine候補を指定する。", "done": true },
+        { "key": "表示", "text": "2D spriteをThree.js sceneへbillboardまたはoverlay表示する注文をまとめる。", "done": false },
+        { "key": "座標", "text": "asset layer座標とgrid座標の対応ルールを決める。", "done": false },
+        { "key": "受渡", "text": "runtime manifestをEngine adapterへ渡す形式を固定する。", "done": false }
+      ]
+    }
+  ]
+}

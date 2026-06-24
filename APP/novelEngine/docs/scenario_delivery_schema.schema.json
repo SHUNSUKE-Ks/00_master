@@ -106,12 +106,20 @@
           }
         }
       }
+    },
+    "assetPrompts": {
+      "type": "object",
+      "description": "scenario_oneshotから引き継いだ素材prompt。Engine再生には必須ではない。",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {}
     }
   },
   "$defs": {
     "tag": {
       "type": "string",
-      "pattern": "^(bg|char|face|cg|bgm|se|fx|mood|flag|ev|memo|ui)_[a-zA-Z0-9_]+$",
+      "pattern": "^(ui|bg|char|face|cg|bgm|se|fx|cam|mood|flag|ev|req|memo|fn)_[a-zA-Z0-9_]+$",
       "description": "素材・演出・イベント候補のtag。例: bg_forest, char_knight, cg_forest_encounter"
     },
     "tags": {
@@ -228,6 +236,9 @@
         "next": {
           "type": ["string", "null"],
           "description": "次Sceneのid。飛び飛び構成や最終Sceneではnullでもよい。"
+        },
+        "choice": {
+          "$ref": "#/$defs/choice"
         }
       }
     },
@@ -328,6 +339,57 @@
               }
             }
           ]
+        }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "options"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^choice_[a-zA-Z0-9_]+$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choiceOption"
+          }
+        }
+      }
+    },
+    "choiceOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "next"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "next": {
+          "type": ["string", "null"],
+          "pattern": "^scene_[a-zA-Z0-9_]+$"
+        },
+        "setFlags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^flag_[a-zA-Z0-9_]+$"
+          },
+          "default": []
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
         }
       }
     }

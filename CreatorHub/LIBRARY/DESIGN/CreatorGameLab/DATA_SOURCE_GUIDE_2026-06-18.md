@@ -53,6 +53,7 @@ public\data-sources\{source_id}\devindex
 ├─ layout-profile.registry.json
 ├─ dev-save-slots.json
 ├─ component-view.registry.json
+├─ title-game-studio.registry.json
 └─ migration-queue.registry.json
 ```
 
@@ -69,3 +70,20 @@ public\data-sources\{source_id}\devindex
 - `C:\00_master\CreatorGameLab\src\data\schema.ts`
 - `C:\00_master\CreatorGameLab\src\data\devindex.ts`
 - `C:\00_master\CreatorGameLab\public\data-sources\source-manifest.json`
+
+## TitleGameStudio Registry
+
+`title-game-studio.registry.json` は、Engineより先に作るTitleGameStudioを管理する。
+
+主な項目:
+
+- `studioId`
+- `title`
+- `status`
+- `studioKind`
+- `standaloneHtmlPath`
+- `runtimeManifestPath`
+- `engineBinding`
+- `viewStateLayers`
+
+GameLab WorkSpaceでは、ここからTitleGameStudioを選び、後から `novel / battle / collection` Engineを当てる。

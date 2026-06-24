@@ -1,0 +1,269 @@
+{
+  "meta": {
+    "id": "srpg_visual_runtime_manifest_v0_1",
+    "version": "0.1",
+    "status": "draft",
+    "purpose": "2D_SRPGStudioで生成した画像をSRPGエンジン側へ渡すためのruntime向けmanifest。座標は初期切り出し用の仮grid。"
+  },
+  "style": {
+    "prompt": "tactical fantasy SRPG visual style, warm hand-painted pixel art look, HD-2D inspired isometric game screen, crisp readable UI, layered game asset production, muted parchment gold, deep navy shadows, soft bloom, dramatic but usable in-game composition, no logos, no watermark",
+    "sharedLook": "Map / Conversation / Battleで同じPlayer、同じUIトーン、同じwarm HD-2D pixel fantasy lookを使う。"
+  },
+  "screens": {
+    "map": {
+      "phase": "Map Select",
+      "states": [
+        "idle",
+        "marker_focus",
+        "mission_preview",
+        "route_confirm"
+      ],
+      "layers": [
+        {
+          "id": "bg",
+          "type": "background",
+          "asset": "bg_world_map_01",
+          "z": 0
+        },
+        {
+          "id": "markers",
+          "type": "object",
+          "asset": "obj_srpg_marker_set",
+          "z": 20
+        },
+        {
+          "id": "playerStatus",
+          "type": "ui",
+          "asset": "ui_player_status_panel",
+          "z": 80
+        }
+      ]
+    },
+    "conversation": {
+      "phase": "Story",
+      "states": [
+        "reading",
+        "log_open",
+        "auto_play",
+        "skip_confirm",
+        "choice_open"
+      ],
+      "layers": [
+        {
+          "id": "bg",
+          "type": "background",
+          "asset": "bg_conversation_dock_01",
+          "z": 0
+        },
+        {
+          "id": "player",
+          "type": "character",
+          "asset": "player_walk_default",
+          "z": 30
+        },
+        {
+          "id": "playerStatus",
+          "type": "ui",
+          "asset": "ui_player_status_panel",
+          "z": 80
+        }
+      ]
+    },
+    "battle": {
+      "phase": "Tactical Action",
+      "states": [
+        "player_idle",
+        "move_preview",
+        "target_select",
+        "command_open",
+        "action_preview",
+        "enemy_turn"
+      ],
+      "layers": [
+        {
+          "id": "bg",
+          "type": "background",
+          "asset": "bg_battle_field_forest_01",
+          "z": 0
+        },
+        {
+          "id": "range",
+          "type": "object",
+          "asset": "obj_srpg_marker_set",
+          "z": 15
+        },
+        {
+          "id": "playerWalk",
+          "type": "character",
+          "asset": "player_walk_default",
+          "z": 30
+        },
+        {
+          "id": "playerBattle",
+          "type": "character",
+          "asset": "player_battle_action",
+          "z": 35
+        },
+        {
+          "id": "playerStatus",
+          "type": "ui",
+          "asset": "ui_player_status_panel",
+          "z": 80
+        }
+      ]
+    }
+  },
+  "assets": {
+    "bg_world_map_01": {
+      "type": "background",
+      "path": "/assets/srpg/background/bg_world_map_01.png",
+      "size": {
+        "width": 1536,
+        "height": 1024
+      },
+      "usage": [
+        "map"
+      ]
+    },
+    "bg_conversation_dock_01": {
+      "type": "background",
+      "path": "/assets/srpg/background/bg_conversation_dock_01.png",
+      "size": {
+        "width": 1536,
+        "height": 1024
+      },
+      "usage": [
+        "conversation"
+      ]
+    },
+    "bg_battle_field_forest_01": {
+      "type": "background",
+      "path": "/assets/srpg/background/bg_battle_field_forest_01.png",
+      "size": {
+        "width": 1536,
+        "height": 1024
+      },
+      "usage": [
+        "battle"
+      ]
+    },
+    "player_walk_default": {
+      "type": "spriteSheet",
+      "path": "/assets/srpg/character/player_walk_default_alpha.png",
+      "sourcePath": "/assets/srpg/character/player_walk_default_chroma.png",
+      "alpha": true,
+      "size": {
+        "width": 1536,
+        "height": 1024
+      },
+      "grid": {
+        "columns": 5,
+        "rows": 4,
+        "cellWidth": 307,
+        "cellHeight": 256
+      },
+      "framePolicy": "初期切り出しは5x4 grid。実装時に余白を検出してtrimする。方向はrowごとにfront / side_a / side_b / backとして仮扱い。",
+      "animations": {
+        "default_front": [
+          "walk_r0_c0"
+        ],
+        "walk_front": [
+          "walk_r0_c1",
+          "walk_r0_c2",
+          "walk_r0_c3",
+          "walk_r0_c4"
+        ],
+        "walk_side_a": [
+          "walk_r1_c0",
+          "walk_r1_c1",
+          "walk_r1_c2",
+          "walk_r1_c3",
+          "walk_r1_c4"
+        ],
+        "walk_side_b": [
+          "walk_r2_c0",
+          "walk_r2_c1",
+          "walk_r2_c2",
+          "walk_r2_c3",
+          "walk_r2_c4"
+        ],
+        "walk_back": [
+          "walk_r3_c0",
+          "walk_r3_c1",
+          "walk_r3_c2",
+          "walk_r3_c3",
+          "walk_r3_c4"
+        ]
+      }
+    },
+    "player_battle_action": {
+      "type": "spriteSheet",
+      "path": "/assets/srpg/character/player_battle_action_alpha.png",
+      "sourcePath": "/assets/srpg/character/player_battle_action_chroma.png",
+      "alpha": true,
+      "size": {
+        "width": 1536,
+        "height": 1024
+      },
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cellWidth": 384,
+        "cellHeight": 512
+      },
+      "framePolicy": "初期切り出しは4x2 grid。attack framesはエフェクト込みのため、後工程でhitbox / effectBoxを分ける。",
+      "animations": {
+        "battle_idle": [
+          "battle_r0_c0"
+        ],
+        "ready": [
+          "battle_r0_c1"
+        ],
+        "sword_attack": [
+          "battle_r0_c2",
+          "battle_r0_c3"
+        ],
+        "guard": [
+          "battle_r1_c0"
+        ],
+        "damaged": [
+          "battle_r1_c1"
+        ],
+        "victory": [
+          "battle_r1_c2"
+        ],
+        "back_view": [
+          "battle_r1_c3"
+        ]
+      }
+    },
+    "ui_player_status_panel": {
+      "type": "uiSheet",
+      "path": "/assets/srpg/ui/ui_player_status_panel_alpha.png",
+      "sourcePath": "/assets/srpg/ui/ui_player_status_panel_chroma.png",
+      "alpha": true,
+      "usage": [
+        "map",
+        "conversation",
+        "battle",
+        "result"
+      ]
+    },
+    "obj_srpg_marker_set": {
+      "type": "objectSheet",
+      "path": "/assets/srpg/object/obj_srpg_marker_set_alpha.png",
+      "sourcePath": "/assets/srpg/object/obj_srpg_marker_set_chroma.png",
+      "alpha": true,
+      "usage": [
+        "map",
+        "battle"
+      ]
+    }
+  },
+  "next": [
+    "player_walk_defaultの実trim frame座標を作る",
+    "player_battle_actionのhitbox / effectBoxを分ける",
+    "ui_player_status_panelの部品ごとのslice座標を作る",
+    "obj_srpg_marker_setのmarker / range / cursor / propsごとのslice座標を作る"
+  ]
+}

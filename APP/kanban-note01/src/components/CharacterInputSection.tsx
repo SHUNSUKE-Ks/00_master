@@ -1,4 +1,4 @@
-import { type Component, For, Show, createSignal, onCleanup, onMount } from 'solid-js'
+import { type Component, For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 type CharacterSlot = {
   id: number
@@ -17,18 +17,57 @@ const DEFAULT_SLOTS: CharacterSlot[] = [
   { id: 3, name: 'CharacterD', active: false },
 ]
 
+const CHARACTER_SLOTS_KEY = 'note-story-character-slots-v1'
+
+function loadCharacterSlots(): CharacterSlot[] {
+  if (typeof window === 'undefined') return DEFAULT_SLOTS
+  try {
+    const raw = localStorage.getItem(CHARACTER_SLOTS_KEY)
+    if (!raw) return DEFAULT_SLOTS
+    const parsed = JSON.parse(raw) as CharacterSlot[]
+    return DEFAULT_SLOTS.map((slot) => ({ ...slot, ...parsed.find((item) => item.id === slot.id) }))
+  } catch (error) {
+    console.warn('[CharacterInput] failed to load slots:', error)
+    return DEFAULT_SLOTS
+  }
+}
+
+function saveCharacterSlots(slots: CharacterSlot[]) {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(CHARACTER_SLOTS_KEY, JSON.stringify(slots))
+}
+
 const CharacterInputSection: Component<Props> = (props) => {
   const [open, setOpen] = createSignal(true)
-  const [slots, setSlots] = createSignal<CharacterSlot[]>(DEFAULT_SLOTS)
+  const [slots, setSlots] = createSignal<CharacterSlot[]>(loadCharacterSlots())
   const [micMode, setMicMode] = createSignal(false)
+
+  createEffect(() => saveCharacterSlots(slots()))
 
   onMount(() => {
     const handleKeydown = (event: KeyboardEvent) => {
       if (!event.altKey || event.ctrlKey || event.metaKey) return
-      if (!['1', '2', '3', '4'].includes(event.key)) return
-      const index = Number(event.key) - 1
+      if (!event.isTrusted) return
+      const key = event.key.toLowerCase()
+      const shortcutIndex: Record<string, number | undefined> = {
+        '1': 0,
+        '2': 1,
+        '3': 2,
+        '4': 3,
+        a: 0,
+        f: 3,
+      }
+      const index = shortcutIndex[key]
+      if (index === undefined) return
       const slot = slots()[index]
-      if (!slot?.active) return
+      if (!slot) return
+      console.info('[NoteStory Shortcut] character', {
+        key: event.key,
+        code: event.code,
+        index,
+        name: slot.name,
+        isTrusted: event.isTrusted,
+      })
       event.preventDefault()
       props.onInsert(slot.name, { fromLineEnd: true, triggerMic: micMode() })
     }

@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.solidjs-novel-engine/schema/scenario_oneshot_v0_1.schema.json",
+  "title": "Scenario OneShot Draft Schema",
+  "description": "ChatGPT、kanban-note01、人間が短いシナリオ断片を納品するための下書き用フォーマット。NovelEngine本体はこの形式を直接再生せず、DevStudioでscenario_main.jsonへ変換する。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["meta", "scenes"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["title"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "scenario_oneshot"
+        },
+        "version": {
+          "type": "string",
+          "default": "0.1"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "episode": {
+          "type": ["integer", "string"]
+        },
+        "source": {
+          "type": "string",
+          "description": "chatgpt, kanban-note01, human, import など"
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scene"
+      }
+    },
+    "assetPrompts": {
+      "type": "object",
+      "description": "素材生成や発注に使う簡易prompt。keyは bg_ / char_ / cg_ / ui_ などの素材tag。",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": {}
+    }
+  },
+  "$defs": {
+    "tag": {
+      "type": "string",
+      "pattern": "^(ui|bg|char|face|bgm|se|fx|cam|ev|flag|req|memo|fn)_[a-zA-Z0-9_]+$"
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "talk"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(sc|scene)_[a-zA-Z0-9_]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "任意のScene表示名。未指定ならidから生成する。"
+        },
+        "bg": {
+          "type": "string",
+          "pattern": "^bg_[a-zA-Z0-9_]+$"
+        },
+        "characters": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/character"
+          }
+        },
+        "talk": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/talkTuple"
+              },
+              {
+                "$ref": "#/$defs/talkObject"
+              }
+            ]
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "next": {
+          "type": ["string", "null"]
+        },
+        "choice": {
+          "$ref": "#/$defs/choice"
+        }
+      }
+    },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^char_[a-zA-Z0-9_]+$"
+        },
+        "face": {
+          "type": "string",
+          "pattern": "^face_[a-zA-Z0-9_]+$"
+        },
+        "slot": {
+          "type": "string",
+          "enum": ["left", "center", "right", "back", "front"]
+        }
+      }
+    },
+    "talkTuple": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "type": "string",
+          "description": "speaker"
+        },
+        {
+          "type": "string",
+          "description": "text"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          },
+          "description": "optional tags"
+        }
+      ]
+    },
+    "talkObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["speaker", "text"],
+      "properties": {
+        "speaker": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          },
+          "default": []
+        }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "options"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^choice_[a-zA-Z0-9_]+$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choiceOption"
+          }
+        }
+      }
+    },
+    "choiceOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "next"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "next": {
+          "type": "string",
+          "pattern": "^(sc|scene)_[a-zA-Z0-9_]+$"
+        },
+        "setFlags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^flag_[a-zA-Z0-9_]+$"
+          },
+          "default": []
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          },
+          "default": []
+        }
+      }
+    }
+  }
+}

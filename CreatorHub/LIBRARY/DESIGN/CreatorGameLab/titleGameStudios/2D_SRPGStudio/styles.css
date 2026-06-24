@@ -1,0 +1,673 @@
+:root {
+  color-scheme: dark;
+  --bg: #090d13;
+  --panel: #141a25;
+  --panel-2: #1b2331;
+  --line: #2a3548;
+  --text: #edf3ff;
+  --muted: #9ba8bb;
+  --accent: #74e6d4;
+  --gold: #e3b75b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", sans-serif;
+  margin: 0;
+}
+
+.studio {
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 28px;
+}
+
+.hero,
+.board {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  padding: 20px;
+}
+
+.todo-hero {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.todo-hero > div {
+  min-width: 0;
+}
+
+.todo-hero span {
+  color: var(--muted);
+}
+
+.hero > p {
+  color: var(--accent);
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+h1 {
+  font-size: 34px;
+  margin: 0 0 18px;
+}
+
+h2,
+h3 {
+  margin-top: 0;
+}
+
+p,
+li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.hero-grid,
+.state-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.progress-tile {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  flex: 0 0 240px;
+  padding: 14px;
+}
+
+.progress-tile strong {
+  display: block;
+  font-size: 32px;
+}
+
+.progress-line {
+  background: rgb(255 255 255 / 10%);
+  border-radius: 999px;
+  height: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.progress-line i {
+  background: var(--accent);
+  display: block;
+  height: 100%;
+  width: 0;
+}
+
+.progress-tile small {
+  color: var(--muted);
+  font-family: ui-monospace, "Cascadia Code", monospace;
+}
+
+.todo-head {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.todo-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.todo-head a,
+.todo-links a {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.todo-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.milestone-board {
+  border-color: rgb(227 183 91 / 30%);
+}
+
+.milestone-stepper {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.milestone-step {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+  min-height: 104px;
+  padding: 12px;
+  position: relative;
+  text-align: left;
+}
+
+.milestone-step::after {
+  background: var(--line);
+  content: "";
+  height: 2px;
+  left: calc(100% + 2px);
+  position: absolute;
+  top: 28px;
+  width: 8px;
+}
+
+.milestone-step:last-child::after {
+  display: none;
+}
+
+.milestone-step span {
+  align-items: center;
+  background: rgb(255 255 255 / 8%);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+}
+
+.milestone-step b {
+  color: var(--gold);
+}
+
+.milestone-step small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.milestone-step.done,
+.milestone-step.completed {
+  border-color: rgb(116 230 212 / 34%);
+}
+
+.milestone-step.active,
+.milestone-step:hover {
+  border-color: var(--gold);
+}
+
+.milestone-step.next {
+  border-color: rgb(227 183 91 / 44%);
+}
+
+.milestone-detail {
+  background: rgb(255 255 255 / 3%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  margin-top: 12px;
+  padding: 14px;
+}
+
+.milestone-detail-head {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr minmax(220px, 320px);
+}
+
+.milestone-detail-head span {
+  color: var(--gold);
+  font-weight: 800;
+}
+
+.milestone-detail-head aside {
+  background: rgb(0 0 0 / 16%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.milestone-detail-head strong,
+.milestone-detail-head small,
+.milestone-detail-head a {
+  display: block;
+}
+
+.milestone-detail-head strong {
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.milestone-detail-head small {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.milestone-detail-head a {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  margin-top: 12px;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+
+.milestone-child-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.milestone-child {
+  align-items: start;
+  background: rgb(255 255 255 / 4%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 58px 1fr;
+  padding: 10px;
+}
+
+.milestone-child span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.milestone-child p {
+  margin: 0;
+}
+
+.milestone-child.done {
+  border-color: rgb(116 230 212 / 28%);
+}
+
+.next-task-board {
+  border-color: rgb(116 230 212 / 28%);
+}
+
+.todo-head button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+.next-task-active {
+  align-items: stretch;
+  background: linear-gradient(135deg, rgb(116 230 212 / 12%), rgb(227 183 91 / 8%));
+  border: 1px solid rgb(116 230 212 / 34%);
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr minmax(180px, 260px);
+  padding: 14px;
+}
+
+.next-task-active span,
+.next-task-list span {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.next-task-active p {
+  margin-bottom: 0;
+}
+
+.next-task-active aside {
+  background: rgb(0 0 0 / 16%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+}
+
+#copyActiveTask {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 8px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.next-task-active strong,
+.next-task-active small {
+  display: block;
+}
+
+.next-task-active strong {
+  color: var(--gold);
+  margin-bottom: 8px;
+  padding-right: 68px;
+}
+
+.next-task-active small,
+.next-task-list small {
+  color: var(--muted);
+  font-family: ui-monospace, "Cascadia Code", monospace;
+}
+
+.next-task-list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.next-task-list button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+  min-height: 104px;
+  padding: 12px;
+  text-align: left;
+}
+
+.next-task-list button.active,
+.next-task-list button:hover {
+  border-color: var(--accent);
+}
+
+.delivery-callout {
+  background: #20242b;
+  border: 1px solid #464d58;
+  border-radius: 8px;
+  margin-top: 14px;
+  padding: 14px;
+}
+
+.delivery-callout h3 {
+  margin-bottom: 6px;
+}
+
+.delivery-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.delivery-item {
+  align-items: start;
+  background: rgb(255 255 255 / 4%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 58px 1fr;
+  padding: 10px;
+}
+
+.delivery-item span {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.delivery-item p {
+  margin: 0;
+}
+
+.delivery-item.done {
+  border-color: rgb(227 183 91 / 34%);
+}
+
+.todo-group {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.todo-group-head {
+  align-items: start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.todo-group-head code {
+  color: var(--accent);
+  font-family: ui-monospace, "Cascadia Code", monospace;
+}
+
+.todo-items {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.todo-item {
+  align-items: start;
+  background: rgb(255 255 255 / 3%);
+  border: 1px solid rgb(255 255 255 / 7%);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 64px 1fr;
+  padding: 10px;
+}
+
+.todo-item input {
+  margin-top: 5px;
+}
+
+.todo-item span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.todo-item p {
+  margin: 0;
+}
+
+.todo-item code {
+  color: var(--accent);
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 11px;
+}
+
+.todo-item.done {
+  border-color: rgb(116 230 212 / 28%);
+}
+
+.concept-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.concept-grid article {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.concept-grid b {
+  color: var(--accent);
+}
+
+.state-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hero-grid section,
+.state-grid article,
+.card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.gallery {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.slot-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.card:hover {
+  border-color: var(--accent);
+}
+
+.card img {
+  aspect-ratio: 16 / 9;
+  background: #05070b;
+  border-radius: 6px;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.card span {
+  color: var(--accent);
+  display: block;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+.slot-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.slot-card div {
+  align-items: start;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.slot-card span,
+.slot-card code,
+.slot-card small {
+  color: var(--accent);
+  display: block;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 11px;
+}
+
+.slot-card strong {
+  background: rgb(116 230 212 / 10%);
+  border: 1px solid rgb(116 230 212 / 35%);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+.slot-card p {
+  margin-bottom: 8px;
+}
+
+dialog {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  max-width: min(1100px, 94vw);
+  padding: 16px;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 78%);
+}
+
+dialog img {
+  max-height: 70vh;
+  object-fit: contain;
+  width: 100%;
+}
+
+#close {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  float: right;
+  padding: 8px 12px;
+}
+
+@media (max-width: 860px) {
+  .hero-grid,
+  .todo-hero,
+  .state-grid,
+  .gallery,
+  .slot-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .progress-tile {
+    flex: auto;
+  }
+
+  .todo-item,
+  .delivery-item {
+    grid-template-columns: auto 54px 1fr;
+  }
+
+  .delivery-list {
+    grid-template-columns: 1fr;
+  }
+
+  .next-task-active,
+  .next-task-list,
+  .milestone-stepper,
+  .milestone-detail-head,
+  .concept-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .milestone-step::after {
+    display: none;
+  }
+
+  .milestone-child {
+    grid-template-columns: auto 54px 1fr;
+  }
+}

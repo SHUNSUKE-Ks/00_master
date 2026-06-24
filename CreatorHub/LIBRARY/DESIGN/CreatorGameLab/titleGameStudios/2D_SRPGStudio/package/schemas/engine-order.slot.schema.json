@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creator-game-lab.engine-order-slot.schema.v0.1",
+  "title": "Engine Order Slot",
+  "type": "object",
+  "required": ["slotId", "schemaVersion", "status", "orders"],
+  "properties": {
+    "slotId": { "const": "slot_engine_order" },
+    "schemaVersion": { "const": "creator-game-lab.engine-order-slot.v0.1" },
+    "status": { "type": "string" },
+    "orders": { "type": "array", "items": { "type": "object" } }
+  }
+}

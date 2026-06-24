@@ -1,0 +1,98 @@
+{
+  "registryId": "title_game_studio_registry_20260622",
+  "updatedAt": "2026-06-22T00:00:00+09:00",
+  "studios": [
+    {
+      "studioId": "studio_2d_srpg_001",
+      "title": "2D_SRPGStudio",
+      "status": "designing",
+      "targetTitleId": "steel_horizon",
+      "summary": "Engineより先にSRPG TitleのMap / Conversation / Battle画面、素材、Fix Log、Runtime Manifestを決めるTitleGameStudio。",
+      "studioKind": "srpg",
+      "componentKey": "titleGameStudio2dSrpg",
+      "standaloneHtmlPath": "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/index.html",
+      "packageManifestPath": "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/titleGameStudios/2D_SRPGStudio/package/title-game-studio.package.json",
+      "runtimeManifestPath": "C:/00_master/APP/novelEngine/public/assets/srpg/srpg_runtime_manifest_v0_1.json",
+      "designDocPath": "C:/00_master/CreatorHub/LIBRARY/DESIGN/CreatorGameLab/TITLE_GAME_STUDIO_PACKAGE_SPEC_2026-06-22.md",
+      "progressPercent": 42,
+      "screenCount": 5,
+      "assetCount": 12,
+      "fixLogCount": 0,
+      "engineBinding": {
+        "adventure": {
+          "engineId": "AdventureEngine",
+          "modelId": "adventure_novel_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        },
+        "battle": {
+          "engineId": "BattleEngine",
+          "modelId": "battle_2d_srpg_ver_1_1",
+          "version": "1.1.0",
+          "status": "candidate"
+        },
+        "collection": {
+          "engineId": "CollectionEngine",
+          "modelId": "collection_reward_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        }
+      },
+      "viewStateLayers": {
+        "appPhase": ["studio_design", "engine_binding", "runtime_preview"],
+        "viewPhase": ["gallery", "screen_layout", "runtime_manifest", "fix_log"],
+        "activeTarget": ["screen", "asset", "engine_slot", "fix_request"],
+        "viewMode": ["gallery", "detail", "compare", "manifest"],
+        "interactionState": ["idle", "reviewing_image", "writing_fix", "binding_engine"],
+        "overlayState": ["none", "image_lightbox", "engine_slot_picker", "fix_request_editor"]
+      },
+      "updatedAt": "2026-06-22T00:00:00+09:00"
+    },
+    {
+      "studioId": "studio_novel_game_001",
+      "title": "NovelGameStudio",
+      "status": "draft",
+      "targetTitleId": "realm_of_aether",
+      "summary": "novelGame向けにScenario、Conversation Log、Tags、Character DB、Save Slotを整理し直す予定のTitleGameStudio。",
+      "studioKind": "novel",
+      "componentKey": "titleGameStudioNovel",
+      "standaloneHtmlPath": "",
+      "packageManifestPath": "",
+      "runtimeManifestPath": "",
+      "designDocPath": "C:/00_master/APP/novelEngine/docs/novelEngine_tags.md",
+      "progressPercent": 18,
+      "screenCount": 3,
+      "assetCount": 0,
+      "fixLogCount": 0,
+      "engineBinding": {
+        "adventure": {
+          "engineId": "AdventureEngine",
+          "modelId": "novel_engine_core",
+          "version": "0.1.0",
+          "status": "selected"
+        },
+        "battle": {
+          "engineId": "BattleEngine",
+          "modelId": "battle_none",
+          "version": "0.0.0",
+          "status": "planned"
+        },
+        "collection": {
+          "engineId": "CollectionEngine",
+          "modelId": "collection_log_core",
+          "version": "0.1.0",
+          "status": "candidate"
+        }
+      },
+      "viewStateLayers": {
+        "appPhase": ["studio_design", "engine_binding"],
+        "viewPhase": ["scenario", "character_db", "tag_dictionary", "save_slots"],
+        "activeTarget": ["scene", "character", "tag", "save_slot"],
+        "viewMode": ["index", "detail", "preview"],
+        "interactionState": ["idle", "editing_scenario", "reviewing_log"],
+        "overlayState": ["none", "scenario_intake", "tag_picker"]
+      },
+      "updatedAt": "2026-06-22T00:00:00+09:00"
+    }
+  ]
+}

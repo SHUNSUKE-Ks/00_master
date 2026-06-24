@@ -4,7 +4,9 @@
 
 `C:\00_master\agent` は、AIが `C:\00_master` 配下のプロジェクトを扱う前に読む入口です。
 
-Kanban_Juneが進捗と案件管理の司令塔です。
+Kanban_Juneは進捗、Report、Review、知識化の中心です。
+
+APP側の細かい実装、検証、素材整理、UI確認、試行錯誤はAPP側で進めます。Kanban_Juneは作業開始を毎回止める司令塔ではなく、作業後のReportを受けて整理し、必要なものだけTaskTicket化する場所です。
 
 このagentフォルダーは、報告義務、技術スタッツ、探索Index、企画から実装までの決まり事をまとめます。
 
@@ -18,9 +20,9 @@ Kanban_Juneが進捗と案件管理の司令塔です。
 
 ## 基本方針
 
-- すべてのプロジェクト、企画、実験はKanban_Juneで見えるようにする。
+- すべてのプロジェクト、企画、実験はReportでKanban_Juneから見えるようにする。
+- APP側の短い試行錯誤は、TaskTicket化を待たずに進めてよい。
 - 重要な決定、設計、移植、失敗、修正はReportへ残す。
 - 画面を作る前に、画像またはHTMLレイアウトで見た目と遷移を確認する。
-- HTMLレイアウトが固まってからScaffold化し、TODOとTaskTicketに分解する。
+- HTMLレイアウトが固まってからScaffold化し、必要に応じてTODOとTaskTicketに分解する。
 - AIは作業開始前にIndexを確認し、既存資料や既存素材を探してから作業する。
-

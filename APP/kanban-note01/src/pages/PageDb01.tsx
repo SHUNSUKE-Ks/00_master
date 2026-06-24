@@ -6,6 +6,57 @@ import { state, setState, updateProduct, navigate, addProduct, updateDbTitle } f
 type Props = { products: Product[] }
 type EditCell = { rowId: string; col: string; x: number; y: number }
 type CategoryFilter = 'all' | string
+type OutlineItem = { level: 2 | 3; title: string; notebookId?: string; pageId?: string }
+
+const WORK_STATES: NonNullable<Product['workState']>[] = ['アイディア中', '執筆中', '納品候補', '完了']
+const HEADING_MODES: NonNullable<Product['headingRefMode']>[] = ['md_heading', 'stepper_heading', 'manual']
+
+function notebookPageOptions() {
+  return state.notebooks.flatMap((notebook) =>
+    notebook.pages.map((page) => ({
+      notebookId: notebook.id ?? notebook.title,
+      pageId: page.id,
+      label: `${notebook.title} / ${page.title}`,
+    }))
+  )
+}
+
+function findHeadingPage(product: Product) {
+  const notebook =
+    state.notebooks.find((item) => item.id === product.headingRefNotebookId) ??
+    state.notebooks.find((item) => item.title === product.name)
+  const page =
+    notebook?.pages.find((item) => item.id === product.headingRefPageId) ??
+    notebook?.pages[0]
+  return { notebook, page }
+}
+
+function extractHeadingOutline(
+  text: string,
+  source: 'body' | 'scenario' | 'both',
+  ref?: { notebookId?: string; pageId?: string }
+): OutlineItem[] {
+  const lines = text.split('\n')
+  return lines.flatMap((line) => {
+    const match = /^(#{2,3})\s+(.+)$/.exec(line.trim())
+    if (!match) return []
+    return [{ level: match[1].length as 2 | 3, title: match[2].trim(), ...ref }]
+  }).filter((item) => (source === 'scenario' ? true : item.level >= 2))
+}
+
+function jumpToNotebookPage(item: OutlineItem) {
+  if (!item.notebookId || !item.pageId) return
+  setState({
+    selectedNotebookId: item.notebookId,
+    selectedNotebookPageId: item.pageId,
+  })
+  navigate('notebook')
+}
+
+function outlineMark(item: OutlineItem) {
+  if (/選択肢|choice/i.test(item.title)) return '◇'
+  return item.level === 2 ? '■' : '・'
+}
 
 // ── Tags Popover (symptoms / effects) ──────────────────────────────────────
 const TagsPopover: Component<{
@@ -366,6 +417,59 @@ const TableView: Component<{
                           </div>
                         )
 
+                      case 'workState':
+                        return (
+                          <div class="notion-cell flex-1 px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
+                            <select
+                              class="w-full max-w-36 text-xs font-medium bg-amber-50 text-amber-800 border border-amber-100 rounded-lg px-2 py-1.5 outline-none focus:border-nacc-gold"
+                              value={product.workState ?? 'アイディア中'}
+                              onChange={(e) => props.onUpdate(product.id, { workState: e.currentTarget.value as Product['workState'] })}
+                            >
+                              <For each={WORK_STATES}>
+                                {(stateName) => <option value={stateName}>{stateName}</option>}
+                              </For>
+                            </select>
+                          </div>
+                        )
+
+                      case 'headingRef':
+                        return (
+                          <div class="notion-cell flex-[1.6] px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
+                            <select
+                              class="w-full text-xs bg-slate-50 text-slate-700 border border-slate-200 rounded-lg px-2 py-1.5 outline-none focus:border-nacc-gold"
+                              value={product.headingRefPageId ?? ''}
+                              onChange={(e) => {
+                                const option = notebookPageOptions().find((item) => item.pageId === e.currentTarget.value)
+                                if (!option) return
+                                props.onUpdate(product.id, {
+                                  headingRefNotebookId: option.notebookId,
+                                  headingRefPageId: option.pageId,
+                                })
+                              }}
+                            >
+                              <option value="">Titleと同名Noteを自動参照</option>
+                              <For each={notebookPageOptions()}>
+                                {(option) => <option value={option.pageId}>{option.label}</option>}
+                              </For>
+                            </select>
+                          </div>
+                        )
+
+                      case 'headingMode':
+                        return (
+                          <div class="notion-cell flex-1 px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
+                            <select
+                              class="w-full max-w-40 text-xs bg-slate-50 text-slate-700 border border-slate-200 rounded-lg px-2 py-1.5 outline-none focus:border-nacc-gold"
+                              value={product.headingRefMode ?? 'md_heading'}
+                              onChange={(e) => props.onUpdate(product.id, { headingRefMode: e.currentTarget.value as Product['headingRefMode'] })}
+                            >
+                              <For each={HEADING_MODES}>
+                                {(mode) => <option value={mode}>{mode}</option>}
+                              </For>
+                            </select>
+                          </div>
+                        )
+
                       case 'symptoms':
                         return (
                           <div
@@ -692,40 +796,68 @@ const DetailView: Component<{ products: Product[] }> = (props) => {
   )
 }
 
-// ── Index View (2-column: title | summary) ────────────────────────────────
+function titleOutlineItems(product: Product) {
+  const mode = product.headingRefMode ?? 'md_heading'
+  if (mode === 'manual') {
+    return product.effects.map((title) => ({ level: 2 as const, title }))
+  }
+
+  const { notebook, page } = findHeadingPage(product)
+  if (!notebook) {
+    return product.effects.map((title) => ({ level: 2 as const, title }))
+  }
+
+  if (page) {
+    const source = mode === 'stepper_heading'
+      ? page.scenarioBody ?? page.body ?? ''
+      : page.body || page.scenarioBody || ''
+    const ref = { notebookId: notebook.id ?? notebook.title, pageId: page.id }
+    const items = extractHeadingOutline(source, mode === 'stepper_heading' ? 'scenario' : 'body', ref)
+    return items.length > 0 ? items.slice(0, 18) : [{ level: 2 as const, title: page.title, ...ref }]
+  }
+
+  return notebook.pages.map((item) => ({ level: 2 as const, title: item.title, notebookId: notebook.id ?? notebook.title, pageId: item.id }))
+}
+
+// ── Index View (Title + delivered page outline) ────────────────────────────
 const IndexView: Component<{ products: Product[] }> = (props) => (
-  <div class="flex-1 overflow-auto px-1 md:px-6 pb-6">
-    <div class="bg-white rounded-xl border border-nacc-border overflow-hidden">
-      {/* Header — 品目 col: 40% on mobile, fixed 288px on md+ */}
-      <div class="flex border-b-2 border-nacc-border bg-nacc-light sticky top-0 z-10">
-        <div class="w-[40%] md:w-72 shrink-0 px-3 md:px-5 py-2 md:py-3 text-[11px] md:text-xs font-bold text-gray-500 tracking-wider uppercase border-r border-nacc-border">
+  <div class="db-index-view flex-1 overflow-auto px-1 md:px-6 pb-6">
+    <div class="db-index-table bg-white rounded-xl border border-nacc-border overflow-hidden">
+      <div class="db-index-head flex border-b-2 border-nacc-border bg-nacc-light sticky top-0 z-10">
+        <div class="db-index-title-col w-[40%] md:w-72 shrink-0 px-3 md:px-5 py-2 md:py-3 text-[11px] md:text-xs font-bold text-gray-500 tracking-wider uppercase border-r border-nacc-border">
           Title
         </div>
-        <div class="flex-1 px-3 md:px-5 py-2 md:py-3 text-[11px] md:text-xs font-bold text-gray-500 tracking-wider uppercase">
-          Summary
+        <div class="db-index-outline-col flex-1 px-3 md:px-5 py-2 md:py-3 text-[11px] md:text-xs font-bold text-gray-500 tracking-wider uppercase">
+          見出し
         </div>
       </div>
 
-      {/* Rows */}
       <For each={props.products}>
         {(product, i) => (
           <div
-            class="flex border-b border-nacc-border last:border-none hover:bg-[#fffbf5] transition-colors"
+            class="db-index-row flex border-b border-nacc-border last:border-none hover:bg-[#fffbf5] transition-colors"
             classList={{ 'bg-[#fafaf8]': i() % 2 === 1 }}
           >
-            {/* Title — ID is hidden */}
-            <div class="w-[40%] md:w-72 shrink-0 px-2 py-3 md:px-5 md:py-5 border-r border-nacc-border flex flex-col gap-1.5 md:gap-2 justify-start">
-              <p class="font-bold text-nacc-gold text-[12px] md:text-sm leading-snug">{product.name}</p>
+            <div class="db-index-title-cell w-[40%] md:w-72 shrink-0 px-2 py-3 md:px-5 md:py-5 border-r border-nacc-border flex flex-col gap-1.5 md:gap-2 justify-start">
+              <p class="db-index-title-name font-bold text-nacc-gold text-[12px] md:text-sm leading-snug">{product.name}</p>
               <TypeBadge type={product.category} />
             </div>
 
-            {/* Summary */}
-            <div class="flex-1 px-2 py-3 md:px-6 md:py-5 flex items-start min-w-0">
-              <p class="text-[12px] md:text-sm text-nacc-dark leading-relaxed">
-                {product.description || (
-                  <span class="text-gray-300 italic text-[10px] md:text-xs">説明なし</span>
-                )}
-              </p>
+            <div class="db-index-outline-cell flex-1 px-2 py-3 md:px-6 md:py-5 min-w-0">
+              <div class="db-index-outline-list">
+                <For each={titleOutlineItems(product)}>
+                  {(item) => (
+                    <button
+                      type="button"
+                      class={`db-index-outline-item h${item.level}`}
+                      onClick={() => jumpToNotebookPage(item)}
+                    >
+                      <span class="mark">{outlineMark(item)}</span>
+                      <span class="text">{item.title}</span>
+                    </button>
+                  )}
+                </For>
+              </div>
             </div>
           </div>
         )}

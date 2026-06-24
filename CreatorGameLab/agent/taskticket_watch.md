@@ -4,7 +4,20 @@
 
 CreatorGameLab Agentが、自分の作業対象を見つけるための確認手順。
 
+Kanban_Juneは作業開始を毎回止める司令塔ではなく、Reportを受けてReview、進捗整理、次TODO整理、知識化を行う場所として扱う。
+
+CreatorGameLab Agentは、明示されたTaskTicketや複数日にまたがる作業ではこのWatchを使う。APP側の短い修正、UI確認、素材整理、試行錯誤は、必要な資料を確認したうえで進め、作業後にReportで返す。
+
 ## 確認する場所
+
+推奨コマンド:
+
+```powershell
+cd C:\00_master
+node AgentRoom\commands\agent-task-pull.mjs --agent creator_game_lab_agent
+```
+
+このコマンドは、Kanban_JuneのTaskTicketからCreatorGameLab Agent担当候補を抽出し、Start PromptとPull Reportを作る。
 
 TaskTicket:
 
@@ -71,4 +84,3 @@ dev serverは自動起動しない。
 cd C:\00_master\CreatorGameLab
 npm run dev
 ```
-
