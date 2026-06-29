@@ -1,6 +1,13 @@
 import { createStore } from 'solid-js/store'
 import type { GalleryItem, GalleryView, GallerySortBy, GalleryCategory } from './types'
 import { GALLERY_SAMPLE } from './data'
+import type { GalleryPhoto } from '../../types'
+import {
+  addLocalGalleryPhoto,
+  deleteLocalGalleryPhoto,
+  fileToLocalGalleryPhoto,
+  loadLocalGalleryPhotos,
+} from '../../dataBridge/localGallery'
 
 type GalleryLocalState = {
   items: GalleryItem[]
@@ -24,9 +31,41 @@ function extractTags(items: GalleryItem[]): string[] {
   return Array.from(set).sort()
 }
 
+function galleryPhotoToItem(
+  photo: GalleryPhoto,
+  size: { width?: number; height?: number } = {},
+): GalleryItem {
+  return {
+    id: photo.id ?? `local_gallery_${photo.createdAt.getTime()}`,
+    filename: photo.name,
+    label: photo.name.replace(/\.[^.]+$/, ''),
+    description: '',
+    tags: [],
+    category: 'reference',
+    mimeType: photo.dataUrl.match(/^data:([^;]+);/)?.[1] ?? 'image/*',
+    ...size,
+    dataUrl: photo.dataUrl,
+    isFavorite: false,
+    createdAt: photo.createdAt,
+    updatedAt: photo.createdAt,
+  }
+}
+
+function loadInitialGalleryItems(): GalleryItem[] {
+  const localItems = loadLocalGalleryPhotos().map((photo) => galleryPhotoToItem(photo))
+  if (localItems.length > 0) {
+    console.log('[APP04-LOCAL-GALLERY] 6-0 Gallery store loaded local photos', {
+      count: localItems.length,
+    })
+  }
+  return [...localItems, ...GALLERY_SAMPLE.filter((sample) => !localItems.some((item) => item.id === sample.id))]
+}
+
+const initialGalleryItems = loadInitialGalleryItems()
+
 export const [galleryState, setGalleryState] = createStore<GalleryLocalState>({
-  items: GALLERY_SAMPLE,
-  masterTags: extractTags(GALLERY_SAMPLE),
+  items: initialGalleryItems,
+  masterTags: extractTags(initialGalleryItems),
   view: 'grid',
   sortBy: 'createdAt',
   search: '',
@@ -60,35 +99,37 @@ function readImageSize(dataUrl: string): Promise<{ width?: number; height?: numb
 
 export function addGalleryImage(file: File) {
   if (!file.type.startsWith('image/')) return
-  const reader = new FileReader()
-  reader.onload = async () => {
-    const dataUrl = String(reader.result ?? '')
-    if (!dataUrl) return
-    const now = new Date()
-    const size = await readImageSize(dataUrl)
+  fileToLocalGalleryPhoto(file).then(async (photo) => {
+    if (!photo.dataUrl) return
+    addLocalGalleryPhoto(photo)
+    const size = await readImageSize(photo.dataUrl)
     const item: GalleryItem = {
-      id: `gallery_${now.getTime()}`,
-      filename: file.name,
-      label: file.name.replace(/\.[^.]+$/, ''),
-      description: '',
-      tags: [],
-      category: 'reference',
+      ...galleryPhotoToItem(photo, size),
       mimeType: file.type,
       fileSize: file.size,
-      ...size,
-      dataUrl,
-      isFavorite: false,
-      createdAt: now,
-      updatedAt: now,
     }
-    setGalleryState('items', (prev) => [item, ...prev])
+    setGalleryState('items', (prev) => [item, ...prev.filter((entry) => entry.id !== item.id)])
     setGalleryState({ selectedId: item.id, detailOpen: true, showTrash: false })
-  }
-  reader.readAsDataURL(file)
+    console.log('[APP04-LOCAL-GALLERY] 6-1 Gallery page photo added', {
+      id: item.id,
+      filename: file.name,
+    })
+  }).catch((error) => {
+    console.warn('[APP04-LOCAL-GALLERY] 6-1e Gallery page photo add failed', {
+      filename: file.name,
+      error,
+    })
+  })
 }
 
 export function selectGalleryItem(id: string | null) {
   setGalleryState({ selectedId: id, detailOpen: id !== null })
+  if (galleryState.view === 'pinterest') {
+    console.log('[APP04-GALLERY-PINTEREST] 12-2 Toggle pinterest detail overlay', {
+      itemId: id,
+      open: id !== null,
+    })
+  }
 }
 
 export function openLightbox(id: string) {
@@ -136,6 +177,10 @@ export function restoreFromGalleryTrash(id: string) {
 }
 
 export function permanentDeleteGalleryItem(id: string) {
+  if (id.startsWith('local_gallery_')) {
+    deleteLocalGalleryPhoto(id)
+    console.log('[APP04-LOCAL-GALLERY] 6-3 Local gallery photo deleted', { id })
+  }
   setGalleryState('items', (prev) => prev.filter((item) => item.id !== id))
   setGalleryState({ selectedId: null, detailOpen: false })
 }

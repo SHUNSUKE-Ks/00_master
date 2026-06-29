@@ -2,14 +2,10 @@ import { type Component, For } from 'solid-js'
 import { state, navigate } from '../store'
 import type { Page } from '../types'
 
-type NavItem = { page: Page; label: string; icon: string }
+type NavItem = { page: Page; label: string; icon: string; dbHubMode?: string }
 
 const PAGE_NAV: NavItem[] = [
   { page: 'memo', label: 'scenarioノート', icon: '📝' },
-]
-const DB_NAV: NavItem[] = [
-  { page: 'db01', label: 'Title DB', icon: 'T' },
-  { page: 'db02', label: 'Character DB', icon: 'C' },
 ]
 const NavBtn: Component<{ item: NavItem }> = (props) => (
   <button
@@ -19,7 +15,10 @@ const NavBtn: Component<{ item: NavItem }> = (props) => (
       'text-[#555] hover:bg-[#f5f4f1]': state.page !== props.item.page,
     }}
     data-page={props.item.page}
-    onClick={() => navigate(props.item.page)}
+    onClick={() => {
+      if (props.item.dbHubMode) sessionStorage.setItem('note-story-db-hub-mode-v1', props.item.dbHubMode)
+      navigate(props.item.page)
+    }}
   >
     <span class="sidebar-icon">{props.item.icon}</span>
     <span class="sidebar-label truncate">{props.item.label}</span>
@@ -53,9 +52,6 @@ const Sidebar: Component = () => (
       <nav class="flex-1 overflow-y-auto p-2">
         <SectionLabel label="ページ" />
         <For each={PAGE_NAV}>{(item) => <NavBtn item={item} />}</For>
-
-        <SectionLabel label="データベース" />
-        <For each={DB_NAV}>{(item) => <NavBtn item={item} />}</For>
 
         <SectionLabel label="ノートブック" />
         <button

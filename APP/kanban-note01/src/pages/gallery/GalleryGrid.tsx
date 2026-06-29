@@ -1,17 +1,31 @@
 import { type Component, createMemo, For, Show } from 'solid-js'
 import { galleryState, getFilteredItems } from './store'
 import GalleryCard from './GalleryCard'
+import GalleryPinterestGrid from './GalleryPinterestGrid'
 import { CATEGORY_LABELS, CATEGORY_BG } from './types'
 import { selectGalleryItem, toggleGalleryFavorite } from './store'
 import { formatDate } from './store'
 
 const GalleryGrid: Component = () => {
   const filtered = createMemo(() => getFilteredItems(galleryState))
+  const pinterestItems = createMemo(() => {
+    let items = galleryState.items.filter((item) => !item.isDeleted)
+    if (galleryState.search.trim()) {
+      const q = galleryState.search.toLowerCase()
+      items = items.filter((item) =>
+        item.label.toLowerCase().includes(q) ||
+        item.filename.toLowerCase().includes(q) ||
+        (item.description?.toLowerCase().includes(q) ?? false) ||
+        item.tags.some((tag) => tag.toLowerCase().includes(q))
+      )
+    }
+    return items
+  })
 
   return (
     <div class="flex-1 overflow-y-auto">
       {/* Empty state */}
-      <Show when={filtered().length === 0}>
+      <Show when={galleryState.view !== 'pinterest' && filtered().length === 0}>
         <div class="flex flex-col items-center justify-center h-full text-gray-300 gap-4 py-24">
           <svg class="w-20 h-20 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
@@ -22,6 +36,11 @@ const GalleryGrid: Component = () => {
             <p class="text-xs text-gray-300 mt-1">フィルターを変更してみてください</p>
           </div>
         </div>
+      </Show>
+
+      {/* Pinterest scaffold view */}
+      <Show when={galleryState.view === 'pinterest'}>
+        <GalleryPinterestGrid items={pinterestItems()} />
       </Show>
 
       {/* Grid view */}

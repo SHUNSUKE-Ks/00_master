@@ -839,6 +839,7 @@ const INITIAL_NOTEBOOKS: Notebook[] = [
 ]
 
 const LOCAL_MEMOS_KEY = 'note-story-local-memos-v1'
+const LOCAL_BLOGS_KEY = 'note-story-local-blogs-v1'
 const LOCAL_NOTEBOOKS_KEY = 'note-story-local-notebooks-v1'
 const LOCAL_INBOX_KEY = 'note-story-global-inbox-v1'
 
@@ -851,6 +852,15 @@ function reviveMemo(item: Memo): Memo {
     ...item,
     createdAt: reviveDate(item.createdAt),
     updatedAt: reviveDate(item.updatedAt),
+  }
+}
+
+function reviveBlog(item: Blog): Blog {
+  return {
+    ...item,
+    createdAt: reviveDate(item.createdAt),
+    updatedAt: reviveDate(item.updatedAt),
+    deletedAt: item.deletedAt ? reviveDate(item.deletedAt) : undefined,
   }
 }
 
@@ -956,6 +966,19 @@ function loadLocalMemos(): Memo[] {
   }
 }
 
+function loadLocalBlogs(): Blog[] {
+  if (typeof window === 'undefined') return INITIAL_BLOGS
+  try {
+    const raw = localStorage.getItem(LOCAL_BLOGS_KEY)
+    if (!raw) return INITIAL_BLOGS
+    const parsed = JSON.parse(raw) as Blog[]
+    return parsed.map(reviveBlog)
+  } catch (error) {
+    console.warn('[Local BLOG] failed to load blogs:', error)
+    return INITIAL_BLOGS
+  }
+}
+
 function loadLocalNotebooks(): Notebook[] {
   if (typeof window === 'undefined') return INITIAL_NOTEBOOKS
   try {
@@ -1022,6 +1045,11 @@ function saveLocalMemos(memos: Memo[]) {
   localStorage.setItem(LOCAL_MEMOS_KEY, JSON.stringify(memos))
 }
 
+function saveLocalBlogs(blogs: Blog[]) {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(LOCAL_BLOGS_KEY, JSON.stringify(blogs))
+}
+
 function saveLocalNotebooks(notebooks: Notebook[]) {
   if (typeof window === 'undefined') return
   localStorage.setItem(LOCAL_NOTEBOOKS_KEY, JSON.stringify(notebooks))
@@ -1033,6 +1061,7 @@ function saveLocalInboxItems(items: InboxItem[]) {
 }
 
 const initialMemos = loadLocalMemos()
+const initialBlogs = loadLocalBlogs()
 const initialNotebooks = loadLocalNotebooks()
 const initialInboxItems = loadLocalInboxItems(initialNotebooks)
 
@@ -1057,8 +1086,8 @@ const [state, setState] = createStore<AppState>({
   nutrients: NUTRIENTS,
   symptoms: SYMPTOMS,
   memos: initialMemos,
-  blogs: INITIAL_BLOGS,
-  trashBlogs: [],
+  blogs: initialBlogs.filter((blog) => !blog.deletedAt),
+  trashBlogs: initialBlogs.filter((blog) => !!blog.deletedAt),
   notebooks: initialNotebooks,
   inboxItems: initialInboxItems,
   inboxComposerOpen: false,
@@ -1262,6 +1291,7 @@ export async function initFirestore(): Promise<void> {
 
     setState({ memos, blogs, trashBlogs, notebooks, inboxItems: mergedInbox, dbStatus: 'connected' })
     saveLocalMemos(memos)
+    saveLocalBlogs(allBlogs)
     saveLocalNotebooks(notebooks)
     saveLocalInboxItems(mergedInbox)
   } catch (e) {
@@ -1380,11 +1410,19 @@ export function deleteMemo(id: string): void {
 
 export async function addBlog(data: Omit<Blog, 'id'>): Promise<string> {
   const tempId = 'local-' + Date.now()
-  setState('blogs', (prev) => [{ ...data, id: tempId }, ...prev])
+  setState('blogs', (prev) => {
+    const next = [{ ...data, id: tempId }, ...prev]
+    saveLocalBlogs([...next, ...state.trashBlogs])
+    return next
+  })
   try {
     if (!firebaseEnabled) return tempId
     const id = await addBlogFs(data)
-    setState('blogs', (prev) => prev.map((b) => (b.id === tempId ? { ...b, id } : b)))
+    setState('blogs', (prev) => {
+      const next = prev.map((b) => (b.id === tempId ? { ...b, id } : b))
+      saveLocalBlogs([...next, ...state.trashBlogs])
+      return next
+    })
     return id
   } catch {
     return tempId
@@ -1392,7 +1430,11 @@ export async function addBlog(data: Omit<Blog, 'id'>): Promise<string> {
 }
 
 export function updateBlog(id: string, patch: Partial<Omit<Blog, 'id'>>): void {
-  setState('blogs', (prev) => prev.map((b) => (b.id === id ? { ...b, ...patch } : b)))
+  setState('blogs', (prev) => {
+    const next = prev.map((b) => (b.id === id ? { ...b, ...patch } : b))
+    saveLocalBlogs([...next, ...state.trashBlogs])
+    return next
+  })
   if (firebaseEnabled) updateBlogFs(id, patch).catch(console.warn)
 }
 
@@ -1400,8 +1442,13 @@ export function trashBlog(id: string): void {
   const blog = state.blogs.find((b) => b.id === id)
   if (!blog) return
   const deletedAt = new Date()
-  setState('blogs', (prev) => prev.filter((b) => b.id !== id))
-  setState('trashBlogs', (prev) => [{ ...blog, deletedAt }, ...prev])
+  const deletedBlog = { ...blog, deletedAt }
+  setState('blogs', (prev) => {
+    const nextBlogs = prev.filter((b) => b.id !== id)
+    saveLocalBlogs([...nextBlogs, deletedBlog, ...state.trashBlogs.filter((b) => b.id !== id)])
+    return nextBlogs
+  })
+  setState('trashBlogs', (prev) => [deletedBlog, ...prev.filter((b) => b.id !== id)])
   if (firebaseEnabled) updateBlogFs(id, { deletedAt }).catch(console.warn)
 }
 
@@ -1409,19 +1456,28 @@ export function restoreBlog(id: string): void {
   const blog = state.trashBlogs.find((b) => b.id === id)
   if (!blog) return
   const { deletedAt: _d, ...restored } = blog
-  setState('trashBlogs', (prev) => prev.filter((b) => b.id !== id))
-  setState('blogs', (prev) => [{ ...restored }, ...prev])
+  setState('trashBlogs', (prev) => {
+    const nextTrash = prev.filter((b) => b.id !== id)
+    saveLocalBlogs([{ ...restored }, ...state.blogs, ...nextTrash])
+    return nextTrash
+  })
+  setState('blogs', (prev) => [{ ...restored }, ...prev.filter((b) => b.id !== id)])
   if (firebaseEnabled) restoreBlogFs(id).catch(console.warn)
 }
 
 export function deleteBlogPermanent(id: string): void {
-  setState('trashBlogs', (prev) => prev.filter((b) => b.id !== id))
+  setState('trashBlogs', (prev) => {
+    const nextTrash = prev.filter((b) => b.id !== id)
+    saveLocalBlogs([...state.blogs, ...nextTrash])
+    return nextTrash
+  })
   if (firebaseEnabled) deleteBlogFs(id).catch(console.warn)
 }
 
 export function emptyTrash(): void {
   const ids = state.trashBlogs.map((b) => b.id!)
   setState({ trashBlogs: [] })
+  saveLocalBlogs(state.blogs)
   if (firebaseEnabled) Promise.all(ids.map(deleteBlogFs)).catch(console.warn)
 }
 

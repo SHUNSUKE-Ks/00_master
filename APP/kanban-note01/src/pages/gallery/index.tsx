@@ -6,7 +6,7 @@ import GalleryGrid from './GalleryGrid'
 import GalleryDetail from './GalleryDetail'
 import GalleryLightbox from './GalleryLightbox'
 import GalleryTagSheet from './GalleryTagSheet'
-import { galleryState } from './store'
+import { galleryState, selectGalleryItem } from './store'
 
 const GalleryPage: Component = () => {
   function handleBack() {
@@ -18,18 +18,24 @@ const GalleryPage: Component = () => {
       <GalleryHeader onBack={handleBack} />
 
       <div class="flex flex-1 overflow-hidden">
-        <GallerySidebar />
+        <Show when={galleryState.view !== 'pinterest'}>
+          <GallerySidebar />
+        </Show>
 
-        <div class="flex flex-1 overflow-hidden">
+        <div class="relative flex flex-1 overflow-hidden">
           <GalleryGrid />
 
-          <Show when={galleryState.detailOpen && galleryState.selectedId !== null}>
+          <Show when={galleryState.detailOpen && galleryState.selectedId !== null && galleryState.view !== 'pinterest'}>
             <GalleryDetail />
           </Show>
         </div>
       </div>
 
       {/* Overlays (portal-style, rendered at page root) */}
+      <Show when={galleryState.detailOpen && galleryState.selectedId !== null && galleryState.view === 'pinterest'}>
+        <div class="gallery-detail-overlay-backdrop" onClick={() => selectGalleryItem(null)} />
+        <GalleryDetail overlay />
+      </Show>
       <GalleryLightbox />
       <GalleryTagSheet />
     </div>

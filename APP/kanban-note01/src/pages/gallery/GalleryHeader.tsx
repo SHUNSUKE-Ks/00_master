@@ -2,9 +2,26 @@ import { type Component, createMemo } from 'solid-js'
 import { galleryState, setGalleryState, getFilteredItems, addGalleryImage } from './store'
 
 const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
-  const count = createMemo(() => getFilteredItems(galleryState).length)
-  const total = () => galleryState.items.length
+  const pinterestItems = createMemo(() => {
+    let items = galleryState.items.filter((item) => !item.isDeleted)
+    if (galleryState.search.trim()) {
+      const q = galleryState.search.toLowerCase()
+      items = items.filter((item) =>
+        item.label.toLowerCase().includes(q) ||
+        item.filename.toLowerCase().includes(q) ||
+        (item.description?.toLowerCase().includes(q) ?? false) ||
+        item.tags.some((tag) => tag.toLowerCase().includes(q))
+      )
+    }
+    return items
+  })
+  const count = createMemo(() => galleryState.view === 'pinterest' ? pinterestItems().length : getFilteredItems(galleryState).length)
+  const total = () => galleryState.items.filter((item) => !item.isDeleted).length
   let fileInput!: HTMLInputElement
+
+  function logScaffold(testId: string, action: string) {
+    console.log(`[APP04-GALLERY-HEADER] ${testId} ${action}`)
+  }
 
   return (
     <header class="h-14 bg-white border-b border-gray-100 flex items-center px-4 gap-3 shrink-0">
@@ -72,8 +89,8 @@ const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
               'bg-white shadow-sm text-violet-600': galleryState.view === 'grid',
               'text-gray-400 hover:text-gray-600': galleryState.view !== 'grid',
             }}
-            onClick={() => setGalleryState({ view: 'grid' })}
-            title="グリッド表示"
+            onClick={() => { setGalleryState({ view: 'grid' }); logScaffold('2-1', 'Instagram Grid selected') }}
+            title="Instagram風グリッド"
           >
             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 16 16">
               <rect x="1" y="1" width="6" height="6" rx="1.5" />
@@ -83,12 +100,23 @@ const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
             </svg>
           </button>
           <button
+            class="w-8 h-8 rounded-lg flex items-center justify-center transition-all font-black text-xs"
+            classList={{
+              'bg-white shadow-sm text-red-600': galleryState.view === 'pinterest',
+              'text-gray-400 hover:text-gray-600': galleryState.view !== 'pinterest',
+            }}
+            onClick={() => { setGalleryState({ view: 'pinterest' }); logScaffold('2-2', 'Pinterest Masonry selected') }}
+            title="Pinterest風Masonry"
+          >
+            P
+          </button>
+          <button
             class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
             classList={{
               'bg-white shadow-sm text-violet-600': galleryState.view === 'list',
               'text-gray-400 hover:text-gray-600': galleryState.view !== 'list',
             }}
-            onClick={() => setGalleryState({ view: 'list' })}
+            onClick={() => { setGalleryState({ view: 'list' }); logScaffold('2-3', 'List selected') }}
             title="リスト表示"
           >
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,6 +124,15 @@ const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
             </svg>
           </button>
         </div>
+
+        <button
+          class="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-full border border-sky-100 bg-sky-50 text-sky-600 text-xs font-bold hover:bg-sky-100 active:scale-95 transition-all"
+          onClick={() => logScaffold('4-2', 'Asset Tag DB shortcut placeholder')}
+          title="Asset Tag DB scaffold"
+        >
+          <span class="w-4 h-4 rounded bg-sky-500 text-white flex items-center justify-center text-[9px]">DB</span>
+          Tags
+        </button>
 
         {/* Add button */}
         <input

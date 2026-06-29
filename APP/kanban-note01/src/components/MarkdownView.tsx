@@ -1,4 +1,4 @@
-import { type Component, For, Show } from 'solid-js'
+import { type Component, For, Show, createSignal } from 'solid-js'
 
 type Block =
   | { type: 'heading'; level: 1 | 2 | 3 | 4; text: string }
@@ -7,7 +7,7 @@ type Block =
   | { type: 'callout'; kind: 'pillar' | 'memo' | 'idea'; emoji: string; title: string; text: string; tags: string[] }
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
-  | { type: 'code'; text: string }
+  | { type: 'code'; text: string; lang: string }
   | { type: 'hr' }
   | { type: 'table'; headers: string[]; rows: string[][] }
 
@@ -39,13 +39,14 @@ function parseMarkdown(markdown: string): Block[] {
     }
 
     if (trimmed.startsWith('```')) {
+      const lang = trimmed.replace(/^```/, '').trim()
       const code: string[] = []
       i += 1
       while (i < lines.length && !lines[i].trim().startsWith('```')) {
         code.push(lines[i])
         i += 1
       }
-      blocks.push({ type: 'code', text: code.join('\n') })
+      blocks.push({ type: 'code', text: code.join('\n'), lang })
       i += 1
       continue
     }
@@ -151,6 +152,36 @@ function parseMarkdown(markdown: string): Block[] {
   return blocks
 }
 
+const CodeBlock: Component<{ text: string; lang: string }> = (props) => {
+  const [copied, setCopied] = createSignal(false)
+
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(props.text)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1200)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <div class="markdown-code-block">
+      <div class="markdown-code-toolbar">
+        <span>{props.lang || 'code'}</span>
+        <button type="button" onClick={copyCode} aria-label="コードをコピー" title="Copy code">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="11" height="11" rx="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          <span>{copied() ? 'Copied' : 'Copy'}</span>
+        </button>
+      </div>
+      <pre><code>{props.text}</code></pre>
+    </div>
+  )
+}
+
 const MarkdownView: Component<{ markdown: string }> = (props) => {
   const blocks = () => parseMarkdown(props.markdown)
 
@@ -207,7 +238,10 @@ const MarkdownView: Component<{ markdown: string }> = (props) => {
                                         </Show>
                                       }
                                     >
-                                      <pre><code>{(block as Extract<Block, { type: 'code' }>).text}</code></pre>
+                                      {(() => {
+                                        const code = block as Extract<Block, { type: 'code' }>
+                                        return <CodeBlock text={code.text} lang={code.lang} />
+                                      })()}
                                     </Show>
                                   }
                                 >

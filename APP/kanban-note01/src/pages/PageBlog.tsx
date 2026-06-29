@@ -1,8 +1,13 @@
 import { type Component, createSignal, For, Show } from 'solid-js'
 import { state, setState, toggleBlogFilter, addBlog, updateBlog, trashBlog } from '../store'
-import type { Blog, Tag } from '../types'
+import type { Blog, GalleryPhoto, Tag } from '../types'
 import { PRODUCTS, productImageUrl } from '../db/products'
 import { NUTRIENTS } from '../db/nutrients'
+import {
+  addLocalGalleryPhoto,
+  fileToLocalGalleryPhoto,
+  loadLocalGalleryPhotos,
+} from '../dataBridge/localGallery'
 
 let saveTimer: ReturnType<typeof setTimeout>
 
@@ -159,6 +164,7 @@ const PageBlog: Component = () => {
   const [tagPickerSelected, setTagPickerSelected] = createSignal<Tag[]>([])
 
   const [coverPickerOpen, setCoverPickerOpen] = createSignal(false)
+  const [galleryPhotos, setGalleryPhotos] = createSignal<GalleryPhoto[]>([])
   const [popover, setPopover] = createSignal<{ tag: Tag; x: number; y: number } | null>(null)
 
   const isMobile = () => window.innerWidth < 768
@@ -193,8 +199,12 @@ const PageBlog: Component = () => {
     setState('blogs', (prev) => prev.map((b) => (b.id === id ? { ...b, ...patch } : b)))
   }
 
+  function currentBlogId(): string | null {
+    return selectedId() ?? selected()?.id ?? null
+  }
+
   function handleUpdate(patch: Partial<Blog>) {
-    const id = selectedId()
+    const id = currentBlogId()
     if (!id) return
     const now = new Date()
     const full = { ...patch, updatedAt: now }
@@ -225,7 +235,7 @@ const PageBlog: Component = () => {
   }
 
   function removeTag(tagName: string) {
-    const id = selectedId()
+    const id = currentBlogId()
     if (!id) return
     const categoryTags = selected()?.categoryTags.filter((t) => t.name !== tagName) ?? []
     patchLocal(id, { categoryTags })
@@ -233,7 +243,7 @@ const PageBlog: Component = () => {
   }
 
   function confirmTagPicker() {
-    const id = selectedId()
+    const id = currentBlogId()
     const curr = selected()
     if (!id || !curr) return
     const existing = curr.categoryTags.map((t) => t.name)
@@ -249,6 +259,44 @@ const PageBlog: Component = () => {
     e.stopPropagation()
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
     setPopover({ tag, x: Math.min(rect.left, window.innerWidth - 300), y: rect.bottom + 6 })
+  }
+
+  function openCoverPicker() {
+    const photos = loadLocalGalleryPhotos()
+    setGalleryPhotos(photos)
+    setCoverPickerOpen(true)
+    console.log('[APP04-BLOG-COVER] 7-1 Cover picker opened', {
+      galleryPhotoCount: photos.length,
+    })
+  }
+
+  function selectGalleryCover(photo: GalleryPhoto) {
+    handleUpdate({ cover: photo.dataUrl, coverType: 'upload' })
+    setCoverPickerOpen(false)
+    console.log('[APP04-BLOG-COVER] 7-2 Gallery photo selected as blog cover', {
+      id: photo.id,
+      name: photo.name,
+    })
+  }
+
+  async function uploadCoverFromDevice(file: File) {
+    if (!file.type.startsWith('image/')) return
+    try {
+      const photo = await fileToLocalGalleryPhoto(file)
+      const updated = addLocalGalleryPhoto(photo)
+      setGalleryPhotos(updated)
+      handleUpdate({ cover: photo.dataUrl, coverType: 'upload' })
+      setCoverPickerOpen(false)
+      console.log('[APP04-BLOG-COVER] 7-3 Uploaded cover saved to local gallery', {
+        id: photo.id,
+        filename: file.name,
+      })
+    } catch (error) {
+      console.warn('[APP04-BLOG-COVER] 7-3e Uploaded cover failed', {
+        filename: file.name,
+        error,
+      })
+    }
   }
 
   function getTagDetail(tag: Tag): string {
@@ -383,7 +431,7 @@ const PageBlog: Component = () => {
                   onUpdate={handleUpdate}
                   onDelete={handleDeleteBlog}
                   onOpenTagPicker={() => setTagPickerOpen(true)}
-                  onOpenCoverPicker={() => setCoverPickerOpen(true)}
+                  onOpenCoverPicker={openCoverPicker}
                   onRemoveTag={removeTag}
                   isMobile={isMobile()}
                   onBack={() => setMobilePanel('list')}
@@ -465,6 +513,22 @@ const PageBlog: Component = () => {
               <button onClick={() => setCoverPickerOpen(false)} class="text-[#999]">✕</button>
             </div>
             <div class="flex-1 overflow-y-auto p-4">
+              <Show when={galleryPhotos().length > 0}>
+                <p class="text-xs text-[#999] mb-3 font-semibold uppercase tracking-wider">Gallery写真</p>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                  <For each={galleryPhotos()}>
+                    {(photo) => (
+                      <button
+                        class="aspect-square rounded-lg overflow-hidden bg-[#e8e8e8] hover:ring-2 hover:ring-nacc-gold"
+                        onClick={() => selectGalleryCover(photo)}
+                        title={photo.name}
+                      >
+                        <img src={photo.dataUrl} alt={photo.name} class="w-full h-full object-cover" />
+                      </button>
+                    )}
+                  </For>
+                </div>
+              </Show>
               <p class="text-xs text-[#999] mb-3 font-semibold uppercase tracking-wider">Cover Image</p>
               <div class="grid grid-cols-3 gap-2 mb-4">
                 <For each={PRODUCTS.filter((p) => p.image)}>
@@ -484,9 +548,8 @@ const PageBlog: Component = () => {
                 <input type="file" accept="image/*" class="hidden" onChange={(e) => {
                   const file = e.currentTarget.files?.[0]
                   if (!file) return
-                  const reader = new FileReader()
-                  reader.onload = () => { handleUpdate({ cover: reader.result as string, coverType: 'upload' }); setCoverPickerOpen(false) }
-                  reader.readAsDataURL(file)
+                  uploadCoverFromDevice(file)
+                  e.currentTarget.value = ''
                 }} />
               </label>
               <Show when={selected()?.cover}>

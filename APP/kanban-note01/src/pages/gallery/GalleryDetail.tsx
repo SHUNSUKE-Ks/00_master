@@ -4,12 +4,17 @@ import {
   updateGalleryItem, moveToGalleryTrash, restoreFromGalleryTrash,
   permanentDeleteGalleryItem, formatFileSize, formatDate,
 } from './store'
+import { addBlog, navigate, setState, state, updateBlog } from '../../store'
 import type { GalleryCategory } from './types'
 import { CATEGORY_LABELS, CATEGORY_BG, CATEGORY_ICON } from './types'
 
 const ALL_CATEGORIES: GalleryCategory[] = ['product', 'nutrient', 'reference', 'other']
 
-const GalleryDetail: Component = () => {
+type Props = {
+  overlay?: boolean
+}
+
+const GalleryDetail: Component<Props> = (props) => {
   const item = createMemo(() =>
     galleryState.items.find((i) => i.id === galleryState.selectedId)
   )
@@ -77,8 +82,36 @@ const GalleryDetail: Component = () => {
     }
   }
 
+  async function useAsBlogCover() {
+    const it = item()
+    const cover = it?.dataUrl ?? it?.url
+    if (!it || !cover) return
+    const now = new Date()
+    const targetBlog = state.blogs[0]
+    if (targetBlog?.id) {
+      updateBlog(targetBlog.id, { cover, coverType: 'upload', updatedAt: now })
+    } else {
+      await addBlog({
+        title: it.label || '新しいブログ',
+        body: '',
+        cover,
+        coverType: 'upload',
+        categoryTags: [],
+        mode: 'memo',
+        createdAt: now,
+        updatedAt: now,
+      })
+    }
+    setState({ blogMode: 'memo' })
+    navigate('blog')
+    console.log('[APP04-GALLERY-DETAIL] 10-1 Use image as blog cover', { itemId: it.id })
+  }
+
   return (
-    <aside class="gallery-detail w-80 bg-white border-l border-gray-100 flex flex-col overflow-hidden shrink-0">
+    <aside
+      class="gallery-detail w-80 bg-white border-l border-gray-100 flex flex-col overflow-hidden shrink-0"
+      classList={{ 'gallery-detail-overlay-panel': Boolean(props.overlay) }}
+    >
       {/* Panel header */}
       <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
         <span class="text-sm font-semibold text-gray-700">
@@ -173,7 +206,14 @@ const GalleryDetail: Component = () => {
 
                 {/* ── 通常アクション ── */}
                 <Show when={!galleryState.showTrash}>
-                  <div class="flex gap-2 pb-2">
+                  <div class="space-y-2 pb-2">
+                    <button
+                      class="w-full py-2.5 rounded-xl bg-linear-to-r from-sky-500 to-cyan-400 text-sm text-white font-bold active:scale-98 transition-all shadow-sm"
+                      onClick={useAsBlogCover}
+                    >
+                      📓 Blog表紙に使う
+                    </button>
+                    <div class="flex gap-2">
                     <button
                       class="flex-1 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-sm text-gray-600 font-semibold active:scale-98 transition-all"
                       onClick={startEdit}
@@ -186,6 +226,7 @@ const GalleryDetail: Component = () => {
                     >
                       🗑 削除
                     </button>
+                    </div>
                   </div>
 
                   {/* 削除確認 */}

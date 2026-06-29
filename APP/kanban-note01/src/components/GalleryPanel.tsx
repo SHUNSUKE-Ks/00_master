@@ -1,53 +1,49 @@
 import { type Component, createSignal, onMount } from 'solid-js'
 import { state, setState } from '../store'
 import type { GalleryPhoto } from '../types'
-
-const STORAGE_KEY = 'nacc_gallery'
-
-function loadPhotos(): GalleryPhoto[] {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
-  } catch {
-    return []
-  }
-}
-
-function savePhotos(photos: GalleryPhoto[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(photos))
-}
+import {
+  addLocalGalleryPhoto,
+  deleteLocalGalleryPhoto,
+  fileToLocalGalleryPhoto,
+  loadLocalGalleryPhotos,
+} from '../dataBridge/localGallery'
 
 const GalleryPanel: Component = () => {
   const [photos, setPhotos] = createSignal<GalleryPhoto[]>([])
   let fileInput!: HTMLInputElement
 
-  onMount(() => setPhotos(loadPhotos()))
+  onMount(() => setPhotos(loadLocalGalleryPhotos()))
 
   function handleUpload(e: Event) {
     const files = (e.target as HTMLInputElement).files
     if (!files) return
     Array.from(files).forEach((file) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const next: GalleryPhoto = {
-          dataUrl: reader.result as string,
-          name: file.name,
-          createdAt: new Date(),
-        }
-        setPhotos((prev) => {
-          const updated = [next, ...prev]
-          savePhotos(updated)
-          return updated
+      if (!file.type.startsWith('image/')) return
+      fileToLocalGalleryPhoto(file).then((photo) => {
+        const updated = addLocalGalleryPhoto(photo)
+        setPhotos(updated)
+        console.log('[APP04-LOCAL-GALLERY] 6-2 Side gallery photo added', {
+          id: photo.id,
+          filename: file.name,
         })
-      }
-      reader.readAsDataURL(file)
+      }).catch((error) => {
+        console.warn('[APP04-LOCAL-GALLERY] 6-2e Side gallery photo add failed', {
+          filename: file.name,
+          error,
+        })
+      })
     })
+    ;(e.target as HTMLInputElement).value = ''
   }
 
   function deletePhoto(idx: number) {
-    setPhotos((prev) => {
-      const updated = prev.filter((_, i) => i !== idx)
-      savePhotos(updated)
-      return updated
+    const photo = photos()[idx]
+    if (!photo?.id) return
+    const updated = deleteLocalGalleryPhoto(photo.id)
+    setPhotos(updated)
+    console.log('[APP04-LOCAL-GALLERY] 6-3 Local gallery photo deleted', {
+      id: photo.id,
+      source: 'side-panel',
     })
   }
 

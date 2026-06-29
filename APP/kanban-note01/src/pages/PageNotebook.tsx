@@ -5,6 +5,9 @@ import MarkdownView from '../components/MarkdownView'
 import { kanbanMemoInboxEnabled, sendIdeaInboxToFirebase, sendScenarioFragmentToDevStudio } from '../db/firebase'
 import ScenarioBlockEditor from '../components/ScenarioBlockEditor'
 import ScenarioMemoEditor from '../components/ScenarioMemoEditor'
+import ScenarioInputSection from '../components/ScenarioInputSection'
+import CharacterInputSection from '../components/CharacterInputSection'
+import CalloutInputSection from '../components/CalloutInputSection'
 import MarkdownSymbolBar from '../components/MarkdownSymbolBar'
 import NotionCalloutQuickInsert from '../components/NotionCalloutQuickInsert'
 import { dialogueIndent, escapeDialogueToNextParagraph, formatDialogueLine } from '../utils/dialogueFormat'
@@ -12,7 +15,7 @@ import { cursorOffsetForScenarioBlock, formatScenarioBlock, type ScenarioBlockKi
 import { cursorToTextIndex, splitTextBlocks, textIndexToBlockCursor, type BlockCursor } from '../utils/blockText'
 
 let saveTimer: ReturnType<typeof setTimeout>
-type EditorMode = 'note' | 'stepMemo' | 'dialogueLog' | 'characterSheet'
+type EditorMode = 'note' | 'togaki' | 'stepMemo' | 'dialogueLog' | 'characterSheet'
 
 const EDITOR_MODE_KEY = 'note-story-editor-mode-v1'
 
@@ -31,11 +34,37 @@ type PasteItem = {
   text: string
 }
 
+type NoteTemplate = {
+  id: string
+  label: string
+  description: string
+  body: string
+  scenarioBody?: string
+}
+
 const PASTE_BOARD_KEY = 'note-story-paste-board-v1'
 const NOTEBOOK_CHARACTERS_KEY = 'note-story-notebook-characters-v1'
 const IDEA_INBOX_TAGS = ['app', 'codex_consult_seed', 'game_system', 'note_app_improvement', 'task_memo']
 
-const NOTE_TEMPLATES = [
+const TOGAKI_NOTE_BODY = `柱：
+ト：
+名前：「」`
+
+const TOGAKI_SCENARIO_BODY = `# ト書きノート
+## Scene / Event
+### 柱
+### ト
+### セリフ
+名前：「」`
+
+const NOTE_TEMPLATES: NoteTemplate[] = [
+  {
+    id: 'togaki-note',
+    label: 'ト書きノート',
+    description: '柱、ト書き、セリフ、Character入力の基本形',
+    body: TOGAKI_NOTE_BODY,
+    scenarioBody: TOGAKI_SCENARIO_BODY,
+  },
   {
     id: 'novel-episode',
     label: '小説1話',
@@ -192,7 +221,7 @@ const TAG_GROUPS = [
 function initEditorMode(): EditorMode {
   if (typeof window === 'undefined') return 'note'
   const saved = localStorage.getItem(EDITOR_MODE_KEY)
-  return saved === 'dialogueLog' || saved === 'stepMemo' || saved === 'characterSheet' ? saved : 'note'
+  return saved === 'dialogueLog' || saved === 'stepMemo' || saved === 'characterSheet' || saved === 'togaki' ? saved : 'note'
 }
 
 function mkPageId() {
@@ -284,6 +313,7 @@ const PageNotebook: Component = () => {
   const [devStudioStatus, setDevStudioStatus] = createSignal<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [devStudioInfo, setDevStudioInfo] = createSignal<{ id?: string; sentAt?: string; message?: string } | null>(null)
   const [characterPickerOpen, setCharacterPickerOpen] = createSignal(false)
+  const [notebookEditMode, setNotebookEditMode] = createSignal(false)
   const [characterSearch, setCharacterSearch] = createSignal('')
   const [characterDraft, setCharacterDraft] = createSignal('')
   const [characterVersion, setCharacterVersion] = createSignal(0)
@@ -332,6 +362,30 @@ const PageNotebook: Component = () => {
       (!notebook.id || !anchorIds.has(notebook.id))
     )
     return [...idea, ...normal, ...anchors]
+  }
+
+  function canEditNotebook(notebookId?: string) {
+    return Boolean(notebookId && notebookId !== 'story-settings' && notebookId !== 'story-comments' && notebookId !== 'story-inbox')
+  }
+
+  function toggleNotebookFavorite(id?: string) {
+    const notebook = state.notebooks.find((item) => item.id === id)
+    if (!id || !notebook) return
+    updateNotebook(id, { favorite: !notebook.favorite, updatedAt: new Date() })
+    console.log('[APP04-NOTE-DB] 14-1 Toggle notebook favorite', { notebookId: id, favorite: !notebook.favorite })
+  }
+
+  function moveNotebook(id: string | undefined, delta: number) {
+    if (!id) return
+    const current = [...state.notebooks]
+    const index = current.findIndex((item) => item.id === id)
+    const target = index + delta
+    if (index < 0 || target < 0 || target >= current.length) return
+    const [item] = current.splice(index, 1)
+    current.splice(target, 0, item)
+    setState({ notebooks: current })
+    localStorage.setItem('note-story-local-notebooks-v1', JSON.stringify(current))
+    console.log('[APP04-NOTE-DB] 14-2 Move notebook', { notebookId: id, delta })
   }
   const ideaNotebook = () => state.notebooks.find((n) => n.id === 'story-ideas' || n.title === 'アイディア帳')
   const inboxNotebook = () => state.notebooks.find((n) => n.id === 'story-inbox' || n.title === 'InBox')
@@ -580,6 +634,30 @@ const PageNotebook: Component = () => {
     setMobileShelfMode('pages')
   }
 
+  async function handleAddTogakiNotebook() {
+    const now = new Date()
+    const page: NotebookPage = {
+      id: mkPageId(),
+      title: 'ト書きノート',
+      body: TOGAKI_NOTE_BODY,
+      scenarioBody: TOGAKI_SCENARIO_BODY,
+      scenarioLogs: { 'togaki-scene-event': '柱：\nト：\nCharacterA：「」' },
+      characters: defaultPageCharacters(['CharacterA', 'CharacterB']),
+      order: 0,
+    }
+    const id = await addNotebook({ title: 'ト書きノート', storyOnly: true, pages: [page], createdAt: now, updatedAt: now })
+    setSelectedId(id)
+    setSelectedPageId(page.id)
+    setMobileShelfMode('pages')
+    setViewMode('edit')
+    setEditorMode('togaki')
+    console.log('[APP04-NOTEBOOK-FORMAT] 11-1 Add togaki formatted page', {
+      notebookId: id,
+      pageId: page.id,
+      source: 'new-notebook',
+    })
+  }
+
   function handleDeleteNotebook(id: string) {
     deleteNotebook(id)
     if (selectedId() === id) {
@@ -603,6 +681,33 @@ const PageNotebook: Component = () => {
     setSendStatus('idle')
     setDevStudioStatus('idle')
     setDevStudioInfo(null)
+  }
+
+  function handleAddTogakiPage() {
+    const nb = selectedNotebook()
+    if (!nb) return
+    const page: NotebookPage = {
+      id: mkPageId(),
+      title: 'ト書きノート',
+      body: TOGAKI_NOTE_BODY,
+      scenarioBody: TOGAKI_SCENARIO_BODY,
+      scenarioLogs: { 'togaki-scene-event': '柱：\nト：\nCharacterA：「」' },
+      characters: defaultPageCharacters(['CharacterA', 'CharacterB']),
+      order: nb.pages.length,
+    }
+    const pages = [...nb.pages, page]
+    updateNotebook(nb.id!, { pages, updatedAt: new Date() })
+    setSelectedPageId(page.id)
+    setViewMode('edit')
+    setEditorMode('togaki')
+    setSendStatus('idle')
+    setDevStudioStatus('idle')
+    setDevStudioInfo(null)
+    console.log('[APP04-NOTEBOOK-FORMAT] 11-1 Add togaki formatted page', {
+      notebookId: nb.id,
+      pageId: page.id,
+      source: 'page-list',
+    })
   }
 
   function openWorldWordDictionary() {
@@ -754,12 +859,19 @@ const PageNotebook: Component = () => {
     setEditorMode('stepMemo')
   }
 
-  function insertNoteTemplate(templateBody: string) {
-    const targetField = editorMode() === 'stepMemo' ? 'scenarioBody' : 'body'
+  function insertNoteTemplate(template: NoteTemplate) {
+    const targetField = template.id === 'togaki-note' ? 'body' : editorMode() === 'stepMemo' ? 'scenarioBody' : 'body'
+    const templateBody = targetField === 'scenarioBody' ? template.scenarioBody ?? template.body : template.body
     const current = (targetField === 'scenarioBody' ? currentScenarioBody() : selectedPage()?.body ?? '').trim()
     patchPage(targetField, current ? `${current}\n\n${templateBody}` : templateBody)
     if (targetField === 'scenarioBody') setEditorMode('stepMemo')
+    if (template.id === 'togaki-note') setEditorMode('togaki')
     setTemplatePanelOpen(false)
+    console.log('[APP04-NOTEBOOK-FORMAT] 11-2 Insert notebook format template', {
+      templateId: template.id,
+      targetField,
+      pageId: selectedPageId(),
+    })
   }
 
   function setEditorMode(mode: EditorMode) {
@@ -1611,6 +1723,22 @@ const PageNotebook: Component = () => {
     </Show>
   )
 
+  const TogakiEditor = () => (
+    <div class="togaki-page-editor flex-1 min-h-0 flex flex-col gap-3">
+      <ScenarioInputSection onInsert={insertScenarioBlock} />
+      <CharacterInputSection onInsert={insertCharacterLine} />
+      <CalloutInputSection onInsert={insertBlockAtCursor} />
+      <textarea
+        ref={bodyTextareaRef}
+        class="togaki-page-textarea flex-1 min-h-56 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
+        placeholder="柱：&#10;ト：&#10;名前：「」"
+        value={selectedPage()?.body ?? ''}
+        onInput={(e) => patchPage('body', e.currentTarget.value)}
+        onKeyDown={handleBodyKeyDown}
+      />
+    </div>
+  )
+
   const TemplatePicker = () => (
     <div class="template-picker">
       <button
@@ -1624,7 +1752,7 @@ const PageNotebook: Component = () => {
         <div class="template-menu">
           <For each={NOTE_TEMPLATES}>
             {(template) => (
-              <button type="button" onClick={() => insertNoteTemplate(template.body)}>
+              <button type="button" onClick={() => insertNoteTemplate(template)}>
                 <strong>{template.label}</strong>
                 <span>{template.description}</span>
               </button>
@@ -1668,12 +1796,20 @@ const PageNotebook: Component = () => {
           <section class="w-full bg-white">
             <div class="flex items-center justify-between px-4 py-4 border-b border-nacc-border">
               <h1 class="text-xl font-extrabold text-nacc-dark tracking-tight">Title</h1>
-              <button
-                class="rounded-lg bg-nacc-gold px-4 py-2 text-sm font-bold text-white shadow-sm active:scale-[.98]"
-                onClick={handleAddNotebook}
-              >
-                + 新規Title
-              </button>
+              <div class="flex shrink-0 gap-2">
+                <button
+                  class="rounded-lg border border-nacc-border bg-white px-3 py-2 text-xs font-bold text-gray-700 shadow-sm active:scale-[.98]"
+                  onClick={handleAddTogakiNotebook}
+                >
+                  + ト書き
+                </button>
+                <button
+                  class="rounded-lg bg-nacc-gold px-4 py-2 text-sm font-bold text-white shadow-sm active:scale-[.98]"
+                  onClick={handleAddNotebook}
+                >
+                  + 新規Title
+                </button>
+              </div>
             </div>
 
             <div>
@@ -1718,12 +1854,20 @@ const PageNotebook: Component = () => {
                 <div class="text-xs text-gray-400">Title</div>
                 <h1 class="truncate text-lg font-extrabold text-nacc-dark">{nb().title}</h1>
               </div>
-              <button
-                class="rounded-lg bg-nacc-gold px-4 py-2 text-sm font-bold text-white shadow-sm active:scale-[.98]"
-                onClick={handleAddPage}
-              >
-                + 新規ページ
-              </button>
+              <div class="flex shrink-0 gap-2">
+                <button
+                  class="rounded-lg border border-nacc-border bg-white px-3 py-2 text-xs font-bold text-gray-700 shadow-sm active:scale-[.98]"
+                  onClick={handleAddTogakiPage}
+                >
+                  + ト書き
+                </button>
+                <button
+                  class="rounded-lg bg-nacc-gold px-4 py-2 text-sm font-bold text-white shadow-sm active:scale-[.98]"
+                  onClick={handleAddPage}
+                >
+                  + 新規ページ
+                </button>
+              </div>
               <InboxSyncCheckButton />
             </div>
 
@@ -1731,12 +1875,20 @@ const PageNotebook: Component = () => {
               <Show
                 when={nb().pages.length > 0}
                 fallback={
-                  <button
-                    class="w-full rounded-xl border border-dashed border-nacc-border bg-white px-4 py-5 text-left text-sm font-semibold text-gray-400"
-                    onClick={handleAddPage}
-                  >
-                    + 最初のページを追加
-                  </button>
+                  <div class="grid grid-cols-1 gap-2">
+                    <button
+                      class="w-full rounded-xl border border-dashed border-nacc-border bg-white px-4 py-5 text-left text-sm font-semibold text-gray-400"
+                      onClick={handleAddPage}
+                    >
+                      + 最初のページを追加
+                    </button>
+                    <button
+                      class="w-full rounded-xl border border-dashed border-nacc-gold/60 bg-[#fff8ed] px-4 py-5 text-left text-sm font-bold text-nacc-gold"
+                      onClick={handleAddTogakiPage}
+                    >
+                      + ト書きノートで開始
+                    </button>
+                  </div>
                 }
               >
                 <For each={nb().pages.slice().sort((a, b) => a.order - b.order)}>
@@ -1890,6 +2042,12 @@ const PageNotebook: Component = () => {
                                 Note
                               </button>
                               <button
+                                classList={{ active: editorMode() === 'togaki' }}
+                                onClick={() => setEditorMode('togaki')}
+                              >
+                                ト書き
+                              </button>
+                              <button
                                 classList={{ active: editorMode() === 'stepMemo' }}
                                 onClick={() => setEditorMode('stepMemo')}
                               >
@@ -1934,14 +2092,21 @@ const PageNotebook: Component = () => {
                                     <Show
                                       when={editorMode() === 'stepMemo'}
                                       fallback={
-                                        <textarea
-                                          ref={bodyTextareaRef}
-                                          class="flex-1 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
-                                          placeholder="ここに内容を入力..."
-                                          value={page().body}
-                                          onInput={(e) => patchPage('body', e.currentTarget.value)}
-                                          onKeyDown={handleBodyKeyDown}
-                                        />
+                                        <Show
+                                          when={editorMode() === 'togaki'}
+                                          fallback={
+                                            <textarea
+                                              ref={bodyTextareaRef}
+                                              class="flex-1 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
+                                              placeholder="ここに内容を入力..."
+                                              value={page().body}
+                                              onInput={(e) => patchPage('body', e.currentTarget.value)}
+                                              onKeyDown={handleBodyKeyDown}
+                                            />
+                                          }
+                                        >
+                                          <TogakiEditor />
+                                        </Show>
                                       }
                                     >
                                       <ScenarioMemoEditor
@@ -2014,22 +2179,43 @@ const PageNotebook: Component = () => {
           <Show when={desktopNotebookListOpen()}>
             <span class="text-sm font-semibold text-nacc-dark">ノートブック</span>
           </Show>
-          <button
-            class="text-xs px-2 py-1 rounded bg-nacc-gold text-white font-semibold hover:opacity-80"
-            onClick={() => setDesktopNotebookListOpen((open) => !open)}
-            title={desktopNotebookListOpen() ? 'ノート一覧を閉じる' : 'ノート一覧を開く'}
-          >
-            {desktopNotebookListOpen() ? '閉' : '開'}
-          </button>
+          <div class="flex items-center gap-1">
+            <Show when={desktopNotebookListOpen()}>
+              <button
+                class="text-xs px-2 py-1 rounded border border-nacc-border text-gray-500 font-semibold hover:bg-white"
+                classList={{ 'bg-white text-nacc-gold border-nacc-gold/60': notebookEditMode() }}
+                onClick={() => {
+                  setNotebookEditMode((value) => !value)
+                  console.log('[APP04-NOTE-DB] 14-3 Toggle notebook edit mode')
+                }}
+                title="ノートの並び替え・削除・お気に入り"
+              >
+                編集
+              </button>
+            </Show>
+            <button
+              class="text-xs px-2 py-1 rounded bg-nacc-gold text-white font-semibold hover:opacity-80"
+              onClick={() => setDesktopNotebookListOpen((open) => !open)}
+              title={desktopNotebookListOpen() ? 'ノート一覧を閉じる' : 'ノート一覧を開く'}
+            >
+              {desktopNotebookListOpen() ? '閉' : '開'}
+            </button>
+          </div>
         </div>
 
         <Show when={desktopNotebookListOpen()}>
-          <div class="px-3 py-2 border-b border-nacc-border">
+          <div class="px-3 py-2 border-b border-nacc-border grid gap-2">
             <button
               class="w-full text-xs px-2 py-1.5 rounded bg-nacc-gold text-white font-semibold hover:opacity-80"
               onClick={handleAddNotebook}
             >
               + 新規ノート
+            </button>
+            <button
+              class="w-full text-xs px-2 py-1.5 rounded border border-nacc-gold/60 bg-white text-nacc-gold font-bold hover:bg-[#fff8ed]"
+              onClick={handleAddTogakiNotebook}
+            >
+              + ト書きノート
             </button>
           </div>
         </Show>
@@ -2072,13 +2258,43 @@ const PageNotebook: Component = () => {
                       </div>
                     </Show>
                   </div>
-                  <Show when={desktopNotebookListOpen()}>
-                    <button
-                      class="absolute top-2.5 right-2 opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-400 transition-all"
-                      onClick={(e) => { e.stopPropagation(); handleDeleteNotebook(nb.id!) }}
-                    >
-                      ✕
-                    </button>
+                  <Show when={desktopNotebookListOpen() && notebookEditMode()}>
+                    <div class="mt-2 flex items-center gap-1">
+                      <button
+                        class="rounded-md px-2 py-1 text-xs font-bold"
+                        classList={{
+                          'bg-amber-100 text-amber-600': Boolean(nb.favorite),
+                          'bg-white/60 text-gray-400': !nb.favorite,
+                        }}
+                        onClick={(e) => { e.stopPropagation(); toggleNotebookFavorite(nb.id) }}
+                        title="Note DBのお気に入りに表示"
+                      >
+                        {nb.favorite ? '★' : '☆'}
+                      </button>
+                      <button
+                        class="rounded-md bg-white/60 px-2 py-1 text-xs font-bold text-gray-500"
+                        onClick={(e) => { e.stopPropagation(); moveNotebook(nb.id, -1) }}
+                        title="上へ"
+                      >
+                        ↑
+                      </button>
+                      <button
+                        class="rounded-md bg-white/60 px-2 py-1 text-xs font-bold text-gray-500"
+                        onClick={(e) => { e.stopPropagation(); moveNotebook(nb.id, 1) }}
+                        title="下へ"
+                      >
+                        ↓
+                      </button>
+                      <Show when={canEditNotebook(nb.id)}>
+                        <button
+                          class="ml-auto rounded-md px-2 py-1 text-xs font-bold text-red-400 hover:bg-red-50 hover:text-red-500"
+                          onClick={(e) => { e.stopPropagation(); handleDeleteNotebook(nb.id!) }}
+                          title="ノートを削除"
+                        >
+                          削除
+                        </button>
+                      </Show>
+                    </div>
                   </Show>
                 </div>
               )}
@@ -2165,6 +2381,15 @@ const PageNotebook: Component = () => {
                     >
                       + ページを追加
                     </button>
+                    <button
+                      class="flex items-center gap-1 px-2 py-2 text-xs font-bold text-nacc-gold hover:text-[#8b5a1c] transition-colors"
+                      onClick={() => {
+                        handleAddTogakiPage()
+                        setPagePanelOpen(false)
+                      }}
+                    >
+                      + ト書きページ
+                    </button>
                   </div>
                 </div>
               </Show>
@@ -2185,6 +2410,12 @@ const PageNotebook: Component = () => {
                       onClick={handleAddPage}
                     >
                       + 最初のページを追加
+                    </button>
+                    <button
+                      class="mt-1 text-xs px-3 py-1.5 rounded-lg border border-nacc-gold/60 bg-white text-nacc-gold hover:bg-[#fff8ed]"
+                      onClick={handleAddTogakiPage}
+                    >
+                      + ト書きノートで開始
                     </button>
                   </div>
                 }
@@ -2271,6 +2502,12 @@ const PageNotebook: Component = () => {
                               Note
                             </button>
                             <button
+                              classList={{ active: editorMode() === 'togaki' }}
+                              onClick={() => setEditorMode('togaki')}
+                            >
+                              ト書き
+                            </button>
+                            <button
                               classList={{ active: editorMode() === 'stepMemo' }}
                               onClick={() => setEditorMode('stepMemo')}
                             >
@@ -2315,14 +2552,21 @@ const PageNotebook: Component = () => {
                                   <Show
                                     when={editorMode() === 'stepMemo'}
                                     fallback={
-                                      <textarea
-                                        ref={bodyTextareaRef}
-                                        class="flex-1 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
-                                        placeholder="ここに内容を入力..."
-                                        value={page().body}
-                                        onInput={(e) => patchPage('body', e.currentTarget.value)}
-                                        onKeyDown={handleBodyKeyDown}
-                                      />
+                                      <Show
+                                        when={editorMode() === 'togaki'}
+                                        fallback={
+                                          <textarea
+                                            ref={bodyTextareaRef}
+                                            class="flex-1 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
+                                            placeholder="ここに内容を入力..."
+                                            value={page().body}
+                                            onInput={(e) => patchPage('body', e.currentTarget.value)}
+                                            onKeyDown={handleBodyKeyDown}
+                                          />
+                                        }
+                                      >
+                                        <TogakiEditor />
+                                      </Show>
                                     }
                                   >
                                     <ScenarioMemoEditor

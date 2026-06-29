@@ -7,6 +7,7 @@ import PageDb01 from './pages/PageDb01'
 import PageDb02 from './pages/PageDb02'
 import PageDb03 from './pages/PageDb03'
 import PageDb10 from './pages/PageDb10'
+import PageAssetTags from './pages/PageAssetTags'
 import PageBlog from './pages/PageBlog'
 import PageStudy from './pages/PageStudy'
 import PageMemo from './pages/PageMemo'
@@ -57,6 +58,9 @@ const MainApp: Component = () => (
         </Show>
         <Show when={state.page === 'db10'}>
           <PageDb10 />
+        </Show>
+        <Show when={state.page === 'assetTags'}>
+          <PageAssetTags />
         </Show>
         <Show when={state.page === 'blog'}>
           <PageBlog />

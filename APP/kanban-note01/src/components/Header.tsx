@@ -2,6 +2,7 @@ import { type Component, Show, createSignal } from 'solid-js'
 import { state, setState, navigate } from '../store'
 import type { Page } from '../types'
 import { exportLocalWorkspace } from '../dataBridge/localExport'
+import { setGalleryState } from '../pages/gallery/store'
 
 const PAGE_LABELS: Record<Page, string> = {
   memo:     'scenarioノート',
@@ -16,12 +17,13 @@ const PAGE_LABELS: Record<Page, string> = {
   inbox:    'InBox DB',
   trash:    '🗑️ ごみ箱',
   gallery:  '🖼 ギャラリー',
+  assetTags: '🏷 Asset Tag DB',
   devstudio: 'Scenario Board',
 }
 
 const Header: Component = () => {
   const [viewMenuOpen, setViewMenuOpen] = createSignal(false)
-  const isDbPage = () => state.page === 'db01' || state.page === 'db02' || state.page === 'db03' || state.page === 'db10'
+  const isDbPage = () => state.page === 'inbox' || state.page === 'db01' || state.page === 'db02' || state.page === 'db03' || state.page === 'db10' || state.page === 'assetTags'
 
   function closeViewMenu() { setViewMenuOpen(false) }
   function goToDevStudio() {
@@ -39,8 +41,20 @@ const Header: Component = () => {
     closeViewMenu()
   }
   function goToDb() {
-    setState({ dbView: 'index' })
-    navigate('db01')
+    sessionStorage.setItem('note-story-db-hub-mode-v1', 'scenarioDb')
+    navigate('inbox')
+    closeViewMenu()
+  }
+  function openGalleryView(view: 'grid' | 'pinterest') {
+    setGalleryState({ view })
+    navigate('gallery')
+    console.log('[APP04-GLOBAL-NAV] 1-1 Gallery view switch scaffold', { view })
+    closeViewMenu()
+  }
+  function openAssetTagDbScaffold() {
+    sessionStorage.setItem('note-story-db-hub-mode-v1', 'assetTags')
+    navigate('inbox')
+    console.log('[APP04-ASSETTAGDB-NAV] 4-1 Asset Tag DB page opened')
     closeViewMenu()
   }
 
@@ -90,7 +104,11 @@ const Header: Component = () => {
             <div class="p-1.5 flex flex-col gap-0.5">
               <button
                 class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
-                onClick={() => { navigate('inbox'); closeViewMenu() }}
+                onClick={() => {
+                  sessionStorage.setItem('note-story-db-hub-mode-v1', 'inbox')
+                  navigate('inbox')
+                  closeViewMenu()
+                }}
               >
                 <span>IN</span>
                 <div>
@@ -132,6 +150,20 @@ const Header: Component = () => {
 
               <button
                 class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => { navigate('blog'); setState({ blogMode: 'memo' }); closeViewMenu() }}
+              >
+                <span>BL</span>
+                <div>
+                  <div class="font-medium">ブログ表紙</div>
+                  <div class="text-xs text-gray-400">Gallery写真を表紙に使う</div>
+                </div>
+                <Show when={state.page === 'blog'}>
+                  <span class="ml-auto text-nacc-gold text-xs">✓</span>
+                </Show>
+              </button>
+
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
                 onClick={() => { navigate('study'); closeViewMenu() }}
               >
                 <span>ST</span>
@@ -149,7 +181,7 @@ const Header: Component = () => {
                 <span>DB</span>
                 <div>
                   <div class="font-medium">DB</div>
-                  <div class="text-xs text-gray-400">Title / Character DB</div>
+                  <div class="text-xs text-gray-400">DB Hub / Relation原本</div>
                 </div>
                 <Show when={isDbPage()}>
                   <span class="ml-auto text-nacc-gold text-xs">✓</span>
@@ -193,6 +225,41 @@ const Header: Component = () => {
                 </Show>
               </button>
               </Show>
+
+              <div class="border-t border-nacc-border my-1" />
+              <div class="px-3 pt-1 pb-0.5 text-[11px] text-gray-400 font-semibold">
+                Gallery View
+              </div>
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => openGalleryView('grid')}
+              >
+                <span class="w-6 h-6 rounded-lg bg-linear-to-br from-fuchsia-500 to-violet-500 text-white flex items-center justify-center text-xs">IG</span>
+                <div>
+                  <div class="font-medium">Instagram Grid</div>
+                  <div class="text-xs text-gray-400">既存の正方形Gallery</div>
+                </div>
+              </button>
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => openGalleryView('pinterest')}
+              >
+                <span class="w-6 h-6 rounded-lg bg-linear-to-br from-red-600 to-rose-400 text-white flex items-center justify-center text-xs">P</span>
+                <div>
+                  <div class="font-medium">Pinterest Masonry</div>
+                  <div class="text-xs text-gray-400">APP04 画像アセット表示</div>
+                </div>
+              </button>
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={openAssetTagDbScaffold}
+              >
+                <span class="w-6 h-6 rounded-lg bg-linear-to-br from-sky-500 to-cyan-400 text-white flex items-center justify-center text-xs">DB</span>
+                <div>
+                  <div class="font-medium">Asset Tag DB</div>
+                  <div class="text-xs text-gray-400">DB Hub内で管理</div>
+                </div>
+              </button>
             </div>
           </div>
           <div class="fixed inset-0 z-40" onClick={closeViewMenu} />
@@ -206,8 +273,8 @@ const Header: Component = () => {
           'bg-violet-50 text-violet-600': state.page === 'gallery',
           'text-gray-400 hover:bg-gray-100 hover:text-gray-600': state.page !== 'gallery',
         }}
-        onClick={() => navigate('gallery')}
-        title="Gallery"
+        onClick={() => openGalleryView('pinterest')}
+        title="Pinterest Gallery"
       >
         <div class="w-5 h-5 rounded-md bg-linear-to-br from-violet-500 to-pink-500 flex items-center justify-center shrink-0">
           <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -216,6 +283,17 @@ const Header: Component = () => {
           </svg>
         </div>
         <span class="text-xs font-semibold hidden sm:inline">Gallery</span>
+      </button>
+
+      <button
+        class="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all shrink-0 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+        onClick={openAssetTagDbScaffold}
+        title="Asset Tag DB scaffold"
+      >
+        <div class="w-5 h-5 rounded-md bg-linear-to-br from-sky-500 to-cyan-400 flex items-center justify-center shrink-0 text-[10px] font-bold text-white">
+          DB
+        </div>
+        <span class="text-xs font-semibold hidden md:inline">Asset Tags</span>
       </button>
 
       {/* Breadcrumb */}

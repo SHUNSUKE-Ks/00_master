@@ -56,5 +56,5 @@ export type GalleryItem = {
   updatedAt: Date
 }
 
-export type GalleryView = 'grid' | 'list'
+export type GalleryView = 'grid' | 'list' | 'pinterest'
 export type GallerySortBy = 'createdAt' | 'updatedAt' | 'label'

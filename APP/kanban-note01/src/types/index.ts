@@ -71,6 +71,7 @@ export type Notebook = {
   id?: string
   title: string
   cover?: string
+  favorite?: boolean
   storyOnly?: boolean
   pages: NotebookPage[]
   createdAt: Date
@@ -120,7 +121,7 @@ export type InboxItem = {
   updatedAt: string
 }
 
-export type Page = 'memo' | 'upnote' | 'db01' | 'db02' | 'db03' | 'db10' | 'blog' | 'study' | 'notebook' | 'inbox' | 'trash' | 'gallery' | 'devstudio'
+export type Page = 'memo' | 'upnote' | 'db01' | 'db02' | 'db03' | 'db10' | 'assetTags' | 'blog' | 'study' | 'notebook' | 'inbox' | 'trash' | 'gallery' | 'devstudio'
 export type BlogMode = 'memo' | 'view'
 export type FontSize = 's' | 'm' | 'l' | 'xl'
 export type FontSizePx = { s: 13; m: 16; l: 19; xl: 22 }
