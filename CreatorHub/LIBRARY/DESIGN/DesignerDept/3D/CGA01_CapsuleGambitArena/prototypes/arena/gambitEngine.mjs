@@ -123,11 +123,51 @@ function bestFlankApproachTile(state, u, target) {
   return best;
 }
 
-// ── 本体: 1ユニットぶんの1ターンをルールセットから決定する ────────────
-export function evaluateGambitTurn(state, unitId, rules) {
-  const u = state.units.find((x) => x.id === unitId && x.hp > 0);
+// F1 膠着打開: 連続してこのターン数だけ「有効な攻撃も接近もしない」ユニットは、
+// 以後アグレッシブ(接近＋攻撃)へ強制的に切り替える(ラッチ)。guardian×cautiousの
+// 相互不干渉による無限膠着(400ターン引き分け)を解消する最小機構。
+// 「有効」= 攻撃を出した or 移動で最寄り敵への距離を縮めた、のいずれか。
+const STALEMATE_LIMIT = 3;
+
+// ベースライン相当の攻勢プラン(接近→射程内なら攻撃)。強制打開時に使う。
+function forcedAggressivePlan(state, u, nearest) {
   const cmds = [];
-  if (!u) return cmds;
+  if (!nearest) { cmds.push({ type: "faceWait", unitId: u.id, yaw: u.facingYaw ?? 0 }); return cmds; }
+  const dest = bestApproachTile(state, u, nearest);
+  if (dest.x !== u.x || dest.y !== u.y) cmds.push({ type: "move", unitId: u.id, to: { x: dest.x, y: dest.y } });
+  if (manhattan(dest, nearest) <= u.range) cmds.push({ type: "attack", unitId: u.id, targetId: nearest.id });
+  else cmds.push({ type: "faceWait", unitId: u.id, yaw: Math.atan2(nearest.x - dest.x, nearest.y - dest.y) });
+  return cmds;
+}
+
+// ── 本体: 1ユニットぶんの1ターンをルールセットから決定する ────────────
+// memory(任意): Map<unitId,{idle,forced}>。渡すとF1膠着打開が有効。省略時はステートレス
+// （＝純粋にルール評価のみ。単体挙動テストや副作用を避けたい呼び出しではこちら）。
+export function evaluateGambitTurn(state, unitId, rules, memory) {
+  const u = state.units.find((x) => x.id === unitId && x.hp > 0);
+  if (!u) return [];
+  const nearest0 = resolveTarget(state, u, "nearest_enemy");
+  const dist0 = nearest0 ? manhattan(u, nearest0) : Infinity;
+  const mem = memory?.get(unitId) ?? { idle: 0, forced: false };
+  const useForced = mem.forced || mem.idle >= STALEMATE_LIMIT;
+
+  const cmds = useForced ? forcedAggressivePlan(state, u, nearest0) : normalGambitPlan(state, u, rules);
+
+  // 有効性判定 → memory更新（memory省略時は更新しない＝ステートレス互換）
+  if (memory) {
+    const mv = cmds.find((c) => c.type === "move");
+    const didAttack = cmds.some((c) => c.type === "attack");
+    const newDist = mv && nearest0 ? manhattan(mv.to, nearest0) : dist0;
+    const effective = didAttack || (nearest0 && newDist < dist0);
+    const idle = effective ? 0 : mem.idle + 1;
+    memory.set(unitId, { idle, forced: mem.forced || idle >= STALEMATE_LIMIT });
+  }
+  return cmds;
+}
+
+// 通常のルール評価（フェーズA:移動 → フェーズB:最終行動 → フォールバック）
+function normalGambitPlan(state, u, rules) {
+  const cmds = [];
   const active = (rules ?? []).filter((r) => r.enabled !== false).slice().sort((a, b) => b.priority - a.priority);
 
   const targetCache = new Map();

@@ -47,3 +47,47 @@
 
 - gameState.jsのプロトタイプ領域はgit未追跡（`??`）のため差分検証は不可。代わりに実行時アサート(V3)＋実ゲーム起動(V4)で退行なしを担保した。
 - F1/F2はStep3(PlayerAdapter/LLM接続)より前に、カタログ精緻化として着手する価値がある。ただしいずれも「今のコードが仕様通り動いている」ことを覆さない → **本検証は合格**。
+
+---
+
+# 追検証 v0.3 — F1/F2/F3対応＋Git追跡＋テスト追加
+
+検証者: Opus ／ 実施日: 2026-07-19（合格レビュー後の指摘対応）
+対応コミット: ① `Track CGA01 arena + gambit engine (accepted Step2 baseline)` / ② F1/F2/F3修正（本追検証の対象）
+
+## 対応サマリ
+
+| 指摘 | 対応 | 検証 |
+|---|---|---|
+| 履歴管理 | CGA01のarena+battle-protoソースをGit追跡下へ。生成物(logs)は`.gitignore`。合格Step2を①で基準固定→修正を②で差分化 | `git log`で2コミット確認、logs/node_modules混入なし |
+| F1 膠着 | `gambitEngine`に膠着打開機構（memory Map・連続`STALEMATE_LIMIT=3`ターン無為で攻勢化ラッチ）。arenaが対戦ごとにmemory生成 | 単体＋フル対戦テスト（下記）。**arena gambitが401ターン引分→16ターンで決着** |
+| F2 Boss中期 | **仕様確定=「間合い維持=その場保持(hold_position)」**。`boss_mid_hold`(priority15>boss_normal_approach10)を追加しカタログに明記 | 距離3・HP53%で接近moveを出さないことを自動テスト化 |
+| F3 flanker | 現仕様として許容。側面成立がmove依存であることを`gambitCatalog`のflankerに注記 | move十分→側面／move不足→approachフォールバックの両方向を自動テスト化 |
+
+## 自動テスト `prototypes/arena/gambit.test.mjs`（新規・コミット対象＝再実行可能）
+
+`node gambit.test.mjs` → **20 pass / 0 fail**。内訳:
+
+| 区分 | ケース | 結果 |
+|---|---|---|
+| 後方互換 | 無引数createBattleState=元2ユニット／override非汚染 | ✅×3 |
+| 差別化(再掲) | guardian/sniper/cautious(＋健全対照)/aggressive | ✅×7 |
+| **F2** | 中期(HP53%,距離3)=接近moveを出さない・攻撃しない／健在は接近(対照)／瀕死は攻撃(対照) | ✅×4 |
+| **F3** | move十分=側面へ回り込む／move不足=approachにフォールバック | ✅×2 |
+| **F1** | 連続無為後に接近開始／memory無し=従来通りhold（ステートレス互換） | ✅×2 |
+| **F1統合** | guardian×cautious含む6種フル対戦が400ターン未満で決着 | ✅×1 |
+
+## 追加3ケースの再現ログ（arena実走）
+
+- **膠着(F1)**: `node arena.mjs gambit` → 旧「401ターン/引き分け」→ 新「**16ターン/2P勝利**」。20戦統計も 2P勝20/引分0（旧: 引分20）。決定性維持(2回diff一致)。
+- **Boss中期(F2)**: テスト`[F2] 中期(HP53%,距離3): 接近移動を出さない(hold)`=✅。boss_mid_holdが接近を抑止。
+- **flanker移動力(F3)**: テスト`move十分:側面へ回り込む`＝(2,5)→(3,2)側面 ／ `move不足:approードにフォールバック`＝距離短縮。両方✅。
+
+## 退行確認
+
+- baseline `node arena.mjs`: 8ターン/2P勝/生存HP55/58 → **v0.2から不変**（膠着機構はgambitユニットのみ作用、baselineに影響なし）。
+- 無引数`createBattleState()`: テストで元2ユニット一致を再確認。battle-proto本体はV4で確認済み・今回のエンジン/カタログ変更はbattle-protoを一切触らない。
+
+## 追検証の判定: ✅ 合格
+
+F1/F2/F3すべて対応・自動テスト化され、`gambit.test.mjs`が恒常的な回帰ガードになった。膠着は実測で解消(401→16ターン)。Step3(PlayerAdapter/LLM接続)へ進んで差し支えない。

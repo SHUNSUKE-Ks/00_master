@@ -28,7 +28,14 @@
 - [完了 2026-07-19] Gambit評価エンジン(Step2)実装。`prototypes/arena/gambitEngine.mjs`(評価器)+`gambitCatalog.mjs`(GambitDB.csv 6種をgambit.rule.schema.json準拠で具体化)。
   `node arena.mjs gambit` で3v3の6種フル動員デモが動く(gambitSetIdをユニットに付与するだけで固定ロジックから差し替わる設計。gameState.js無変更)。決定性・20戦統計とも確認済み。
   **所見(実装バグではなくAI設計上の発見)**: guardian(ゴーレム)×cautious(スカウト,HP35%未満で永続後退)の組み合わせが400ターン上限まで膠着し引き分けになった。両者とも「相手から仕掛けない限り動かない」性質同士がかみ合うと決着しない — Gambit設計時に「膠着打開ルール(例: 一定ターン経過で強制接近)」が必要という具体的な検証結果。バランス調整はスコープ外のため数値修正はせず、所見として記録のみ。
-  **[検証済 2026-07-19 Opus] 合格**。検証シート: reports/report_arena_gambit_v0.2_verification.md。V1-V6+Gambit差別化(6種11アサート)+実ゲーム退行なし(:5198起動確認)を独立再実行で確認。所見(ブロッカーでない): F1 guardian×cautious膠着で引分(膠着打開ルール未整備), F2 boss中期の様子見が接近移動を止めない(カタログの穴,エンジンは正常), F3 flankerの側面成立はmove依存。いずれもカタログ設計課題でエンジンのバグではない。
+  **[検証済 2026-07-19 Opus] 合格**。検証シート: reports/report_arena_gambit_v0.2_verification.md。V1-V6+Gambit差別化(6種11アサート)+実ゲーム退行なし(:5198起動確認)を独立再実行で確認。
+- [完了 2026-07-19] 合格レビュー指摘(F1/F2/F3)対応＋Git追跡＋自動テスト。検証シートに「追検証v0.3」追記。
+  - **Git**: CGA01のarena+battle-protoソースを追跡下へ（従来全未追跡）。合格Step2を①でコミット固定→修正を②で差分化。生成物(logs)は.gitignore。
+  - **F1膠着**: gambitEngineに膠着打開機構(memory Map・連続3ターン無為で攻勢化ラッチ)。**arena gambitが401ターン引分→16ターン決着**に改善。決定性維持。
+  - **F2 Boss中期**: 仕様確定=「間合い維持=その場保持(hold_position)」。boss_mid_hold(priority15)追加、距離3/HP53%を自動テスト化。
+  - **F3 flanker**: 現仕様許容、側面成立のmove依存をカタログへ注記＋両方向テスト。
+  - **テスト**: `prototypes/arena/gambit.test.mjs` 新規（20 pass/0 fail、恒常回帰ガード）。`node gambit.test.mjs`で再実行可。
+  - 次: Step3(PlayerAdapter/LLM接続)へ進行可。
 - [完了 2026-07-19] アリーナv0.2（多対多＋viewer）実装。設計: brief/arena_viewer_v0.2_design.md。
   T1(gameState.js): `createBattleState(overrides)` に拡張（units差替可、無引数は従来と完全一致をnode -eで確認）。触ったのはOpus範囲だが本セッションではSonnet(Fable指示のもと)が実施— **正式検証(V1-V6)はOpus/em-verifierへ未依頼のため今後要実施**。
   T2(arena.mjs v0.2): 3v3ロースター(ROSTER_3V3)追加、JSONL各行にunitsスナップショット(D3スキーマ)を付与。3v3完走・8ターンで決着、2回実行のdiff一致で決定性を確認。

@@ -52,6 +52,9 @@ export const GAMBIT_CATALOG = {
   ],
 
   // 側面突き: 側面や背後に回り込んでから攻撃を狙う
+  // 【F3 仕様注記】側面成立は移動力(move)依存。今ターンで敵の正面(facingYaw)扇外かつ射程内の
+  // マスへ到達できる場合のみ側面へ回り込み、届かなければ通常approachにフォールバックする
+  // （gambitEngine.bestFlankApproachTile）。move値が小さいユニットでは正面から詰めることもある。
   gambit_flanker_v1: [
     { ruleId: "flank_approach", label: "側面/背後へ回り込む", priority: 80, owner: "enemy",
       when: { target: "nearest_enemy" },
@@ -62,7 +65,10 @@ export const GAMBIT_CATALOG = {
   ],
 
   // ボスフェーズ: HP割合に応じて行動パターンが変化する
-  // 健在期(>=66%)=通常攻勢 / 中期(33-66%)=守りに転じる(様子見) / 瀕死期(<33%)=総攻撃(enrage)
+  // 健在期(>=66%)=通常攻勢 / 中期(33-66%)=様子見 / 瀕死期(<33%)=総攻撃(enrage)
+  // 【F2 仕様確定】中期の「様子見」= その場保持(hold_position)して間合いを詰めず、攻撃もしない。
+  //   接近を止めるため boss_mid_hold(priority15) を boss_normal_approach(10) より高優先度で置き、
+  //   移動フェーズで先に採用させる。攻撃抑制は boss_mid_guard が担う。
   gambit_boss_phase_v1: [
     { ruleId: "boss_enrage_attack", label: "瀕死: 総攻撃", priority: 95, owner: "enemy",
       when: { target: "self", hpPercentLessThan: 33 },
@@ -70,9 +76,12 @@ export const GAMBIT_CATALOG = {
     { ruleId: "boss_enrage_approach", label: "瀕死: 突撃", priority: 90, owner: "enemy",
       when: { target: "self", hpPercentLessThan: 33 },
       then: { action: "moveTo", movePolicy: "approach", targetPolicy: "nearest_enemy" } },
-    { ruleId: "boss_mid_guard", label: "中期: 様子見", priority: 60, owner: "enemy",
+    { ruleId: "boss_mid_guard", label: "中期: 様子見(攻撃抑制)", priority: 60, owner: "enemy",
       when: { target: "self", hpPercentLessThan: 66 },
       then: { action: "guard" } },
+    { ruleId: "boss_mid_hold", label: "中期: 様子見(その場保持=接近しない)", priority: 15, owner: "enemy",
+      when: { target: "self", hpPercentLessThan: 66 },
+      then: { action: "moveTo", movePolicy: "hold_position", targetPolicy: "nearest_enemy" } },
     { ruleId: "boss_normal_attack", label: "健在: 通常攻撃", priority: 20, owner: "enemy",
       when: { target: "nearest_enemy" },
       then: { action: "attack", targetPolicy: "nearest_enemy" } },

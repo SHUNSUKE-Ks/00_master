@@ -84,9 +84,10 @@ function decideTurnBaseline(state, unitId) {
 }
 
 // gambitSetIdが付与されたユニットはGambit評価エンジンへ、それ以外は従来の固定ロジックへ委譲する。
-function decideTurn(state, unitId) {
+// gambitMemory: F1膠着打開用の対戦単位メモリ(Map)。エンジンへ渡すと連続無為ターンで攻勢化する。
+function decideTurn(state, unitId, gambitMemory) {
   const u = state.units.find((x) => x.id === unitId && x.hp > 0);
-  if (u?.gambitSetId && GAMBIT_CATALOG[u.gambitSetId]) return evaluateGambitTurn(state, unitId, GAMBIT_CATALOG[u.gambitSetId]);
+  if (u?.gambitSetId && GAMBIT_CATALOG[u.gambitSetId]) return evaluateGambitTurn(state, unitId, GAMBIT_CATALOG[u.gambitSetId], gambitMemory);
   return decideTurnBaseline(state, unitId);
 }
 
@@ -102,6 +103,7 @@ function snapshotUnits(state) {
 // ── 1戦を回す ─────────────────────────────────────────────────────
 function playOne(roster, { verbose = true } = {}) {
   const state = createBattleState({ units: roster.map((u) => ({ ...u })) });
+  const gambitMemory = new Map(); // F1: この対戦だけのGambit膠着打開メモリ(対戦ごとに新規=決定性維持)
   const jsonl = []; // {tick, cmd, events, units} を1行ずつ
   const dispatch = (cmd) => {
     const events = applyCommand(state, cmd);
@@ -119,7 +121,7 @@ function playOne(roster, { verbose = true } = {}) {
     // このターンに動くチームの生存ユニットを順に処理
     for (const u of living(state, team)) {
       if (state.phase !== "playing") break;
-      for (const cmd of decideTurn(state, u.id)) {
+      for (const cmd of decideTurn(state, u.id, gambitMemory)) {
         dispatch(cmd);
         if (state.phase !== "playing") break;
       }
