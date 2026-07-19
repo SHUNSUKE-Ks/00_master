@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CGA01 Battle 3D — Phase 1</title>
+  <style>
+    :root { --gold:#e8c34a; --gold-dim:#9b8335; --panel:rgba(8,16,30,.92); --ink:#fff9dc; --blue:#6bd9ff; }
+    * { box-sizing:border-box; margin:0 }
+    body { font-family:"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif; color:var(--ink); background:#07142a; height:100dvh; overflow:hidden; position:relative }
+
+    /* ==== 画面フロー（Title/モード選択/バトル）Phase 3 G1 ====
+       .screen は常に inset:0 の全面。表示中のものだけ .active を持つ。
+       バトル画面だけ元のgridレイアウトを維持する必要があるため個別指定する。 */
+    .screen { position:absolute; inset:0; display:none; }
+    .screen.active { display:block; }
+    #screen-battle.active { display:grid; grid-template-columns:1fr 300px }
+
+    /* 背景画像は art/screens/*.png が届くまでCSSグラデで代替する（JSのImage()プリロードでロード可否を判定） */
+    .screen-bg { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0 }
+    #screen-title .screen-bg.fallback { background:linear-gradient(180deg,#2a4f9e 0%,#4a7fd6 45%,#8fc4ea 100%) }
+    #screen-modeselect .screen-bg.fallback { background:linear-gradient(180deg,#233a5c 0%,#3a5a86 55%,#6a7fa0 100%) }
+    /* Result背景は勝敗2枚を重ねて置き、#result-overlayのwin/loseクラスで表示するほうだけ出す */
+    #result-overlay .result-bg-win, #result-overlay .result-bg-lose { display:none }
+    #result-overlay.win .result-bg-win, #result-overlay.lose .result-bg-lose { display:block }
+    #result-overlay .result-bg-win.fallback { background:radial-gradient(circle at 50% 35%,rgba(232,195,74,.35),transparent 65%) }
+    #result-overlay .result-bg-lose.fallback { background:radial-gradient(circle at 50% 45%,rgba(60,70,110,.5),transparent 65%) }
+
+    /* ---- Title画面 ---- */
+    #screen-title .title-wrap { position:relative; z-index:1; height:100%; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:34px; text-align:center; padding:20px }
+    #screen-title .game-logo { font-size:clamp(28px,6vw,54px); font-weight:900; letter-spacing:.08em; color:var(--ink);
+      text-shadow:0 3px 0 #0a2a5c,0 0 30px rgba(90,180,255,.7) }
+    #screen-title .game-logo small { display:block; font-size:.35em; font-weight:700; color:var(--gold); letter-spacing:.3em; margin-top:8px }
+    #title-tap { font:inherit; font-size:16px; font-weight:800; letter-spacing:.1em; color:var(--ink); cursor:pointer;
+      padding:14px 46px; background:#8e293c; border:3px solid var(--gold); border-radius:4px;
+      box-shadow:inset 0 0 0 2px #ef8796,0 6px 0 rgba(0,0,0,.45); animation:taphint 1.6s ease-in-out infinite }
+    @keyframes taphint { 0%,100%{opacity:1} 50%{opacity:.55} }
+
+    /* ---- モード選択画面 ---- */
+    #screen-modeselect .menu-wrap { position:relative; z-index:1; height:100%; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:26px; padding:20px }
+    .menu-title { font-size:clamp(20px,4vw,28px); font-weight:800; letter-spacing:.15em; color:var(--gold);
+      text-shadow:0 2px 0 rgba(0,0,0,.5) }
+    .mode-cards { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; max-width:920px }
+    .mode-card { position:relative; width:200px; height:280px; cursor:pointer; border:3px solid var(--gold); border-radius:6px;
+      background:linear-gradient(#1a1710,#0f0c08); box-shadow:inset 0 0 0 2px #5c4c17,0 10px 26px rgba(0,0,0,.5);
+      display:flex; flex-direction:column; overflow:hidden; padding:0 }
+    .mode-card .card-art { flex:1; background-size:cover; background-position:center }
+    /* data-img属性のあるその要素自身に.fallbackが付く（JS: loadScreenImages）。ancestor経由にしない */
+    .card-art.fallback[data-img="card_mode_battle"] { background:linear-gradient(160deg,#2f6fe0 0%,#8fae72 100%) }
+    .card-art.fallback[data-img="card_mode_hakoniwa"] { background:linear-gradient(160deg,#3d6b2a 0%,#6b4a24 100%) }
+    .card-art.fallback[data-img="card_mode_collection"] { background:linear-gradient(160deg,#4a3350 0%,#101624 100%) }
+    .card-label { padding:10px; font-size:15px; font-weight:800; letter-spacing:.1em; color:var(--ink);
+      background:rgba(8,16,30,.85); border-top:2px solid var(--gold-dim) }
+    .mode-card.disabled { cursor:default; filter:grayscale(.6) brightness(.7) }
+    .card-badge { position:absolute; top:10px; right:10px; padding:4px 10px; font-size:11px; font-weight:800;
+      color:#111; background:var(--gold); border-radius:3px; letter-spacing:.05em }
+    .back-link { font:inherit; font-size:12px; color:#9fb6c8; background:none; border:0; cursor:pointer; letter-spacing:.05em }
+    .back-link:hover { color:var(--ink) }
+
+    /* ---- バトル読み込み中 ---- */
+    #battle-loading { position:absolute; inset:0; z-index:60; display:none; align-items:center; justify-content:center;
+      background:#07142a; color:var(--ink); font-size:14px; font-weight:700; letter-spacing:.1em }
+    #battle-loading.show { display:flex }
+
+    #stage { position:relative; min-width:0 }
+    #stage canvas { display:block }
+    .chip { position:absolute; padding:5px 14px; background:#17120e; border:2px solid var(--gold); border-radius:3px; font-weight:800; font-style:italic; letter-spacing:.05em; font-size:13px }
+    #title-chip { top:10px; left:10px }
+    #turn-left { top:10px; left:325px; font-style:normal; font-size:12px; letter-spacing:.05em }
+    #turn-left:empty { display:none }
+    #face-hint { position:absolute; left:50%; top:14%; transform:translateX(-50%); z-index:22; display:none;
+      padding:7px 18px; font-size:13px; font-weight:700; color:var(--ink); background:rgba(8,16,30,.92);
+      border:2px solid var(--cyan,#6bd9ff); border-radius:4px; box-shadow:0 3px 14px rgba(0,0,0,.5) }
+    #hud-stats { position:absolute; top:10px; right:10px; padding:6px 10px; background:var(--panel); border:2px solid var(--gold-dim); border-radius:4px; font-size:11px; line-height:1.7; text-align:right; color:#cfe3f2 }
+    #hud-stats b { color:var(--blue) }
+    #hud-stats label { display:flex; gap:6px; align-items:center; justify-content:flex-end; cursor:pointer; color:var(--ink) }
+
+    /* ---- 開戦ボタン ---- */
+    #start-btn { position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); z-index:20;
+      font:inherit; font-size:20px; font-weight:900; font-style:italic; letter-spacing:.1em; color:var(--ink);
+      padding:14px 44px; cursor:pointer; background:#8e293c; border:3px solid var(--gold); border-radius:4px;
+      box-shadow:inset 0 0 0 2px #ef8796, 0 6px 0 rgba(0,0,0,.45); }
+    #start-btn:hover { filter:brightness(1.15) }
+
+    /* ---- ターンバナー（盤面中央・一時表示） ---- */
+    #turn-banner { position:absolute; left:50%; top:38%; transform:translate(-50%,-50%) skewX(-10deg) scale(.8);
+      z-index:15; pointer-events:none; opacity:0; font-size:56px; font-weight:900; font-style:italic; letter-spacing:.06em;
+      color:#7fc4ff; -webkit-text-stroke:2px #0a2a5c; text-shadow:0 5px 0 #0a2a5c, 0 0 28px rgba(90,180,255,.85); }
+    #turn-banner.enemy { color:#ff9c8a; -webkit-text-stroke:2px #5c140a; text-shadow:0 5px 0 #5c140a, 0 0 28px rgba(255,120,90,.85) }
+    #turn-banner.show { animation:banner 1.25s ease forwards }
+    @keyframes banner {
+      0% { opacity:0; transform:translate(-50%,-50%) skewX(-10deg) scale(.7) }
+      14% { opacity:1; transform:translate(-50%,-50%) skewX(-10deg) scale(1.06) }
+      24% { transform:translate(-50%,-50%) skewX(-10deg) scale(1) }
+      78% { opacity:1 }
+      100% { opacity:0; transform:translate(-50%,-50%) skewX(-10deg) scale(1) }
+    }
+
+    /* ---- 歯車ボタン + 設定画面 ---- */
+    #gear-btn { position:absolute; top:58px; right:10px; z-index:25; width:38px; height:38px; cursor:pointer;
+      font-size:20px; color:var(--ink); background:var(--panel); border:2px solid var(--gold); border-radius:4px; line-height:1 }
+    #gear-btn:hover { filter:brightness(1.2) }
+    #settings { position:absolute; inset:0; z-index:50; display:none; align-items:center; justify-content:center;
+      background:rgba(3,6,16,.72) }
+    #settings.open { display:flex }
+    /* 幅は2026-07-18にユーザー指示で固定。タブ切替で中身の分量が変わっても幅が動かないよう
+       width/min-width/max-widthを同値にして三重に固定する（%ではなくvw基準で親要素に依存しない） */
+    .settings-card { width:min(680px,92vw); min-width:min(680px,92vw); max-width:min(680px,92vw);
+      max-height:88%; display:flex; flex-direction:column; flex-shrink:0;
+      background:linear-gradient(#1a1710,#0f0c08); border:3px solid var(--gold); border-radius:6px;
+      box-shadow:inset 0 0 0 2px #5c4c17, 0 30px 80px rgba(0,0,0,.75) }
+    .settings-head { display:flex; align-items:center; gap:8px; padding:10px 12px; border-bottom:2px solid var(--gold-dim) }
+    .settings-tabs { display:flex; gap:4px; flex-wrap:wrap; flex:1 }
+    .settings-tabs button { font:inherit; font-size:12px; font-weight:700; color:#c9b98f; padding:6px 12px; cursor:pointer;
+      background:#211a12; border:2px solid var(--gold-dim); border-radius:4px 4px 0 0 }
+    .settings-tabs button.on { color:#111; background:var(--gold); border-color:var(--gold) }
+    #settings-close { font:inherit; font-size:14px; font-weight:800; color:#ff9c8a; width:30px; height:30px; cursor:pointer;
+      background:#3a1410; border:2px solid #c0504a; border-radius:4px }
+    .settings-body { flex:1; overflow-y:auto; padding:18px 22px }
+    .settings-body section { display:none }
+    .settings-body section.on { display:block }
+    .settings-body h3 { font-size:16px; color:var(--gold); letter-spacing:.1em; padding-bottom:8px;
+      border-bottom:1px solid var(--gold-dim); margin-bottom:14px }
+    .ctrl-table { width:100%; border-collapse:collapse; font-size:13px }
+    .ctrl-table th { text-align:left; color:var(--gold); font-weight:700; padding:7px 10px; border-bottom:1px solid var(--gold-dim); background:rgba(90,70,35,.25) }
+    .ctrl-table td { padding:7px 10px; border-bottom:1px solid rgba(155,131,53,.25); color:var(--ink) }
+    .ctrl-table td:first-child { color:var(--gold); font-weight:700; white-space:nowrap }
+    .ctrl-note { font-size:12px; color:#9fb6c8; margin-top:14px; line-height:1.7 }
+    .settings-foot { padding:12px; border-top:2px solid var(--gold-dim); display:flex; justify-content:flex-end }
+    #settings-resume { font:inherit; font-size:14px; font-weight:800; color:var(--ink); padding:9px 30px; cursor:pointer;
+      background:#1c6b3f; border:2px solid var(--gold); border-radius:4px; box-shadow:inset 0 0 0 1px #4cd08a }
+    #settings-resume:hover { filter:brightness(1.15) }
+
+    /* ---- リザルト（勝敗オーバーレイ・原本WIN/LOSE風） ---- */
+    #result-overlay { position:absolute; inset:0; z-index:40; display:none; align-items:center; justify-content:center;
+      background:radial-gradient(circle at 50% 40%, rgba(10,20,45,.55), rgba(3,6,16,.88)) }
+    #result-overlay .result-card { position:relative; z-index:1 }
+    .result-card { text-align:center; padding:38px 60px; background:var(--panel); border:3px solid var(--gold);
+      border-radius:4px; box-shadow:inset 0 0 0 2px #5c4c17, 0 24px 70px rgba(0,0,0,.7); animation:respop .4s ease }
+    @keyframes respop { 0%{transform:scale(.7);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+    #result-title { font-size:52px; font-weight:900; font-style:italic; letter-spacing:.08em; -webkit-text-stroke:2px #000; margin-bottom:18px }
+    #result-overlay.win #result-title { color:#7fc4ff; text-shadow:0 4px 0 #0a2a5c, 0 0 26px rgba(90,180,255,.8) }
+    #result-overlay.lose #result-title { color:#ff9c8a; text-shadow:0 4px 0 #5c140a, 0 0 26px rgba(255,120,90,.8) }
+    .result-btns { display:flex; gap:12px; justify-content:center; position:relative; z-index:1 }
+    #result-again { font:inherit; font-size:16px; font-weight:800; color:var(--ink); padding:11px 34px; cursor:pointer;
+      background:#8e293c; border:2px solid var(--gold); border-radius:3px; box-shadow:inset 0 0 0 1px #ef8796 }
+    #result-again:hover { filter:brightness(1.15) }
+    #result-title-btn { font:inherit; font-size:16px; font-weight:800; color:var(--ink); padding:11px 34px; cursor:pointer;
+      background:#17365c; border:2px solid var(--gold); border-radius:3px; box-shadow:inset 0 0 0 1px #6bd9ff }
+    #result-title-btn:hover { filter:brightness(1.15) }
+
+    /* ---- ダメージ数字（頭上・採用決定事項） ---- */
+    .dmg-pop { position:absolute; z-index:18; pointer-events:none; transform:translate(-50%,-100%);
+      font-size:34px; font-weight:900; color:#ffb23d; -webkit-text-stroke:2px #4a1a00;
+      text-shadow:0 3px 0 #4a1a00; animation:dmg .95s ease-out forwards }
+    @keyframes dmg {
+      0% { opacity:0; margin-top:0; transform:translate(-50%,-100%) scale(.6) }
+      18% { opacity:1; transform:translate(-50%,-100%) scale(1.15) }
+      30% { transform:translate(-50%,-100%) scale(1) }
+      100% { opacity:0; margin-top:-46px; transform:translate(-50%,-100%) scale(1) }
+    }
+
+    /* ---- 1P / CPU 固定ステータスパネル（DevLayerモック準拠） ---- */
+    .st-panel { position:absolute; bottom:10px; width:225px; padding:7px 10px; background:#2a2018;
+      border:2px solid var(--gold); border-radius:3px; box-shadow:inset 0 0 0 2px #5c4c17; font-size:12px }
+    .st-panel .tag { position:absolute; top:-13px; font-size:13px; font-weight:900; font-style:italic; -webkit-text-stroke:1px #000 }
+    #p1-panel { left:10px } #p1-panel .tag { left:6px; color:#5aa9ff }
+    #cpu-panel { right:10px } #cpu-panel .tag { right:6px; color:var(--gold) }
+    .st-panel .row1 { display:flex; justify-content:space-between; align-items:baseline }
+    .st-panel .nm { font-weight:700; font-size:13.5px }
+    .st-panel .pos { color:#9fb6c8; font-size:11px }
+    .st-panel .hp-row { display:flex; gap:6px; align-items:center; margin-top:4px }
+    .st-panel .hp-bar { flex:1; height:9px; background:#1a120a; border:1px solid #6b5a1e }
+    .st-panel .hp-bar i { display:block; height:100%; background:linear-gradient(#f5e27a,#d4b21e); transition:width .35s ease }
+    .st-panel.selected { outline:2px solid #ffe35f }
+    .st-panel.dead { filter:grayscale(.8); opacity:.6 }
+    .st-panel.done { opacity:.55 }
+
+    #motion-bar { position:absolute; left:50%; bottom:10px; transform:translateX(-50%); display:flex; gap:6px; padding:8px 10px; background:var(--panel); border:2px solid var(--gold); border-radius:4px }
+    #motion-bar span { font-size:10px; color:var(--gold); letter-spacing:.15em; font-weight:700; align-self:center; margin-right:4px }
+    #motion-bar button { font:inherit; font-size:12px; font-weight:700; color:var(--ink); padding:5px 12px; cursor:pointer; background:#17365c; border:2px solid var(--gold); border-radius:3px }
+    #motion-bar button:disabled { opacity:.4; cursor:default }
+    #btn-endturn { background:#8e293c !important }
+
+    aside { display:flex; flex-direction:column; min-height:0; border-left:2px solid var(--gold-dim); background:rgba(5,10,20,.85) }
+    aside h1 { font-size:13px; padding:10px 12px; border-bottom:2px solid var(--gold); background:rgba(5,12,25,.9) }
+    aside h1 small { color:var(--gold); display:block; font-size:9px; letter-spacing:.2em }
+    aside section { padding:10px 12px; display:flex; flex-direction:column; gap:6px }
+    aside label { font-size:10px; color:var(--gold); letter-spacing:.15em; font-weight:700 }
+    #cmd-json { font-family:Consolas,monospace; font-size:11.5px; color:#d8f0ff; background:#0a1526; border:2px solid var(--gold-dim); border-radius:3px; padding:8px; height:76px; resize:vertical }
+    .btn-row { display:flex; gap:6px; flex-wrap:wrap }
+    .btn-row button { font:inherit; font-size:11px; font-weight:700; color:var(--ink); padding:5px 10px; cursor:pointer; background:#101624; border:2px solid var(--gold-dim); border-radius:3px }
+    #cmd-exec { background:#8e293c !important; border-color:var(--gold) !important }
+    #log { flex:1; overflow-y:auto; font-size:11px; line-height:1.7; padding:8px 12px; border-top:1px solid #3a2d1a; color:#cfe3f2 }
+    #log p b { color:var(--gold); font-weight:700 }
+
+    /* ==== UIテーマ適用時のみ有効（.theme-on）。無ければ上のCSS描画がfallback ==== */
+    .theme-on .chip { border:0; background:transparent; background-image:var(--img-ui_chip_title); background-size:100% 100%; padding:8px 22px }
+    .theme-on .st-panel { border:0; box-shadow:none; background:transparent; background-image:var(--img-ui_dialog_frame); background-size:100% 100%; padding:12px 18px }
+    .theme-on .st-panel.selected { outline:0; filter:drop-shadow(0 0 6px #ffe35f) }
+    .theme-on #motion-bar { border:0; background:transparent; background-image:var(--img-ui_dialog_frame); background-size:100% 100%; padding:12px 18px }
+    .theme-on #motion-bar button, .theme-on .btn-row button {
+      border:0; background:transparent; background-image:var(--img-ui_btn_secondary); background-size:100% 100%; padding:8px 16px; text-shadow:0 1px 2px rgba(0,0,0,.6); white-space:nowrap }
+    .theme-on #btn-endturn, .theme-on #btn-attack, .theme-on #cmd-exec, .theme-on #start-btn {
+      background-image:var(--img-ui_btn_primary) !important; background-size:100% 100% !important; background-repeat:no-repeat; border:0 !important; box-shadow:none }
+    .theme-on #motion-bar button:active, .theme-on .btn-row button:active { background-image:var(--img-ui_btn_primary-pressed) }
+    .theme-on #motion-bar button:disabled, .theme-on .btn-row button:disabled { background-image:var(--img-ui_btn_primary-disabled); opacity:.85 }
+    .theme-on #start-btn { padding:20px 52px }
+    .theme-on .hp-bar { border:0; background:transparent; background-image:var(--img-ui_gauge_frame); background-size:100% 100%; padding:3px 8px; height:15px }
+    .theme-on .hp-bar i { background:none; background-image:var(--img-ui_gauge_fill_hp); background-size:100% 100% }
+
+    @media (max-width:760px) {
+      body { grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) 200px }
+      aside { border-left:0; border-top:2px solid var(--gold-dim) }
+      .st-panel { width:158px; font-size:10.5px; bottom:170px }
+      .st-panel .nm { font-size:11.5px }
+      #motion-bar { bottom:8px; left:8px; right:8px; transform:none; padding:5px 6px; gap:4px; flex-wrap:wrap; justify-content:center }
+      #motion-bar button { padding:4px 8px; font-size:10.5px }
+      .theme-on #motion-bar { background-image:var(--img-ui_panel_gold); padding:10px }
+      #turn-banner { font-size:34px }
+      #cmd-json { height:48px }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============ Title ============ -->
+  <div id="screen-title" class="screen">
+    <div class="screen-bg" data-img="screen_title_bg"></div>
+    <div class="title-wrap">
+      <h1 class="game-logo">エレメンタルモンスターズ<small>(仮) — CGA01</small></h1>
+      <button id="title-tap">タップでスタート</button>
+    </div>
+  </div>
+
+  <!-- ============ モード選択 ============ -->
+  <div id="screen-modeselect" class="screen">
+    <div class="screen-bg" data-img="screen_mode_select_bg"></div>
+    <div class="menu-wrap">
+      <div class="menu-title">モードを選ぼう</div>
+      <div class="mode-cards">
+        <button class="mode-card" id="mode-battle" data-mode="battle">
+          <div class="card-art" data-img="card_mode_battle"></div>
+          <div class="card-label">⚔ バトル</div>
+        </button>
+        <button class="mode-card disabled" data-mode="hakoniwa" disabled>
+          <div class="card-art" data-img="card_mode_hakoniwa"></div>
+          <div class="card-label">🌱 はこにわ</div>
+          <div class="card-badge">準備中</div>
+        </button>
+        <button class="mode-card disabled" data-mode="collection" disabled>
+          <div class="card-art" data-img="card_mode_collection"></div>
+          <div class="card-label">📖 ずかん</div>
+          <div class="card-badge">準備中</div>
+        </button>
+      </div>
+      <button class="back-link" id="mode-back">◀ タイトルへ</button>
+    </div>
+  </div>
+
+  <!-- ============ バトル（既存画面。ロジック未変更） ============ -->
+  <div id="screen-battle" class="screen">
+  <div id="stage">
+    <div id="battle-loading">読み込み中…</div>
+    <div class="chip" id="title-chip">CGA01 BATTLE 3D — PHASE 3</div>
+    <div class="chip" id="turn-left"></div>
+    <div id="hud-stats">
+      <div>fps <b id="st-fps">-</b> · calls <b id="st-calls">-</b> · tris <b id="st-tris">-</b></div>
+      <label><input type="checkbox" id="dbg-orbit"> Debug Orbit</label>
+      <label><input type="checkbox" id="dbg-sprite"> Sprite 2.5D</label>
+    </div>
+    <button id="gear-btn" title="設定">⚙</button>
+
+    <div id="settings">
+      <div class="settings-card">
+        <div class="settings-head">
+          <div class="settings-tabs">
+            <button data-tab="game">ゲーム</button>
+            <button data-tab="display">ディスプレイ</button>
+            <button data-tab="audio">オーディオ</button>
+            <button data-tab="control" class="on">コントロール</button>
+            <button data-tab="howto">遊び方</button>
+            <button data-tab="other">その他</button>
+          </div>
+          <button id="settings-close" title="閉じる">✕</button>
+        </div>
+        <div class="settings-body">
+          <section data-panel="control" class="on">
+            <h3>コントロール</h3>
+            <table class="ctrl-table">
+              <tr><th>操作</th><th>マウス</th><th>キーボード</th></tr>
+              <tr><td>ユニットを選ぶ</td><td>ユニットをクリック</td><td>Tab（味方を順に切替）</td></tr>
+              <tr><td>移動</td><td>青い到達マスをクリック</td><td>矢印キー / WASD</td></tr>
+              <tr><td>向き決め＆待機</td><td>移動後、向きたい方をクリック</td><td>十字キーで向き→Enter</td></tr>
+              <tr><td>攻撃</td><td>射程内の敵をクリック</td><td>F または Space</td></tr>
+              <tr><td>ターン終了</td><td>「ターン終了」ボタン</td><td>E</td></tr>
+              <tr><td>選択解除</td><td>盤の外側をクリック</td><td>—</td></tr>
+              <tr><td>カメラ回転（デバッグ）</td><td>Debug Orbit を ON</td><td>—</td></tr>
+            </table>
+            <p class="ctrl-note">※ 移動→向き決めクリックで1体の行動が終わります。移動後に射程内の敵をクリックすれば攻撃で締めます。味方全員が行動を終えると自動で敵ターンへ。</p>
+          </section>
+          <section data-panel="game"><h3>ゲーム</h3><p class="ctrl-note">（Phase 1.5 プロト）難易度・オート戦闘などは今後追加予定。</p></section>
+          <section data-panel="display"><h3>ディスプレイ</h3><p class="ctrl-note">解像度・UIスケールは実装予定。現状はブラウザ幅に自動追従します。</p></section>
+          <section data-panel="audio"><h3>オーディオ</h3><p class="ctrl-note">BGM / SE 音量は音声実装後に追加します。</p></section>
+          <section data-panel="howto"><h3>遊び方</h3><p class="ctrl-note">開戦 → 味方を敵の隣へ動かす → 攻撃 → 敵を全滅で勝利。敵のターンは自動で動きます。</p></section>
+          <section data-panel="other"><h3>その他</h3><p class="ctrl-note">UIテーマの着せ替えは今後の設定項目に追加予定です。</p></section>
+        </div>
+        <div class="settings-foot">
+          <button id="settings-resume">再開</button>
+        </div>
+      </div>
+    </div>
+
+    <button id="start-btn">⚔ 開戦</button>
+    <div id="turn-banner">PLAYER TURN</div>
+    <div id="face-hint">🧭 向きを決めてクリック（十字キー→Enterでも可）</div>
+
+    <div id="result-overlay">
+      <div class="screen-bg result-bg-win fallback" data-img="screen_result_win_bg"></div>
+      <div class="screen-bg result-bg-lose fallback" data-img="screen_result_lose_bg"></div>
+      <div class="result-card">
+        <div id="result-title">1P WIN</div>
+        <div class="result-btns">
+          <button id="result-again">もう一度</button>
+          <button id="result-title-btn">タイトルへ</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="st-panel" id="p1-panel">
+      <span class="tag">1P</span>
+      <div class="row1"><span class="nm" id="p1-name">-</span><span class="pos" id="p1-pos"></span></div>
+      <div class="hp-row"><span id="p1-hp-num">♥ -</span><span class="hp-bar"><i id="p1-hp" style="width:100%"></i></span></div>
+    </div>
+    <div class="st-panel" id="cpu-panel">
+      <span class="tag">CPU</span>
+      <div class="row1"><span class="nm" id="cpu-name">-</span><span class="pos" id="cpu-pos"></span></div>
+      <div class="hp-row"><span id="cpu-hp-num">♥ -</span><span class="hp-bar"><i id="cpu-hp" style="width:100%"></i></span></div>
+    </div>
+
+    <div id="motion-bar">
+      <span>ACTION</span>
+      <button data-clip="idle" disabled>IDLE</button>
+      <button data-clip="move" disabled>MOVE</button>
+      <button data-clip="attack" disabled>ATTACK</button>
+      <button data-clip="hit" disabled>HIT</button>
+      <button id="btn-attack" disabled>⚔ 攻撃</button>
+      <button id="btn-endturn" disabled>ターン終了</button>
+    </div>
+  </div>
+  <aside>
+    <h1><small>GAME STATE → RENDER ADAPTER → SCENE</small>JSONコマンドコンソール</h1>
+    <section>
+      <label>COMMAND (JSON)</label>
+      <textarea id="cmd-json">{ "type": "startBattle" }</textarea>
+      <div class="btn-row">
+        <button id="cmd-exec">実行 ▶</button>
+        <button data-preset="up">1マス前進</button>
+        <button data-preset="select">ドレイク選択</button>
+        <button data-preset="attack">攻撃</button>
+      </div>
+    </section>
+    <div id="log"></div>
+  </aside>
+  </div><!-- /#screen-battle -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

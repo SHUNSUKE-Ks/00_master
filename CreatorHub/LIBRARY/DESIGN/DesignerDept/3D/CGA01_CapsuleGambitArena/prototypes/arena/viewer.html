@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Gambit Arena Viewer</title>
+<style>
+  :root {
+    --bg: #14161c;
+    --panel: #1c1f28;
+    --panel2: #22252f;
+    --border: #333844;
+    --text: #e6e8ee;
+    --text-dim: #8a90a0;
+    --ally: #4f8ff0;
+    --enemy: #ef5b5b;
+    --accent: #f0c94f;
+    --dead: #3a3d46;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", "Yu Gothic UI", sans-serif; font-size: 13px;
+    height: 100vh; display: flex; flex-direction: column;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 15px; margin: 0; margin-right: auto; color: var(--accent); font-weight: 600; }
+  header .field { color: var(--text-dim); }
+  button, select {
+    background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px;
+  }
+  button:hover { border-color: var(--accent); }
+  button:disabled { opacity: .4; cursor: default; }
+  input[type="range"] { width: 160px; }
+
+  #meter-row { padding: 6px 12px; background: var(--panel); border-bottom: 1px solid var(--border); }
+  #meter-bar { display: flex; height: 18px; border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+  #meter-ally { background: var(--ally); }
+  #meter-enemy { background: var(--enemy); }
+  #meter-label { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+
+  main {
+    flex: 1; display: grid;
+    grid-template-columns: 28px 1fr 1fr 1fr 1fr 28px;
+    gap: 1px; background: var(--border); overflow: hidden; min-height: 0;
+  }
+  .nav { background: var(--panel); }
+  .col { background: var(--bg); display: flex; flex-direction: column; min-height: 0; }
+  .col h2 {
+    font-size: 11px; color: var(--text-dim); margin: 0; padding: 6px 8px;
+    background: var(--panel); border-bottom: 1px solid var(--border); letter-spacing: .05em;
+  }
+  .log-box { flex: 1; overflow-y: auto; padding: 6px 8px; font-size: 12px; line-height: 1.5; }
+  .log-box p { margin: 0 0 4px; }
+  .log-ally p { color: #a9c6f5; }
+  .log-enemy p { color: #f3a9a9; }
+
+  .card-box { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 6px; }
+  .card {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 5px; padding: 6px 8px;
+  }
+  .card.dead { background: var(--dead); opacity: .55; }
+  .card .row1 { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+  .card .badge {
+    display: inline-block; width: 16px; height: 16px; border-radius: 3px; margin-right: 6px;
+    text-align: center; line-height: 16px; font-size: 10px; color: #10121a;
+  }
+  .team-ally .badge { background: var(--ally); }
+  .team-enemy .badge { background: var(--enemy); }
+  .card .acted { font-size: 10px; color: var(--accent); }
+  .hp-bar-outer { background: #0009; border-radius: 3px; height: 6px; margin: 4px 0; overflow: hidden; }
+  .hp-bar-inner { background: #5ecb6b; height: 100%; }
+  .card .stats { display: flex; gap: 10px; font-size: 11px; color: var(--text-dim); }
+
+  footer {
+    height: 84px; background: var(--panel); border-top: 1px solid var(--border);
+    padding: 6px 12px; overflow-y: auto; font-size: 12px; flex-shrink: 0;
+  }
+  footer p { margin: 0 0 3px; color: var(--accent); }
+
+  #dropzone {
+    position: fixed; inset: 0; background: #000c; display: none;
+    align-items: center; justify-content: center; font-size: 20px; z-index: 10;
+    border: 3px dashed var(--accent); pointer-events: none;
+  }
+  #dropzone.active { display: flex; }
+</style>
+</head>
+<body>
+
+<header id="drop-target">
+  <h1>⚔ Gambit Arena Viewer</h1>
+  <span class="field">JSONL:</span>
+  <button id="btn-open">棋譜を開く…</button>
+  <input type="file" id="file-input" accept=".jsonl" style="display:none">
+  <span class="field" id="file-name">(未読込・ドラッグ&ドロップも可)</span>
+  <button id="btn-play" disabled>▶ 再生</button>
+  <select id="speed">
+    <option value="600">1x</option>
+    <option value="250">2x</option>
+    <option value="0">MAX</option>
+  </select>
+  <input type="range" id="scrubber" min="0" max="0" value="0" disabled>
+  <span class="field" id="tick-label">tick -/-</span>
+</header>
+
+<div id="meter-row">
+  <div id="meter-bar"><div id="meter-ally" style="width:50%"></div><div id="meter-enemy" style="width:50%"></div></div>
+  <div id="meter-label">評価: -</div>
+</div>
+
+<main>
+  <div class="nav" id="nav-left"></div>
+  <div class="col">
+    <h2>1P テキストログ</h2>
+    <div class="log-box log-ally" id="log-ally"></div>
+  </div>
+  <div class="col">
+    <h2>1P パラメーター</h2>
+    <div class="card-box" id="cards-ally"></div>
+  </div>
+  <div class="col">
+    <h2>2P パラメーター</h2>
+    <div class="card-box" id="cards-enemy"></div>
+  </div>
+  <div class="col">
+    <h2>2P テキストログ</h2>
+    <div class="log-box log-enemy" id="log-enemy"></div>
+  </div>
+  <div class="nav" id="nav-right"></div>
+</main>
+
+<footer id="footer-log"></footer>
+
+<div id="dropzone">JSONLをドロップして読込</div>
+
+<script>
+// ── 状態 ──────────────────────────────────────────────────────────
+// このビューアはgameStateのルールを一切知らない。arena.mjsが出力したJSONLの
+// units スナップショット(D3)だけを見て毎行再描画する「再生専用」プレイヤー。
+const MILESTONE = new Set(["battleStarted", "turnChanged", "unitDefeated", "battleEnded"]);
+const GLOBAL = new Set(["battleStarted", "turnChanged", "battleEnded"]);
+
+let records = [];   // JSONL 1行=1オブジェクト
+let idx = 0;         // 現在表示中のレコードindex
+let playing = false;
+let timer = null;
+
+const el = (id) => document.getElementById(id);
+const fileInput = el("file-input");
+const scrubber = el("scrubber");
+const playBtn = el("btn-play");
+const speedSel = el("speed");
+
+// ── 読込 ──────────────────────────────────────────────────────────
+function loadText(text, name) {
+  records = text.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => JSON.parse(l));
+  idx = 0;
+  el("file-name").textContent = name;
+  scrubber.max = String(Math.max(0, records.length - 1));
+  scrubber.value = "0";
+  scrubber.disabled = records.length === 0;
+  playBtn.disabled = records.length === 0;
+  renderUpTo(0);
+}
+
+el("btn-open").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", () => {
+  const f = fileInput.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => loadText(r.result, f.name);
+  r.readAsText(f);
+});
+
+const dropTarget = el("drop-target");
+const dropzone = el("dropzone");
+["dragenter", "dragover"].forEach((ev) => window.addEventListener(ev, (e) => { e.preventDefault(); dropzone.classList.add("active"); }));
+["dragleave", "drop"].forEach((ev) => window.addEventListener(ev, (e) => { e.preventDefault(); if (ev === "dragleave" && e.target !== dropzone) return; dropzone.classList.remove("active"); }));
+window.addEventListener("drop", (e) => {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => loadText(r.result, f.name);
+  r.readAsText(f);
+});
+
+// ── 再生制御 ─────────────────────────────────────────────────────
+scrubber.addEventListener("input", () => { stop(); idx = Number(scrubber.value); renderUpTo(idx); });
+
+playBtn.addEventListener("click", () => { playing ? stop() : play(); });
+
+function play() {
+  if (idx >= records.length - 1) idx = 0;
+  playing = true;
+  playBtn.textContent = "⏸ 一時停止";
+  step();
+}
+function stop() {
+  playing = false;
+  playBtn.textContent = "▶ 再生";
+  if (timer) clearTimeout(timer);
+}
+function step() {
+  if (!playing) return;
+  renderUpTo(idx);
+  scrubber.value = String(idx);
+  if (idx >= records.length - 1) { stop(); return; }
+  idx++;
+  const ms = Number(speedSel.value);
+  if (ms === 0) step(); else timer = setTimeout(step, ms);
+}
+
+// ── 描画 ─────────────────────────────────────────────────────────
+// index までのレコードを先頭から再生してログ欄を作り直す(再現性重視・件数は小さいので十分軽い)
+function renderUpTo(index) {
+  el("log-ally").innerHTML = "";
+  el("log-enemy").innerHTML = "";
+  el("footer-log").innerHTML = "";
+  for (let i = 0; i <= index && i < records.length; i++) applyRecord(records[i]);
+  const last = records[Math.min(index, records.length - 1)];
+  if (last) { renderCards(last.units); renderMeter(last.units); }
+  el("tick-label").textContent = `tick ${last ? last.tick : "-"} / record ${index + 1}/${records.length}`;
+  scrollBottoms();
+}
+
+function applyRecord(rec) {
+  const events = rec.events || [];
+  let lastType = null;
+  const pairs = [];
+  for (const e of events) {
+    if (e.type === "log") { pairs.push({ pairedType: lastType, text: e.text }); lastType = null; }
+    else lastType = e.type;
+  }
+  const actorTeam = rec.cmd?.unitId ? (rec.units || []).find((u) => u.id === rec.cmd.unitId)?.team : null;
+  for (const p of pairs) {
+    if (MILESTONE.has(p.pairedType)) appendP("footer-log", p.text);
+    if (actorTeam && !GLOBAL.has(p.pairedType)) appendP(actorTeam === "ally" ? "log-ally" : "log-enemy", p.text);
+  }
+}
+function appendP(boxId, text) {
+  const p = document.createElement("p");
+  p.textContent = text;
+  el(boxId).appendChild(p);
+}
+function scrollBottoms() {
+  for (const id of ["log-ally", "log-enemy", "footer-log"]) { const b = el(id); b.scrollTop = b.scrollHeight; }
+}
+
+function renderCards(units) {
+  renderCardCol("cards-ally", units.filter((u) => u.team === "ally"));
+  renderCardCol("cards-enemy", units.filter((u) => u.team === "enemy"));
+}
+function renderCardCol(boxId, units) {
+  const box = el(boxId);
+  box.innerHTML = "";
+  for (const u of units) {
+    const dead = u.hp <= 0;
+    const pct = Math.max(0, Math.round((u.hp / u.maxHp) * 100));
+    const div = document.createElement("div");
+    div.className = `card team-${u.team}${dead ? " dead" : ""}`;
+    div.innerHTML = `
+      <div class="row1">
+        <span><span class="badge">${u.team === "ally" ? "A" : "E"}</span>${u.name}</span>
+        <span class="acted">${dead ? "戦闘不能" : (u.acted ? "行動済" : "")}</span>
+      </div>
+      <div class="hp-bar-outer"><div class="hp-bar-inner" style="width:${pct}%"></div></div>
+      <div class="stats">
+        <span>HP ${u.hp}/${u.maxHp}</span><span>AT ${u.atk}</span><span>DF ${u.def}</span><span>(${u.x},${u.y})</span>
+      </div>`;
+    box.appendChild(div);
+  }
+}
+
+function renderMeter(units) {
+  const sum = (team, key) => units.filter((u) => u.team === team).reduce((s, u) => s + u[key], 0);
+  const allyHp = sum("ally", "hp"), allyMax = sum("ally", "maxHp");
+  const enemyHp = sum("enemy", "hp"), enemyMax = sum("enemy", "maxHp");
+  const allyPct = allyMax ? allyHp / allyMax : 0;
+  const enemyPct = enemyMax ? enemyHp / enemyMax : 0;
+  const total = allyPct + enemyPct || 1;
+  const allyShare = Math.round((allyPct / total) * 100);
+  el("meter-ally").style.width = allyShare + "%";
+  el("meter-enemy").style.width = (100 - allyShare) + "%";
+  el("meter-label").textContent = `評価: 1P ${allyShare}%  /  2P ${100 - allyShare}%  (残HP比率)`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+名前,gambitSetId,行動タイプ,説明,使用ユニット,実装状態,status
+側面突き,gambit_flanker_v1,flanker,側面や背後に回り込んでから攻撃を狙う,工房斥候 / 湿地滑走兵,未実装,active
+守り抜く,gambit_guardian_v1,guardian,前線に留まり味方や陣地を守る,鉄板衛兵,未実装,active
+狙撃,gambit_sniper_v1,sniper,射程を活かし後方から一方的に攻撃する,ボルト射手 / 水路投射兵,未実装,active
+慎重,gambit_cautious_v1,cautious,不利な間合いでは様子見し安全に立ち回る,熾火浮遊体,未実装,active
+猛攻,gambit_aggressive_v1,aggressive,積極的に前進し最も近い敵へ突撃する,断崖翼兵 / 坑道穿ち,未実装,active
+ボスフェーズ,gambit_boss_phase_v1,boss_phase,HP割合に応じて行動パターンが変化する,封殻巨像 / 観測竜アーカイヴ,未実装,active
