@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260720_007",
+  "projectId": "app_launchpad_sampler01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "verification-design",
+  "kind": "phase_report",
+  "date": "2026-07-20",
+  "title": "T1〜T3統合評価・タップ非機能要件・診断基盤",
+  "summary": "T1〜T3の成果を1コマンドで検証する統合スクリプトを作成し、タップ非機能要件と番号付き例外ログを機械可読・人向け資料の両方へ固定した。",
+  "agentId": "codex",
+  "modelProfileId": "codex-default",
+  "startedAt": "2026-07-20T13:48:00+09:00",
+  "completedAt": "2026-07-20T14:08:00+09:00",
+  "durationMin": 20,
+  "tokensUsed": null,
+  "outcomes": [
+    "npm run validate:projectでWAV、ライセンス、テンプレート、診断契約、TypeScriptを一括検証できるようにした。",
+    "タップの最小領域、押下反映、復帰、連打、同時押し、モード切替、例外ログを数値化した。",
+    "15個の安定checkpointをtests/interaction/tap_interaction_cases.jsonへ定義した。",
+    "RN_interactionDiagnostics.tsへ通常・予期しない分岐・例外・時間測定・guard処理を実装した。",
+    "Android実測が未実施であることをpendingとして資料へ明示した。"
+  ],
+  "verification": [
+    "V-01 WAV inventory: 32 files pass。",
+    "V-02 WAV headers: PCM 16-bit / 44100Hz / mono pass。",
+    "V-03 determinism: generated A/B mismatch 0、disk mismatch 0、unique hash 32。",
+    "V-04 LICENSES.md存在確認 pass。",
+    "V-05 template validation: 4 templates / 32 pads / 32 samples / 32 map keys pass。",
+    "V-06 interaction contract: 15 checkpoints / 10 metrics / group 1〜4 pass。",
+    "V-07 TypeScript validation pass。"
+  ],
+  "nextActions": [
+    "T4でRN_padPlayerへ1-4、2-3、3-2、3-3の診断ログとguardを接続する。",
+    "T5でRN_Padへ1-1〜1-6、2-1〜2-2、3-1のログと時間測定を接続する。",
+    "Android実機でtap_nfr_metrics_v0.1.mdの手順を実施し、pending指標をpass/failへ更新する。"
+  ],
+  "deliverables": [
+    "scripts/validate_project.mjs",
+    "scripts/validate_interaction_contract.mjs",
+    "src/config/RN_interactionMetrics.json",
+    "src/config/RN_interactionMetrics.ts",
+    "src/diagnostics/RN_interactionDiagnostics.ts",
+    "tests/interaction/tap_interaction_cases.json",
+    "brief/tap_nfr_metrics_v0.1.md",
+    "package.json",
+    "DEVBOARD.md"
+  ],
+  "tags": ["phase_report", "validation", "interaction", "tap-nfr", "console-probe", "exception-handling"],
+  "blockedEncountered": ["Android実機のタップ時間、連打、同時押し、音声重畳はT4/T5未実装のため実測不可。数値契約と観測点までを先行確定した。"],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "interaction-debug-testの安定checkpoint方式により、ログ欠落箇所からevent/store/audio/animation/renderの停止層を特定できる構成にした。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

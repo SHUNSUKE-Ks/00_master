@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "templates": [
+    {
+      "id": "template_rock01",
+      "name": "Rock",
+      "accentColor": "#e64545",
+      "pads": [
+        { "id": "rock_kick", "row": 0, "column": 0, "label": "KICK", "category": "drum", "color": "green", "sample": "drum_kick_rock01.wav" },
+        { "id": "rock_snare", "row": 1, "column": 0, "label": "SNARE", "category": "drum", "color": "green", "sample": "drum_snare_rock01.wav" },
+        { "id": "rock_closed_hat", "row": 2, "column": 0, "label": "CL HAT", "category": "drum", "color": "green", "sample": "drum_closed_hat_rock01.wav" },
+        { "id": "rock_open_hat", "row": 3, "column": 1, "label": "OP HAT", "category": "drum", "color": "green", "sample": "drum_open_hat_rock01.wav" },
+        { "id": "rock_crash", "row": 0, "column": 6, "label": "CRASH", "category": "fx", "color": "orange", "sample": "drum_crash_rock01.wav" },
+        { "id": "rock_tom_high", "row": 1, "column": 3, "label": "TOM HI", "category": "perc", "color": "indigo", "sample": "drum_tom_high_rock01.wav" },
+        { "id": "rock_tom_low", "row": 2, "column": 3, "label": "TOM LOW", "category": "perc", "color": "indigo", "sample": "drum_tom_low_rock01.wav" },
+        { "id": "rock_clap", "row": 0, "column": 7, "label": "CLAP", "category": "perc", "color": "indigo", "sample": "drum_clap_rock01.wav" }
+      ]
+    },
+    {
+      "id": "template_jazz01",
+      "name": "Jazz",
+      "accentColor": "#d9a441",
+      "pads": [
+        { "id": "jazz_kick", "row": 0, "column": 0, "label": "KICK", "category": "drum", "color": "green", "sample": "drum_kick_jazz01.wav" },
+        { "id": "jazz_snare", "row": 1, "column": 0, "label": "SNARE", "category": "drum", "color": "green", "sample": "drum_snare_jazz01.wav" },
+        { "id": "jazz_ride", "row": 0, "column": 3, "label": "RIDE", "category": "perc", "color": "indigo", "sample": "drum_ride_jazz01.wav" },
+        { "id": "jazz_brush", "row": 1, "column": 3, "label": "BRUSH", "category": "perc", "color": "indigo", "sample": "drum_brush_jazz01.wav" },
+        { "id": "jazz_rim", "row": 2, "column": 3, "label": "RIM", "category": "perc", "color": "indigo", "sample": "drum_rim_jazz01.wav" },
+        { "id": "jazz_closed_hat", "row": 2, "column": 0, "label": "CL HAT", "category": "drum", "color": "green", "sample": "drum_closed_hat_jazz01.wav" },
+        { "id": "jazz_open_hat", "row": 3, "column": 1, "label": "OP HAT", "category": "drum", "color": "green", "sample": "drum_open_hat_jazz01.wav" },
+        { "id": "jazz_tom", "row": 0, "column": 7, "label": "TOM", "category": "perc", "color": "indigo", "sample": "drum_tom_jazz01.wav" }
+      ]
+    },
+    {
+      "id": "template_dnb01",
+      "name": "Drum & Bass",
+      "accentColor": "#2fb5a8",
+      "pads": [
+        { "id": "dnb_kick", "row": 0, "column": 0, "label": "KICK", "category": "drum", "color": "green", "sample": "drum_kick_dnb01.wav" },
+        { "id": "dnb_snare", "row": 1, "column": 0, "label": "SNARE", "category": "drum", "color": "green", "sample": "drum_snare_dnb01.wav" },
+        { "id": "dnb_break", "row": 2, "column": 1, "label": "BREAK", "category": "drum", "color": "green", "sample": "drum_break_dnb01.wav" },
+        { "id": "dnb_closed_hat", "row": 3, "column": 0, "label": "CL HAT", "category": "drum", "color": "green", "sample": "drum_closed_hat_dnb01.wav" },
+        { "id": "dnb_open_hat", "row": 4, "column": 1, "label": "OP HAT", "category": "drum", "color": "green", "sample": "drum_open_hat_dnb01.wav" },
+        { "id": "dnb_sub", "row": 0, "column": 2, "label": "SUB", "category": "bass", "color": "blue", "sample": "bass_sub_dnb01.wav" },
+        { "id": "dnb_perc", "row": 0, "column": 7, "label": "PERC", "category": "perc", "color": "indigo", "sample": "perc_dnb01.wav" },
+        { "id": "dnb_fx", "row": 0, "column": 6, "label": "FX", "category": "fx", "color": "orange", "sample": "fx_dnb01.wav" }
+      ]
+    },
+    {
+      "id": "template_hiphop01",
+      "name": "HipHop",
+      "accentColor": "#ff5b2b",
+      "pads": [
+        { "id": "hiphop_kick", "row": 0, "column": 0, "label": "KICK", "category": "drum", "color": "green", "sample": "drum_kick_hiphop01.wav" },
+        { "id": "hiphop_snare", "row": 1, "column": 0, "label": "SNARE", "category": "drum", "color": "green", "sample": "drum_snare_hiphop01.wav" },
+        { "id": "hiphop_clap", "row": 0, "column": 1, "label": "CLAP", "category": "drum", "color": "green", "sample": "drum_clap_hiphop01.wav" },
+        { "id": "hiphop_closed_hat", "row": 2, "column": 0, "label": "CL HAT", "category": "drum", "color": "green", "sample": "drum_closed_hat_hiphop01.wav" },
+        { "id": "hiphop_open_hat", "row": 3, "column": 1, "label": "OP HAT", "category": "drum", "color": "green", "sample": "drum_open_hat_hiphop01.wav" },
+        { "id": "hiphop_808", "row": 0, "column": 2, "label": "808", "category": "bass", "color": "blue", "sample": "bass_808_hiphop01.wav" },
+        { "id": "hiphop_perc", "row": 0, "column": 7, "label": "PERC", "category": "perc", "color": "indigo", "sample": "perc_hiphop01.wav" },
+        { "id": "hiphop_vocal_chop", "row": 1, "column": 7, "label": "CHOP", "category": "vocal", "color": "teal", "sample": "vocal_chop_hiphop01.wav" }
+      ]
+    }
+  ]
+}

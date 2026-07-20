@@ -23,7 +23,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "validate:templates": "node scripts/validate_templates.mjs",
+    "validate:interaction": "node scripts/validate_interaction_contract.mjs",
+    "validate:interaction-implementation": "node scripts/validate_interaction_implementation.mjs",
+    "validate:project": "node scripts/validate_project.mjs"
   },
   "private": true
 }

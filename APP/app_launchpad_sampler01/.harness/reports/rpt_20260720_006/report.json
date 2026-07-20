@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260720_006",
+  "projectId": "app_launchpad_sampler01",
+  "milestoneId": null,
+  "taskId": "T3",
+  "phase": "build",
+  "kind": "task_report",
+  "date": "2026-07-20",
+  "title": "T3 テンプレートデータ契約・検証スクリプト完了",
+  "summary": "4テンプレート、32割当パッド、静的sampleMap、依存なしの検証スクリプトをSOL判断で実装し、G2相当のデータ整合を確認した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5.6-sol",
+  "startedAt": "2026-07-20T13:21:00+09:00",
+  "completedAt": "2026-07-20T13:43:00+09:00",
+  "durationMin": 22,
+  "tokensUsed": null,
+  "outcomes": [
+    "RN_types.tsにテンプレート、パッド、カテゴリ、色、モード、状態の型契約を定義した。",
+    "system_templates.jsonにRock、Jazz、Drum & Bass、HipHopを各8音ずつ定義した。",
+    "sampleMap.tsに32 WAVの静的requireマップを定義した。",
+    "validate_templates.mjsでG2の5検査項目とカテゴリ/色対応を機械検証できるようにした。"
+  ],
+  "verification": [
+    "node scripts/validate_templates.mjs: pass。Templates=4、Assigned pads=32、Referenced samples=32、Static sampleMap keys=32。",
+    "検査内容: テンプレート数、各テンプレート最低8音、WAV実在、sampleMap整合、row/column範囲・重複、カテゴリ/色対応。",
+    "node --check scripts/validate_templates.mjs: pass。",
+    "npm run typecheck: pass、TypeScriptエラー0。"
+  ],
+  "nextActions": [
+    "T4としてRN_padPlayer.tsにexpo-audioのテンプレートロード・再トリガー・全解放を実装する。",
+    "T5でHipHopのPad画面と接続し、Android実機で音源再生を確認する。"
+  ],
+  "deliverables": [
+    "src/data/RN_types.ts",
+    "src/data/system_templates.json",
+    "src/data/sampleMap.ts",
+    "scripts/validate_templates.mjs",
+    "DEVBOARD.md"
+  ],
+  "tags": ["task_report", "data-contract", "template", "validation", "sol", "t3"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "JSON、静的asset map、実ファイルの三者をNodeだけで相互検査すると、React Nativeの動的require制約を早期に検出できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

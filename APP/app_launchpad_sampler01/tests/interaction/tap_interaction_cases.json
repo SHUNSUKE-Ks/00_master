@@ -1,0 +1,17 @@
+[
+  { "id": "1-1", "area": "pad", "label": "onPressIn received", "expectedLogPrefix": "[LPS01 1-1]", "required": true, "status": "pending" },
+  { "id": "1-2", "area": "pad", "label": "pressed state requested", "expectedLogPrefix": "[LPS01 1-2]", "required": true, "status": "pending" },
+  { "id": "1-3", "area": "pad", "label": "visual feedback scheduled", "expectedLogPrefix": "[LPS01 1-3]", "metricKey": "pressFeedbackTargetMs", "required": true, "status": "pending" },
+  { "id": "1-4", "area": "audio", "label": "audio trigger requested", "expectedLogPrefix": "[LPS01 1-4]", "required": true, "status": "pending" },
+  { "id": "1-5", "area": "pad", "label": "onPressOut or cancel received", "expectedLogPrefix": "[LPS01 1-5]", "required": true, "status": "pending" },
+  { "id": "1-6", "area": "pad", "label": "idle reset completed", "expectedLogPrefix": "[LPS01 1-6]", "metricKey": "releaseResetTargetMs", "required": true, "status": "pending" },
+  { "id": "2-1", "area": "multitouch", "label": "second pad onPressIn received", "expectedLogPrefix": "[LPS01 2-1]", "required": true, "status": "pending" },
+  { "id": "2-2", "area": "multitouch", "label": "simultaneous pressed IDs confirmed", "expectedLogPrefix": "[LPS01 2-2]", "metricKey": "simultaneousPadCount", "required": true, "status": "pending" },
+  { "id": "2-3", "area": "audio", "label": "independent player overlap requested", "expectedLogPrefix": "[LPS01 2-3]", "required": true, "status": "pending" },
+  { "id": "3-1", "area": "guard", "label": "empty or unknown pad ignored", "expectedLogPrefix": "[LPS01 3-1]", "required": true, "status": "pending" },
+  { "id": "3-2", "area": "guard", "label": "unexpected branch logged with context", "expectedLogPrefix": "[LPS01 3-2]", "metricKey": "unexpectedLogTargetMs", "required": true, "status": "pending" },
+  { "id": "3-3", "area": "guard", "label": "exception contained or rethrown by policy", "expectedLogPrefix": "[LPS01 3-3]", "required": true, "status": "pending" },
+  { "id": "4-1", "area": "mode", "label": "mode selection received", "expectedLogPrefix": "[LPS01 4-1]", "required": true, "status": "pending" },
+  { "id": "4-2", "area": "mode", "label": "mode state update requested", "expectedLogPrefix": "[LPS01 4-2]", "required": true, "status": "pending" },
+  { "id": "4-3", "area": "mode", "label": "mode panel render scheduled", "expectedLogPrefix": "[LPS01 4-3]", "metricKey": "modeSwitchTargetMs", "required": true, "status": "pending" }
+]

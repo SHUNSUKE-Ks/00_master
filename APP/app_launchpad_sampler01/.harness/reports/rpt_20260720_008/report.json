@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260720_008",
+  "projectId": "app_launchpad_sampler01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "t4-t7-implementation",
+  "kind": "phase_report",
+  "date": "2026-07-20",
+  "title": "T4〜T7 RN画面・音声・操作パネル実装",
+  "summary": "4テンプレートJSONと静的sampleMapをReact Native画面へ接続し、32音の再生窓口、48パッド、同時押し、モード、セッションUI状態、テンプレート永続化、番号付き診断ログを実装した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5.6-terra",
+  "startedAt": "2026-07-20T14:20:00+09:00",
+  "completedAt": "2026-07-20T15:05:00+09:00",
+  "durationMin": 45,
+  "tokensUsed": null,
+  "outcomes": [
+    "RN_padPlayerをexpo-audioの唯一のimport窓口にし、テンプレートのロード、再トリガー、解放を実装した。",
+    "4テンプレートを同じRN_ScreenPadへ接続し、8列×6行の48セルと32 WAVを静的sampleMapから解決した。",
+    "onPressIn/onPressOut、120ms復帰、16回連打用の独立Pressable、2パッド同時押しの状態・ログを実装した。",
+    "フィルター/音量の8フェーダー、16枚のFXカード、ホーム4カード、AsyncStorage復元を実装した。",
+    "V-08とAndroid実機記入表を追加し、静的検証と実機測定を明確に分離した。"
+  ],
+  "verification": [
+    "npm run validate:project pass。V-01〜V-08全pass。",
+    "V-08: 15 checkpoint、expo-audio import 1箇所、6x8グリッドを静的検証。",
+    "npm run typecheck pass。",
+    "Android実機の音声、同時発音、連打、実時間は未測定。"
+  ],
+  "nextActions": [
+    "Android Expo Goでtests/interaction/tap_manual_checklist.mdを実行する。",
+    "[LPS01]ログと実測値を同ファイルへ記入し、NFR-TAP-01〜09をpass/fail判定する。",
+    "実機結果を受けてT8 Report、DEVBOARD、tap_nfr_metrics_v0.1.mdを更新する。"
+  ],
+  "deliverables": [
+    "App.tsx",
+    "src/audio/RN_padPlayer.ts",
+    "src/components/RN_Pad.tsx",
+    "src/components/RN_PadGrid.tsx",
+    "src/components/RN_ModeRail.tsx",
+    "src/components/RN_FaderPanel.tsx",
+    "src/components/RN_FxPanel.tsx",
+    "src/components/RN_TemplateCard.tsx",
+    "src/screens/RN_ScreenHome.tsx",
+    "src/screens/RN_ScreenPad.tsx",
+    "src/state/useAppStore.ts",
+    "src/theme/RN_theme.ts",
+    "scripts/validate_interaction_implementation.mjs",
+    "tests/interaction/tap_manual_checklist.md",
+    "DEVBOARD.md"
+  ],
+  "tags": ["phase_report", "react-native", "expo-audio", "multitouch", "interaction", "verification"],
+  "blockedEncountered": ["Android実機は利用者操作が必要なため、音声の実再生・音声重畳・時間計測は未測定。"],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": true, "note": "UIイベントを番号固定の診断ログへ接続し、静的契約検証と端末実測表を分離することで、音声層・状態層・描画層の障害位置を追跡できるようにした。" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

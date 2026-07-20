@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "consolePrefix": "[LPS01",
+  "metrics": {
+    "minimumTouchTargetDp": 48,
+    "pressFeedbackTargetMs": 16.7,
+    "pressFeedbackWarningMs": 33.4,
+    "releaseResetTargetMs": 120,
+    "releaseResetToleranceMs": 30,
+    "modeSwitchTargetMs": 100,
+    "rapidTapCount": 16,
+    "rapidTapIntervalMs": 80,
+    "simultaneousPadCount": 2,
+    "unexpectedLogTargetMs": 10
+  }
+}
