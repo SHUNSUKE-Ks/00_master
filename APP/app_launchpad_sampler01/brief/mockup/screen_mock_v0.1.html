@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>app_launchpad_sampler01 — デザインモック v0.1（機能なし）</title>
+<style>
+  /* ===== デザイントークン（設計書D5のカテゴリ色辞書に準拠） ===== */
+  :root{
+    --bg: #0c0e11;
+    --bg-elev: #16191e;
+    --bg-card: #1d2127;
+    --text: #f2f3f5;
+    --text-dim: #8a919b;
+    --accent: #ff5b2b;            /* HipHopテンプレートのaccentColor */
+    --radius: 14px;
+
+    /* category colors: base(暗地) / ink(文字・アイコン) / lit(点灯) */
+    --drum-base:#0e2b1e;    --drum-ink:#4ade8c;   --drum-lit:#19b869;
+    --bass-base:#0e2337;    --bass-ink:#4db3f0;   --bass-lit:#1f7fd0;
+    --melodic-base:#2a1530; --melodic-ink:#d477e8;--melodic-lit:#c34ddd;
+    --fx-base:#331507;      --fx-ink:#ff8a4d;     --fx-lit:#e85f1e;
+    --perc-base:#1c1a38;    --perc-ink:#9c8cf0;   --perc-lit:#6f5ce0;
+    --vocal-base:#08282a;   --vocal-ink:#3fd6c2;  --vocal-lit:#14a894;
+    --empty-base:#14161a;   --empty-ink:#3a3f47;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; }
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Hiragino Sans","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
+    overflow:hidden; user-select:none;
+  }
+
+  /* ===== 画面切替（モック用タブ。実アプリには存在しない） ===== */
+  .mockbar{
+    position:fixed; top:8px; left:50%; transform:translateX(-50%);
+    display:flex; gap:4px; background:#000a; border:1px solid #ffffff22;
+    border-radius:99px; padding:4px; z-index:99; backdrop-filter:blur(6px);
+  }
+  .mockbar button{
+    border:0; background:transparent; color:var(--text-dim);
+    font-size:12px; padding:5px 14px; border-radius:99px; cursor:pointer;
+  }
+  .mockbar button.on{ background:var(--accent); color:#fff; }
+
+  .screen{ display:none; height:100vh; }
+  .screen.on{ display:flex; }
+
+  /* ============================================================
+     screen_home
+  ============================================================ */
+  #screen_home{ flex-direction:column; align-items:center; justify-content:center; gap:36px; }
+  #screen_home h1{ font-size:22px; letter-spacing:.35em; font-weight:800; }
+  #screen_home h1 small{ display:block; letter-spacing:.1em; font-size:11px; color:var(--text-dim); margin-top:6px; font-weight:400;}
+  .tpl-row{ display:flex; gap:20px; }
+  .tpl-card{
+    width:190px; height:230px; border-radius:18px; background:var(--bg-card);
+    border:1px solid #ffffff14; padding:18px; display:flex; flex-direction:column;
+    cursor:pointer; transition:transform .12s, box-shadow .12s; position:relative; overflow:hidden;
+  }
+  .tpl-card:hover{ transform:translateY(-4px); }
+  .tpl-card .art{
+    height:96px; border-radius:12px; margin-bottom:14px; position:relative; overflow:hidden;
+  }
+  .tpl-card .art::after{ /* 簡易ジェネレイティブ模様 */
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 25% 30%, #ffffff30 0 8%, transparent 9%),
+      radial-gradient(circle at 70% 65%, #ffffff22 0 14%, transparent 15%),
+      radial-gradient(circle at 85% 20%, #00000040 0 10%, transparent 11%);
+  }
+  .tpl-card .g-name{ font-size:17px; font-weight:700; }
+  .tpl-card .g-sub{ font-size:11px; color:var(--text-dim); margin-top:4px; line-height:1.5; }
+  .tpl-card .badge{
+    position:absolute; top:10px; right:10px; font-size:10px; padding:2px 8px;
+    border-radius:99px; background:#000c; color:#fff;
+  }
+  .tpl-card.sel{ outline:2px solid var(--accent); }
+  .tpl-rock .art{ background:linear-gradient(135deg,#8c1f1f,#e64545); }
+  .tpl-jazz .art{ background:linear-gradient(135deg,#6b4a12,#d9a441); }
+  .tpl-dnb  .art{ background:linear-gradient(135deg,#0b4f5e,#2fb5a8); }
+  .tpl-hip  .art{ background:linear-gradient(135deg,#7a2708,#ff5b2b); }
+
+  /* ============================================================
+     screen_pad
+  ============================================================ */
+  #screen_pad{ flex-direction:column; padding:10px 14px 14px; gap:10px; }
+
+  /* --- ヘッダー --- */
+  .padhead{ display:flex; align-items:center; gap:14px; height:44px; flex:none; }
+  .padhead .chev{ font-size:20px; color:var(--text-dim); cursor:pointer; padding:4px 8px;}
+  .padhead .tplchip{ display:flex; align-items:center; gap:10px; }
+  .padhead .tplchip .ico{
+    width:32px; height:32px; border-radius:8px;
+    background:linear-gradient(135deg,#7a2708,var(--accent));
+  }
+  .padhead .tplchip .nm{ font-size:16px; font-weight:700; }
+  .padhead .spacer{ flex:1; }
+  .padhead .hicon{
+    width:30px; height:30px; border-radius:8px; display:grid; place-items:center;
+    color:var(--text-dim); font-size:14px; cursor:pointer;
+  }
+  .padhead .hicon.accent{ color:var(--accent); }
+
+  /* --- 本体レイアウト: グリッド+下部パネル | 右レール --- */
+  .padbody{ flex:1; display:flex; gap:12px; min-height:0; }
+  .padmain{ flex:1; display:flex; flex-direction:column; gap:10px; min-width:0; }
+
+  /* --- パッドグリッド --- */
+  .grid{
+    flex:1; display:grid; min-height:0;
+    grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(6,1fr);
+    gap:6px;
+  }
+  .pad{
+    border-radius:10px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:4px;
+    cursor:pointer; position:relative; overflow:hidden;
+    transition:transform .06s, filter .06s;
+    border:1px solid #ffffff0a;
+  }
+  .pad .cico{
+    width:30px; height:30px; border-radius:50%;
+    border:2px dashed currentColor; display:grid; place-items:center;
+    font-size:13px; opacity:.9;
+  }
+  .pad .cat{ font-size:10px; font-weight:600; letter-spacing:.05em; }
+  .pad .nm{ font-size:11px; opacity:.85; }
+  /* カテゴリ配色 */
+  .pad.drum   { background:var(--drum-base);    color:var(--drum-ink); }
+  .pad.bass   { background:var(--bass-base);    color:var(--bass-ink); }
+  .pad.melodic{ background:var(--melodic-base); color:var(--melodic-ink); }
+  .pad.fx     { background:var(--fx-base);      color:var(--fx-ink); }
+  .pad.perc   { background:var(--perc-base);    color:var(--perc-ink); }
+  .pad.vocal  { background:var(--vocal-base);   color:var(--vocal-ink); }
+  .pad.empty  { background:var(--empty-base);   color:var(--empty-ink); border-style:dashed; cursor:default; }
+  .pad.empty .cico{ border-style:dotted; opacity:.4; }
+  /* 押下(pressed)＝同系色の輝度アップ＋縮小。デザイン確認用にpointerdownで付与 */
+  .pad.pressed{ transform:scale(.96); color:#fff; }
+  .pad.drum.pressed   { background:var(--drum-lit); }
+  .pad.bass.pressed   { background:var(--bass-lit); }
+  .pad.melodic.pressed{ background:var(--melodic-lit); }
+  .pad.fx.pressed     { background:var(--fx-lit); }
+  .pad.perc.pressed   { background:var(--perc-lit); }
+  .pad.vocal.pressed  { background:var(--vocal-lit); }
+  /* active（再生中の余韻）＝外周グロー */
+  .pad.active{ box-shadow:0 0 14px 2px currentColor inset; }
+  /* モードがパッド以外のとき: グリッドを圧縮し簡易表示 */
+  .padmain.compact .grid{ flex:0 0 46%; }
+  .padmain.compact .pad .cat{ display:none; }
+  .padmain.compact .pad .cico{ width:20px; height:20px; font-size:10px; }
+
+  /* --- 下部パネル --- */
+  .panel{ flex:1; display:none; min-height:0; border-radius:var(--radius);
+          background:var(--bg-elev); border:1px solid #ffffff0d; padding:14px; }
+  .padmain.compact .panel.on{ display:flex; }
+
+  /* フェーダー共通: 8本 */
+  .faders{ flex:1; display:grid; grid-template-columns:repeat(8,1fr); gap:14px; align-items:stretch; }
+  .fader{ display:flex; justify-content:center; }
+  .fader .track{ width:44px; border-radius:8px; background:#0a0c0e; position:relative; overflow:hidden; }
+  /* ボリューム型: 塗りバー */
+  .panel.volume .fader .fill{
+    position:absolute; left:6px; right:6px; bottom:6px; border-radius:5px;
+    background:var(--accent); height:var(--v,70%);
+  }
+  /* フィルター型: 細トラック＋ノブ */
+  .panel.filter .fader .track{ width:10px; background:#0a0c0e; }
+  .panel.filter .fader{ position:relative; }
+  .panel.filter .fader .knob{
+    position:absolute; width:44px; height:14px; border-radius:4px;
+    background:var(--accent); bottom:var(--v,30%); left:50%; transform:translateX(-50%);
+    box-shadow:0 2px 8px #0008;
+  }
+
+  /* FXカード 2行×8列 */
+  .fxgrid{ flex:1; display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:1fr 1fr; gap:10px; }
+  .fxcard{
+    border-radius:10px; background:var(--bg-card); border:1px solid #ffffff0d;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    cursor:pointer; transition:filter .08s;
+  }
+  .fxcard .fico{ font-size:26px; color:var(--fx-ink); line-height:1; }
+  .fxcard .fnm{ font-size:10px; color:var(--fx-ink); font-weight:600; }
+  .fxcard.lit{ background:var(--fx-lit); border-color:transparent; }
+  .fxcard.lit .fico, .fxcard.lit .fnm{ color:#fff; }
+
+  /* --- 右レール（4モード: FR-04） --- */
+  .rail{ flex:none; width:86px; display:flex; flex-direction:column;
+         justify-content:flex-end; gap:8px; padding-bottom:6px; }
+  .rmode{
+    height:76px; border-radius:12px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:6px; cursor:pointer;
+    color:var(--text-dim); background:transparent; border:1px solid transparent;
+    font-size:11px;
+  }
+  .rmode .ric{ font-size:18px; }
+  .rmode:hover{ background:#ffffff08; }
+  .rmode.on{ color:var(--accent); border-color:#ff5b2b33; background:#ff5b2b14; }
+
+  /* 状態見本の脚注 */
+  .legend{
+    position:fixed; left:14px; bottom:8px; font-size:10px; color:var(--text-dim);
+    display:flex; gap:14px; z-index:9;
+  }
+  .legend b{ color:var(--text); font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- モック専用の画面切替（実アプリには無い） -->
+<div class="mockbar">
+  <button id="mb_home" class="on" onclick="showScreen('home')">screen_home</button>
+  <button id="mb_pad" onclick="showScreen('pad')">screen_pad</button>
+</div>
+
+<!-- ============ screen_home ============ -->
+<section id="screen_home" class="screen on">
+  <h1>LAUNCHPAD SAMPLER<small>テンプレートを選択</small></h1>
+  <div class="tpl-row">
+    <div class="tpl-card tpl-rock" onclick="showScreen('pad')">
+      <div class="art"></div>
+      <div class="g-name">Rock</div>
+      <div class="g-sub">Kick / Snare / Hat / Crash<br>8 sounds</div>
+    </div>
+    <div class="tpl-card tpl-jazz" onclick="showScreen('pad')">
+      <div class="art"></div>
+      <div class="g-name">Jazz</div>
+      <div class="g-sub">Kick / Ride / Brush / Rim<br>8 sounds</div>
+    </div>
+    <div class="tpl-card tpl-dnb" onclick="showScreen('pad')">
+      <div class="art"></div>
+      <div class="g-name">Drum &amp; Bass</div>
+      <div class="g-sub">Break / Sub / Perc / FX<br>8 sounds</div>
+    </div>
+    <div class="tpl-card tpl-hip sel" onclick="showScreen('pad')">
+      <div class="badge">前回</div>
+      <div class="art"></div>
+      <div class="g-name">HipHop</div>
+      <div class="g-sub">Kick / Clap / 808 / Vocal<br>8 sounds</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ screen_pad ============ -->
+<section id="screen_pad" class="screen">
+  <div class="padhead">
+    <div class="chev" onclick="showScreen('home')">⌄</div>
+    <div class="tplchip"><div class="ico"></div><div class="nm">HipHop</div></div>
+    <div class="spacer"></div>
+    <div class="hicon">⋯</div>
+    <div class="hicon accent">◎</div>
+    <div class="hicon">■</div>
+  </div>
+
+  <div class="padbody">
+    <div class="padmain" id="padmain">
+      <div class="grid" id="grid"><!-- JSで生成 --></div>
+
+      <div class="panel filter" id="panel_filter">
+        <div class="faders">
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:30%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:52%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:18%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:44%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:36%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:64%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:26%"></div></div>
+          <div class="fader"><div class="track"></div><div class="knob" style="--v:40%"></div></div>
+        </div>
+      </div>
+
+      <div class="panel volume" id="panel_volume">
+        <div class="faders">
+          <div class="fader"><div class="track"><div class="fill" style="--v:82%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:78%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:90%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:70%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:84%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:64%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:74%"></div></div></div>
+          <div class="fader"><div class="track"><div class="fill" style="--v:58%"></div></div></div>
+        </div>
+      </div>
+
+      <div class="panel fxpanel" id="panel_fx">
+        <div class="fxgrid" id="fxgrid"><!-- JSで生成 --></div>
+      </div>
+    </div>
+
+    <div class="rail">
+      <div class="rmode on" id="rm_pad" onclick="setMode('pad')"><div class="ric">▦</div>パッド</div>
+      <div class="rmode" id="rm_filter" onclick="setMode('filter')"><div class="ric">◠</div>フィルター</div>
+      <div class="rmode" id="rm_volume" onclick="setMode('volume')"><div class="ric">▮▮</div>ボリューム</div>
+      <div class="rmode" id="rm_fx" onclick="setMode('fx')"><div class="ric">✦</div>FX</div>
+    </div>
+  </div>
+</section>
+
+<div class="legend">
+  <span><b>状態見本:</b> 通常=idle ／ 押下=輝度UP+縮小 ／ 破線枠=empty</span>
+  <span>タップ/クリックで押下デザインを確認できます（音は鳴りません）</span>
+</div>
+
+<script>
+/* ============================================================
+   機能なしのデザインモック。以下は「見た目確認用」の最小スクリプトのみ。
+   （音・状態管理・永続化は一切なし）
+============================================================ */
+
+/* HipHopテンプレート: 設計書D4の配置規約
+   列0-1=ドラム / 列2=ベース / 列3-5=メロディック / 列6=FX / 列7=ボーカル・パーカッション */
+const CAT_ICON = { drum:"◉", bass:"∿", melodic:"❋", fx:"⚡", perc:"⁘", vocal:"♪" };
+const CAT_LABEL = { drum:"ドラム", bass:"ベース", melodic:"メロディック", fx:"FX", perc:"パーカッション", vocal:"ボーカル" };
+const PADS = {
+  "0,0":{cat:"drum", nm:"Kick"},     "0,1":{cat:"drum", nm:"Clap"},
+  "1,0":{cat:"drum", nm:"Snare"},    "1,1":{cat:"drum", nm:"Rim"},
+  "2,0":{cat:"drum", nm:"Cl Hat"},   "2,1":{cat:"drum", nm:"Op Hat"},
+  "0,2":{cat:"bass", nm:"808 C"},    "1,2":{cat:"bass", nm:"808 G"},
+  "0,3":{cat:"melodic", nm:"Keys A"},"1,3":{cat:"melodic", nm:"Keys B"},
+  "0,4":{cat:"melodic", nm:"Pluck"}, "2,4":{cat:"melodic", nm:"Pad Warm"},
+  "0,6":{cat:"fx", nm:"Riser"},      "1,6":{cat:"fx", nm:"Impact"},
+  "0,7":{cat:"vocal", nm:"Chop 1"},  "1,7":{cat:"perc", nm:"Shaker"}
+};
+
+const grid = document.getElementById("grid");
+for (let r = 0; r < 6; r++) {
+  for (let c = 0; c < 8; c++) {
+    const d = PADS[r + "," + c];
+    const el = document.createElement("div");
+    if (d) {
+      el.className = "pad " + d.cat;
+      el.innerHTML = `<div class="cico">${CAT_ICON[d.cat]}</div><div class="cat">${CAT_LABEL[d.cat]}</div><div class="nm">${d.nm}</div>`;
+      el.addEventListener("pointerdown", () => el.classList.add("pressed"));
+      el.addEventListener("pointerup",   () => setTimeout(() => el.classList.remove("pressed"), 120));
+      el.addEventListener("pointerleave",() => el.classList.remove("pressed"));
+    } else {
+      el.className = "pad empty";
+      el.innerHTML = `<div class="cico">·</div>`;
+    }
+    grid.appendChild(el);
+  }
+}
+
+/* FXカード 16枚（要件FR-04の例示名） */
+const FX = ["Stutter","Stutter","Stutter","Stutter","Flanger","Flanger","Gater","Gater",
+            "Autofilter","Autofilter","Autofilter","Stopper","Stopper","Delay","Delay","Delay"];
+const FX_ICON = { Stutter:"◔", Flanger:"≈", Gater:"▥", Autofilter:"◒", Stopper:"⏷", Delay:"⊗" };
+const fxgrid = document.getElementById("fxgrid");
+FX.forEach(nm => {
+  const el = document.createElement("div");
+  el.className = "fxcard";
+  el.innerHTML = `<div class="fico">${FX_ICON[nm]}</div><div class="fnm">${nm}</div>`;
+  el.addEventListener("click", () => el.classList.toggle("lit"));
+  fxgrid.appendChild(el);
+});
+
+/* モード切替（見た目のみ） */
+function setMode(m) {
+  ["pad","filter","volume","fx"].forEach(x => {
+    document.getElementById("rm_" + x).classList.toggle("on", x === m);
+    const p = document.getElementById("panel_" + x);
+    if (p) p.classList.toggle("on", x === m);
+  });
+  document.getElementById("padmain").classList.toggle("compact", m !== "pad");
+}
+
+/* モック用の画面切替 */
+function showScreen(s) {
+  document.getElementById("screen_home").classList.toggle("on", s === "home");
+  document.getElementById("screen_pad").classList.toggle("on", s === "pad");
+  document.getElementById("mb_home").classList.toggle("on", s === "home");
+  document.getElementById("mb_pad").classList.toggle("on", s === "pad");
+}
+</script>
+</body>
+</html>

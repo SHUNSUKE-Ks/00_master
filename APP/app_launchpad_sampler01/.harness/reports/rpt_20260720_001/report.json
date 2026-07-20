@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260720_001",
+  "projectId": "app_launchpad_sampler01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "design",
+  "kind": "decision",
+  "date": "2026-07-20",
+  "title": "React Native初期設計・実装順序・受け入れテストの確定",
+  "summary": "凍結済み要件とHTMLモックをReact Native実装契約へ具体化し、SolからTerraへの切替条件を含む実装順序と受け入れテストを確定した。",
+  "agentId": "codex",
+  "modelProfileId": "codex-default",
+  "startedAt": "2026-07-20T10:15:00+09:00",
+  "completedAt": "2026-07-20T10:33:00+09:00",
+  "durationMin": 18,
+  "tokensUsed": null,
+  "outcomes": [
+    "RNの層構造、ファイル責務、型、状態、音声ライフサイクル、画面レイアウトを実装可能な粒度で確定した。",
+    "8段階の実装順序と各段階の完了ゲートを定義した。",
+    "自動・静的テスト10件とAndroid実機テスト18件を受け入れ基準へ対応付けた。",
+    "T4までSol、T5以降の定型UIはTerra、重要判断と最終判定はSolへ戻す運用を定義した。"
+  ],
+  "verification": [
+    "要件定義、凍結設計D1〜D10、CODEX引継ぎ資料、UI参照、HTMLモック、DEVBOARDを相互照合した。",
+    "設計書内の絶対パスを検査し、既存正資料6件がすべて存在することを確認した。",
+    "受け入れIDの件数を機械確認し、AT-01〜AT-10の10件、MT-01〜MT-18の18件であることを確認した。",
+    "Markdownのコードフェンス数が偶数で、Mermaidブロックが閉じていることを確認した。",
+    "T8成果物の実機検証シートは将来作成物のため、現時点で未作成であることを確認した。"
+  ],
+  "nextActions": [
+    "Solで段階1（T1）のExpo scaffoldとTypeScript strict設定を実施する。",
+    "段階2〜4でWAV、データ契約、RN_padPlayerを確定する。",
+    "段階5以降の定型UI実装をTerraへ移し、節目と最終受け入れをSolで判定する。"
+  ],
+  "deliverables": [
+    "brief/rn_initial_design_v0.1.md",
+    "DEVBOARD.md"
+  ],
+  "tags": [
+    "react-native",
+    "expo",
+    "initial-design",
+    "acceptance-test",
+    "model-routing"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "RNアプリの初期設計、段階ゲート、受け入れマトリクスを一体化する書式は他プロジェクトにも再利用できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}
