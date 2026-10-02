@@ -17,7 +17,8 @@ export default defineConfig({
         theme_color: '#0b1f3a',
         background_color: '#0b1f3a',
         display: 'standalone',
-        orientation: 'portrait',
+        // 端末の向きに合わせる（2026-09-28: portrait 固定だと、入れたアプリ（PWA）がタブレットで横にならなかった）
+        orientation: 'any',
         start_url: '/',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
@@ -34,4 +35,12 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        sandbox: 'sandbox.html',
+      },
+    },
+  },
 })

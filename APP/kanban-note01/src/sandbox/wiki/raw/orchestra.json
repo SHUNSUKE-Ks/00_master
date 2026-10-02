@@ -1,0 +1,40 @@
+{
+  "id": "concept_orchestra",
+  "type": "concept",
+  "name": "Orchestra",
+  "title": "複数agentの指揮（役割分担＋順次調停＋所有権）",
+  "summary": "複数の実行者を単一指揮者（Conductor）が調停する層。役割分担だけでは足りず、順次化・所有権・実体検証が揃って初めて安全に並走できる。",
+  "body": [
+    "## 定義",
+    "",
+    "```",
+    "依頼 → 指揮者（Conductor）→ 役割に応じたagentへ順次分配",
+    "        │  agent同士は直接対話しない（単一指令源）",
+    "        └  完了は実体/プロトコルで検証してから次へ",
+    "```",
+    "",
+    "## 3原則（claudemasterの採用形）",
+    "",
+    "1. **順次化**: 同一成果物に触れるタスクは同時に1つだけ流す（並行spawnの無言上書きを構造的に排除。2026-07-08〜10に3度の実証事故が根拠）。",
+    "2. **所有権**: 1成果物=1owner（task.jsonのowner/lockedAt）。owner未取得の成果物には書かない。",
+    "3. **役割→engine束縛**: 役割ごとにモデル/CLIを固定（設計=opus/実装=sonnet/調査=haiku、ゲーム=CODEX）。コストと得手不得手の最適化。",
+    "",
+    "## 単なる役割分担（CrewAI型）との違い",
+    "",
+    "Manager→Researcher→Writer→Reviewerと役割を並べるだけでは、完了検証と所有権が無く成果物が矛盾する。orchestraの本体は役割表ではなく**調停の規律**。",
+    "",
+    "## claudemasterでの実装",
+    "",
+    "- 実装予定: conductor-lite（順次dispatch＋owner_lock＋VERIFY。M1、KPI-1）",
+    "- 参照実装: jockey（ACP Conductor、完了=RPC Response着地）",
+    "- 現行の代替: TaskBoard（ファイル真実源）＋lane遷移＋検収フロー"
+  ],
+  "sources": [
+    "実読: 01_Library/01_Library/jockey/topics/conductor_ownership.md（jockey設計doc§1.1/§9の要約）",
+    "実証: 並行書き込み事故3件（02_Output/2026-07-10_fable_briefing.md §3-1）",
+    "裁定: 02_Output/2026-07-10_fable_decisions.md 裁定2"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11"
+}

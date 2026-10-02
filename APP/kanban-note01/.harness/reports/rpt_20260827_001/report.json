@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260827_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "discovery",
+  "kind": "decision",
+  "date": "2026-08-27",
+  "title": "kanban-note01 機能索引の作成",
+  "summary": "未完成のノートアプリをコード読解し、再利用可能な技術トピックと分離境界を文書化した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-08-27T17:36:00+09:00",
+  "completedAt": "2026-08-27T17:52:00+09:00",
+  "durationMin": 16,
+  "tokensUsed": null,
+  "outcomes": [
+    "指定機能と隠れた機能を12件の再利用技術トピックとして整理した。",
+    "各トピックに目的、利用者挙動、状態・データ、依存先、根拠行、分離境界を記載した。"
+  ],
+  "verification": [
+    "対象および上位のAGENTS.mdを確認した。",
+    "主要ソースの行番号を読み取り確認した。",
+    "git diff --checkを実行し、今回追加した文書に形式エラーがないことを確認した。"
+  ],
+  "nextActions": [
+    "Story Notebook、Scenario Composer、Asset Galleryの採用範囲を決める。",
+    "見出し会話ログの安定IDと人物参照IDのデータ設計を決める。"
+  ],
+  "deliverables": [
+    "docs/機能索引_再利用技術トピック_20260827.md"
+  ],
+  "tags": ["discovery", "functional-index", "note", "gallery"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "混在した試作アプリを、根拠行付きの再利用トピックへ分解する文書形式は他アプリにも再利用できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

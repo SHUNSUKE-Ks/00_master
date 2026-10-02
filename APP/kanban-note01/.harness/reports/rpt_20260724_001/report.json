@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260724_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "study-library",
+  "kind": "phase_report",
+  "date": "2026-07-24",
+  "title": "旧State駆動資料の隔離保管と二階層目録",
+  "summary": "2026年4〜5月のState駆動・HTMLゲーム・SolidJS移行メモを、現行Study資料と分離した旧資料棚へ保管した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-07-24T00:00:00+09:00",
+  "completedAt": "2026-07-24T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "Studyに旧資料 / State草稿カテゴリを追加した。",
+    "JSON状態機械、HTMLゲーム構造、SolidJS移行の原文保管資料を追加した。",
+    "2026-07-31の学習資料カンバン引き渡しで使える二階層目録を追加した。"
+  ],
+  "verification": [
+    "StudyCard型とカテゴリ定義を旧資料カテゴリへ拡張した。",
+    "各CardのMarkdownパスと目次からのリンクを確認した。"
+  ],
+  "nextActions": [
+    "追加の旧資料は同じlegacy/state-driven配下に保管し、目次へ追記する。",
+    "2026-07-31に目録を基に学習資料をカンバンへ引き渡す。"
+  ],
+  "deliverables": [
+    "public/study-blog/legacy/state-driven/目次.md",
+    "public/study-blog/legacy/state-driven/json-state-machine.md",
+    "public/study-blog/legacy/state-driven/html-game-structure.md",
+    "public/study-blog/legacy/state-driven/solidjs-migration.md",
+    "src/dataBridge/studyLibrary.ts",
+    "src/pages/PageStudy.tsx"
+  ],
+  "tags": ["Study", "旧資料", "State駆動", "目録", "保管"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "旧資料を現行方針と混ぜず、原文保管と二階層索引をセットにする方式は、今後の学習資料受け入れにも再利用できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

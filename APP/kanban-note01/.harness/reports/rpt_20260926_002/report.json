@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260926_002",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-26",
+  "title": "修正依頼2: ナレーションをAlt+0共通に、ページ送り、PCの左右縦長NAV、下の帯をPCで非表示",
+  "summary": "V2.1 の会話ログを修正依頼2に合わせた。ナレーションは名前札なし・全作品共通の Alt+0、会話の一番下にページ送り、PC幅では左（目次ステッパー・人物・Scene一覧）と右（WW・演出tag）にアイコン1マスの縦長NAVを置き、下の帯はPC幅で隠した（部品は残し、スマホでは使う）。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-26T05:00:00+09:00",
+  "completedAt": "2026-09-26T06:10:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "ナレーション: 名前札を出さず、字数の目安も当てない。Alt+0（全作品共通）。番号つきの人物（Alt+1〜9）からは外した。KeyDeckの書き出しにも ALT+0 の枠を足した。作品ページには「0 ナレーション（全作品共通）」の行",
+    "ページ送り: 会話の一番下に「← 前のページへ」「次のページへ →」（行き先の場面名つき、端では押せない）",
+    "左NAV: 目次（場面のステッパー。いまの場面の柱も並べ、押すとそこへ移る）／人物（立ち絵・番号・説明、押すとセリフ）／Scene一覧（作品の全ての柱と、それがある場面）",
+    "右NAV: WW（置き場は未定の案内）／演出tag（タグ辞書。書いている備考のカーソル位置に貼る。備考でなければ直下に備考を作る）",
+    "下の帯（Sceneの行＋人物ボタン）: PC幅では隠す。部品は残し、スマホ幅では今まで通り。柱の記入ステートの候補はPCでも出す",
+    "タグ辞書の候補を src/v21/TagPicker.tsx に切り出し、下書きと会話ログで共通にした",
+    "納品（はじまりの町の防衛線）の登場人物からナレーションを外し、説明は素材一覧の最初の一文だけにした"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "PC幅の jsdom テスト 23件 PASS（左右のNAVとアイコン、既定のパネル、下の帯が隠れる、ステッパー、ページ送り、ナレーションに名前札も目安も無い、Alt+0、人物パネルの 0＋1〜4 と立ち絵、Alt+3＝小鬼の斥候、Scene一覧と移動、演出tagが備考に入る、柱の記入ステートの候補、パネルの開閉）",
+    "回帰: V2.1 の流れ 28・ヘルプ 16・下書き 26（TagPicker 切り出し後）・柱 19・納品 20、Vol1.1 の会話ログ 21・12、読み書き 14 すべて PASS",
+    "未実施: 実機での目視、本番への再デプロイ（利用者の確認待ち）"
+  ],
+  "nextActions": [
+    "本番へ再デプロイするか確認する",
+    "スマホ幅でも下の帯を隠すかを決める（隠すと、スマホで人物ボタンを押す手段が無くなる）",
+    "WW（世界観の用語）の置き場を決め、右NAVのWWに候補を出す"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/TagPicker.tsx",
+    "APP/kanban-note01/src/v21/DraftsV21.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/src/utils/keydeckExport.ts",
+    "APP/kanban-note01/public/deliveries/hajimari_defense/delivery.json",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "talklog", "narration", "side-nav", "pager", "revision"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "画面幅で『下の帯（スマホ）』と『左右の縦長NAV（PC）』を出し分け、同じ操作（人物・柱・タグ）を両方から呼べるようにした。部品を消さずに出し分けるので、後から戻すのも1行で済む"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

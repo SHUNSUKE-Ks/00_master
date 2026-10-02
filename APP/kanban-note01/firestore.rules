@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isNoteAppSource() {
+      return request.resource.data.source == "kanban-note01";
+    }
+
+    function isRpaJob() {
+      return request.resource.data.type == "rpa_job"
+        && request.resource.data.source == "kanban-note01"
+        && request.resource.data.target == "codex";
+    }
+
+    // Note app consultation / scenario / idea bridge.
+    match /memoArchive/{docId} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && isNoteAppSource();
+      allow delete: if false;
+    }
+
+    // Study OSS candidate -> Codex local worker queue.
+    match /rpaJobs/{jobId} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && isRpaJob()
+        && request.resource.data.status == "実行依頼";
+
+      allow update: if signedIn()
+        && resource.data.type == "rpa_job"
+        && isRpaJob()
+        && request.resource.data.status in ["実行依頼", "確認中", "Library化済み", "保留", "失敗"];
+
+      allow delete: if false;
+    }
+
+    // Optional AllAssets gallery bridge used by Note Gallery sync.
+    match /galleryAssets/{assetId} {
+      allow read: if signedIn();
+      allow create, update: if signedIn()
+        && request.resource.data.createdByApp == "note_story";
+      allow delete: if false;
+    }
+
+    // Keep local Note app collections available only when Firebase mode is enabled.
+    match /memos/{docId} {
+      allow read, create, update, delete: if signedIn();
+    }
+    match /blogs/{docId} {
+      allow read, create, update, delete: if signedIn();
+    }
+    match /notebooks/{docId} {
+      allow read, create, update, delete: if signedIn();
+    }
+    match /products/{docId} {
+      allow read, create, update: if signedIn();
+      allow delete: if false;
+    }
+    match /nutrients/{docId} {
+      allow read, create, update: if signedIn();
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

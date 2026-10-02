@@ -42,6 +42,7 @@ function formatCurrentLine(
 
 
 const PageMemo: Component = () => {
+  const [memoView, setMemoView] = createSignal<'editor' | 'cards'>('editor')
   const [selectedId, setSelectedId] = createSignal<string | null>(state.selectedMemoId ?? state.memos[0]?.id ?? null)
   const isMobile = () => window.innerWidth < 768
   const [mobilePanel, setMobilePanel] = createSignal<'list' | 'editor'>('list')
@@ -151,6 +152,13 @@ const PageMemo: Component = () => {
     const id = await addMemo(data)
     setSelectedId(id)
     if (isMobile()) setMobilePanel('editor')
+  }
+
+  async function addCardMemo() {
+    const now = new Date()
+    const id = await addMemo({ title: '', body: '', tags: [], createdAt: now, updatedAt: now })
+    setSelectedId(id)
+    queueMicrotask(() => document.getElementById(`memo-card-title-${id}`)?.focus())
   }
 
   function selectMemo(id: string) {
@@ -500,12 +508,50 @@ const PageMemo: Component = () => {
   )
 
   return (
-    <div class="flex h-full overflow-hidden">
+    <div class="flex h-full flex-col overflow-hidden">
+      <div class="memo-card-toolbar flex shrink-0 items-center justify-between px-4 py-2">
+        <div class="memo-card-view-switch flex gap-1 rounded-lg p-1 text-xs">
+          <button type="button" class="memo-card-view-button rounded-md px-3 py-1.5" classList={{ active: memoView() === 'editor' }} onClick={() => setMemoView('editor')}>通常View</button>
+          <button type="button" class="memo-card-view-button rounded-md px-3 py-1.5" classList={{ active: memoView() === 'cards' }} onClick={() => setMemoView('cards')}>Card View</button>
+        </div>
+        <Show when={memoView() === 'cards'}><button type="button" class="memo-card-add rounded-lg px-3 py-1.5 text-xs" onClick={addCardMemo}>+ Card</button></Show>
+      </div>
+      <Show when={memoView() === 'cards'} fallback={<div class="flex min-h-0 flex-1 overflow-hidden">
       <Show when={!isMobile() || mobilePanel() === 'list'}>
         <List />
       </Show>
       <Show when={!isMobile() || mobilePanel() === 'editor'}>
         <Editor />
+      </Show>
+      </div>}>
+        <section class="memo-card-surface min-h-0 flex-1 overflow-y-auto p-4 md:p-6" aria-label="Card View">
+          <div class="grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <For each={state.memos.filter((memo) => memo.id).map((memo) => memo.id!)} fallback={<p class="text-sm text-gray-500">Cardがありません。+ Cardから追加できます。</p>}>
+              {(memoId) => {
+                const memo = () => state.memos.find((item) => item.id === memoId)
+                return <article class="memo-card-note flex min-h-56 flex-col rounded-xl p-4">
+                <input
+                  id={`memo-card-title-${memoId}`}
+                  type="text"
+                  aria-label="Cardのタイトル"
+                  placeholder="タイトル"
+                  class="memo-card-title w-full text-base font-semibold leading-relaxed outline-none"
+                  value={memo()?.title ?? ''}
+                  onInput={(event) => updateMemo(memoId, { title: event.currentTarget.value, updatedAt: new Date() })}
+                />
+                <textarea
+                  aria-label="Cardの本文"
+                  placeholder="ここに書く"
+                  class="memo-card-body mt-3 min-h-36 w-full flex-1 resize-y text-sm leading-relaxed outline-none"
+                  value={memo()?.body ?? ''}
+                  onInput={(event) => updateMemo(memoId, { body: event.currentTarget.value, updatedAt: new Date() })}
+                />
+                <div class="memo-card-footer mt-3 flex justify-end pt-2"><button type="button" class="memo-card-link text-xs" onClick={() => { setSelectedId(memoId); setMemoView('editor'); setMobilePanel('editor') }}>通常Viewで開く</button></div>
+              </article>
+              }}
+            </For>
+          </div>
+        </section>
       </Show>
 
       {/* ── Tag picker bottom sheet ── */}

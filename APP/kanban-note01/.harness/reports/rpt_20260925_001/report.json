@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "phase_report",
+  "date": "2026-09-25",
+  "title": "NACC機能のkanban-note01への移植",
+  "summary": "商品Gallery、成分カードの直接編集、資料GalleryのPDF全画面閲覧を既存のノートアプリへ追加した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-6-sol",
+  "startedAt": "2026-09-25T08:42:02.4941100+09:00",
+  "completedAt": "2026-09-25T08:42:02.4941100+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "商品カードから商品詳細Viewへ移動できる",
+    "成分カードのタイトル・別名・説明文をカード上で編集できる",
+    "画像とPDFを資料Galleryから全画面で閲覧できる",
+    "指定された初期PDF2件を配置した"
+  ],
+  "verification": [
+    "npm run build: 成功",
+    "git diff --check: エラーなし",
+    "PDF2件の実在と配置先サイズを確認"
+  ],
+  "nextActions": [
+    "利用者の端末で画面操作とPDF表示を確認する"
+  ],
+  "deliverables": [
+    "src/pages/PageDb01.tsx",
+    "src/components/GalleryPanel.tsx",
+    "src/db/products.ts",
+    "src/store/index.ts",
+    "src/types/index.ts",
+    "public/documents/nacc-cosmetics-2026-09-20.pdf",
+    "public/documents/nacc-supplements-2026-09-20.pdf"
+  ],
+  "tags": [
+    "migration",
+    "gallery",
+    "ingredient",
+    "pdf"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "reusable": true,
+    "note": "既存の関連付けと更新関数を再利用した。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

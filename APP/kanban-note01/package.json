@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "verify:sandbox": "node scripts/verify-sandbox.mjs",
+    "preview": "vite preview",
+    "rpa:jobs": "node scripts/rpa-jobs/process-rpa-jobs.mjs"
   },
   "dependencies": {
+    "@kobalte/core": "^0.13.12",
     "@tailwindcss/vite": "^4.3.0",
     "dexie": "^4.4.2",
     "firebase": "^12.13.0",

@@ -1,0 +1,14 @@
+{
+  "format": "note_story_delivery_index",
+  "version": "0.1",
+  "deliveries": [
+    {
+      "packageId": "pkg_hajimari_defense_ep01",
+      "title": "はじまりの町の防衛線",
+      "subtitle": "第一章「勇者が旅立つ理由がない朝」",
+      "cover": "/deliveries/hajimari_defense/trpg-loc-secret-base-morning.webp",
+      "path": "/deliveries/hajimari_defense/delivery.json",
+      "deliveredAt": "2026-09-26T00:00:00+09:00"
+    }
+  ]
+}

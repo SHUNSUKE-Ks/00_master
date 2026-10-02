@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260926_005",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-26",
+  "title": "会話ログ・執筆デスクのサイドバーで登場人物を足す・名前を変える",
+  "summary": "登場人物の編集が作品ページにしか無く、新しいタイトルの会話ログから名前を変えられなかった。サイドバーの人物パネルに ✎（名前の変更）と「＋ 人物を足す」を置き、名前を変えると作品の全場面と下書きのセリフの名前も付け替えるようにした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-26T09:40:00+09:00",
+  "completedAt": "2026-09-26T10:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "CastSidebar.tsx: 人物パネルを部品にして会話ログと執筆デスク（作品の下書き）で共通化。✎ でその場で名前を変える、「＋ 人物を足す」で足す",
+    "renameSpeaker（utils/talkLog.ts）: セリフの話者名だけを付け替え、他の行は1文字も変えない。renameCharacter（actions.ts）が作品の全場面の本文・会話ログ欄と nb.cast を更新",
+    "未登録の作品はログの名前を登録してから足す／変える。仮の名前 CharacterA／B は変えた1人だけ登録",
+    "空・ナレーション・重複・「：「」」を含む名前は断ってパネルに理由を出す",
+    "並べ替え・外すは作品ページのまま（リンクを置いた）。ヘルプに追記",
+    "パネル内の入力欄は押してカーソルを置けるようにした（hold が入力欄を除外）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "登場人物のサイドバー jsdom テスト 19件 PASS（スクショと同じ状況: CharacterA の名前変更で作品登録・この場面と他の場面のセリフ付け替え・続き行の字下げ・画面が追従・オーバーレイが開いたまま、足す・Alt+2、重複／ナレーション／既存名への変更を断る、Esc、作品ページへのリンク、仮の名前は1人だけ登録。PC幅の執筆デスクで足す・変える・下書きのセリフも付け替え）",
+    "回帰: V2.1 の流れ 28・ヘルプ 16・下書き 26・柱 21・スマホ 16・納品 20・PC幅 25・執筆デスク 49 すべて PASS（PC幅と執筆デスクのテストは ✎ ボタンを数えないよう選び方を直した）"
+  ],
+  "nextActions": [
+    "スマホの実機で、名前の変更と追加を試してもらう",
+    "サイドバーから説明（role）や立ち絵も変えたいか確かめる"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/CastSidebar.tsx",
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/utils/talkLog.ts",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/sideNav.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "talklog", "cast", "sidebar", "rename"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "名前はセリフの鍵なので、変更は登録だけでなく全場面のセリフへ伝える必要がある。パーサーの raw 保持のおかげで、変えた行以外を壊さずに付け替えられた"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

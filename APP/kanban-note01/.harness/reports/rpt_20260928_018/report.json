@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_018",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "一覧の「編集」（並べ替え・非表示）、最新の変更ログ、Assets のタブ、シナリオの受信箱、本番デプロイと CC への申し送り",
+  "summary": "Title・Event の一覧の「選択」を「編集」に変え、選ぶ・↑↓で並べ替え・非表示（アーカイブ。見て戻せる）・ごみ箱へ をまとめた。「届いた納品」を「最新の変更ログ」に改名して見出しの下へ置き、最近の変更・納品・外から届いたシナリオを並べる。作品ページの素材は Assets のタブ（All・Character・背景・エネミー・Item）に。外（CC）からシナリオを足す受信箱（note_story_scenario v0.1）と形式の文書を作り、本番へデプロイし、CC への申し送りと技術スタックのお願いを出した。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T18:40:00+09:00",
+  "completedAt": "2026-09-28T20:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "型: Notebook に archivedAt（非表示）・listOrder（並び）・inboxIds（受信箱から取り込んだ packageId）、素材の kind に enemy",
+    "ListTools: 「編集」（EditToggle・EditBar: 非表示／ごみ箱へ／完了、MoveButtons ↑↓）、非表示の一覧（開く・表示に戻す）。並べ替えは更新日時を変えない（変更ログに出さない）。検索・絞り込み中は並べ替えできない",
+    "非表示の Title・Event は一覧・会話ログ・ホームなどに出ない。ページは開けて、上に知らせと「表示に戻す」",
+    "ChangeLogPanel（新）: 最新の変更ログ。Title・Event の更新、納品（取り込む／開く）、受信箱のシナリオ（外から・取り込む／開く）を新しい順に。ふだん4件、「すべて見る」で20件",
+    "inbox.ts（新）: 受信箱の読み込み・形のチェック・取り込み（newEvent: Title の下にイベント／appendScenes: Title かそのイベントに場面）。名前で合わせる。二度取り込まない。public/inbox/index.json（空）",
+    "作品ページ: Assets のタブと、分類を変える「編集」。エネミーは立ち絵と同じ切り抜き。納品 hajimari_defense の小鬼の斥候・牙の魔獣を enemy に（次の取り込みから。取り込み済みの物は「編集」で変える）",
+    "docs/受信箱_シナリオ納品フォーマット_v0.1.md（新）。ヘルプ（タイトル・イベント・作品ページ）",
+    "本番デプロイ（kanban-note01.vercel.app）。UI部品カタログ expand-term-inline/meta.json の usedIn に1行（カタログの決まり）",
+    "C:/00_CreatorCompass/CCへ_NoteStory_V2.1更新と受信箱・技術スタック_20260928.md（更新の案内・受信箱の使い方・技術スタックの許可のお願い・KeyDeck 改善の方針）。KeyDeck の2つのチャット（UI_KEYDECK HUB画面UI向上・統括＿KEYDECK）へ方針を送信（対応不要のお知らせ）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 18本 すべて PASS（計551件）。新: 編集と変更ログ 25件（変更ログが見出しの直下・外からと更新が新しい順・すべて見る・newEvent の取り込みと人物・Character タグ・appendScenes で場面と空き枠・取り込み済み・名前違いの理由・二度取り込まない・形式違い・↑で並べ替え・並べ替えは変更に数えない・↑↓で選ばれない・非表示・非表示 n・会話ログに出ない・開ける・表示に戻す・イベントの非表示）、納品 +5件（変更ログから取り込む・Assets のタブと件数・タブで絞る・編集で分類を変える）",
+    "本番: トップの JS に「最新の変更ログ」「note_story_scenario」「表示に戻す」「エネミー」、/inbox/index.json、納品の enemy 2件を確認",
+    "画面の目視はしていない（開発サーバーは起動していない）"
+  ],
+  "nextActions": [
+    "利用者が本番で Title の「編集」・非表示・変更ログ・Assets のタブを目で確かめる。取り込み済みの小鬼の斥候・牙の魔獣は Assets の「編集」でエネミーに",
+    "CC からの返事: KeyDeck Hub を CH の「別枠」にする許可／新アプリのスタックの確認",
+    "UI部品カタログへの導線（C:/00_master/AGENTS.md に1行・CH の INDEX の説明）を利用者に確認"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/v21/ListTools.tsx",
+    "APP/kanban-note01/src/v21/TitlesV21.tsx",
+    "APP/kanban-note01/src/v21/EventsV21.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/ChangeLogPanel.tsx",
+    "APP/kanban-note01/src/v21/inbox.ts",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/public/inbox/index.json",
+    "APP/kanban-note01/public/deliveries/hajimari_defense/delivery.json",
+    "APP/kanban-note01/docs/受信箱_シナリオ納品フォーマット_v0.1.md",
+    "C:/00_CreatorCompass/CCへ_NoteStory_V2.1更新と受信箱・技術スタック_20260928.md",
+    "C:/00_CreatorHub/projects/DESIGN01_DesignLab/experiments/ui-catalog/patterns/expand-term-inline/meta.json（usedIn のみ）"
+  ],
+  "tags": ["v21", "title", "event", "archive", "reorder", "changelog", "inbox", "assets", "deploy", "techstack"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": true, "note": "外からの書き込みは受信箱を通し、取り込むかどうかを人が決める形にした。外の人はアプリの ID を知らないので名前で合わせ、packageId で二度取り込みを防ぐ" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

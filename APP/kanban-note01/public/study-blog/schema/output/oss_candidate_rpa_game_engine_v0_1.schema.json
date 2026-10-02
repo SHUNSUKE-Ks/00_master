@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Game Engine v0.1",
+  "type": "object",
+  "required": ["repo", "engineCore", "rendering", "scene", "topics"],
+  "properties": {
+    "repo": { "type": "string" },
+    "engineCore": { "type": "string" },
+    "rendering": { "type": "string" },
+    "scene": { "type": "string" },
+    "input": { "type": "string" },
+    "assetPipeline": { "type": "string" },
+    "sampleLinks": { "type": "array", "items": { "type": "string" } },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

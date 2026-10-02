@@ -1,0 +1,36 @@
+{
+  "id": "concept_learning_loop",
+  "type": "concept",
+  "name": "Learning Loop",
+  "title": "成長型ハーネスのサイクル",
+  "summary": "Agentが「実行→観察→反省→記憶→技術化」を回し、使うほど賢くなる循環。Nous Researchが Learning Loop と呼ぶもの。価値の中心はReflection/Skill/Memoryの3つ。",
+  "body": [
+    "## サイクル",
+    "",
+    "```",
+    "Task → Observation → Action → Reflection → Memory → Skill → (改善) → 次のTask",
+    "```",
+    "",
+    "- **Reflection（反省）**: なぜ失敗/成功したか、より良い方法は何かを考える。普通のAgentと違う核心。",
+    "- **Memory（記憶）**: 成功した文脈を保存し次回再利用。",
+    "- **Skill（技術化）**: 一度成功した手順を skill_*.md として保存。次回は短い指示で再実行。",
+    "",
+    "## 価値の中心",
+    "",
+    "Screen（画面操作/ブラウザの目）**ではなく** Reflection / Skill / Memory の3つが価値。",
+    "→ claudemasterでは **Screen(ブラウザ自動化)を追わない**。Claude Codeが既にツールを持つため。",
+    "",
+    "## claudemasterでの実装対応",
+    "",
+    "- Skill生成 = decomposer（動いた成果物→パーツ+再現レシピ+Skill）※**人間承認ゲート付き**（skill_growth_rules）",
+    "- Memory = LLM Wiki本体（Raw/Wiki/Schema）＋既存memory system",
+    "- 実行検証（反省の前提）= VERIFY（run_reader.ps1のrunner実体検証）",
+    "- **自動Skill生成の解禁は3ガード後**: Schema品質基準pass＋VERIFY通過＋人間承認。ガードなしの自動生成は空洞を複製する（2026-07-08〜10に3度実証）。"
+  ],
+  "sources": [
+    "Nous Hermes/Portal解説（ユーザー提供の二次資料 2026-07-10）。一次サイト(nousresearch.com)は方針により未読"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-10",
+  "updatedAt": "2026-07-11"
+}

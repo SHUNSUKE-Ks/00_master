@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_010",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "端末のポップアップをやめ、アプリの中のダイアログに（新しいタイトルは名前とあらすじ）",
+  "summary": "新しいタイトルなどで端末の既存のポップアップ（window.prompt / confirm）が出ていたのを、アプリの中のダイアログ（暗い配色・Enter で決める・Esc と外側でやめる）に置き換えた。V2.1 の10か所すべて。新しいタイトルはタイトル名（必須）とあらすじ（任意）を聞く。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T20:40:00+09:00",
+  "completedAt": "2026-09-28T21:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "dialog.tsx: askConfirm・askText・askForm（Promise を返す）と DialogHost（AppV21 に1つ）。1行の欄は Enter、複数行は Ctrl+Enter で決める。空の必須欄・形の合わない値はダイアログの中で理由を出す。危ない操作は赤いボタン",
+    "置き換えた所: 新しいタイトル（名前＋あらすじ）、名前をまとめる確認、KeyDeck の Deck 名（会話ログ・作品ページ）、下書き・WW・プロットの章／場所を消す確認、ショートカットをすべて消す確認、キー入力モニターのコピーの代わり",
+    "名前の変更（まとめる確認つき）は async にし、呼び出し側（名前札・サイドバー・作品ページ・スマホの人物）を合わせた",
+    "ダイアログが開いているあいだは、登録したショートカットとヘルプのキーを動かさない"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功。src/v21 に window.prompt / confirm / alert は残っていない",
+    "jsdom 13本 すべて PASS（計359件）。登場人物 36（名前をまとめる確認がアプリのダイアログで出る・やめると変わらない・まとめる、新しいタイトルのダイアログ（名前とあらすじ・名前にカーソル・空の名前は断る・あらすじも保存・Esc と外側でやめる））",
+    "開発サーバー（375px）で新しいタイトルのダイアログが幅343px・名前にカーソルで出ることを確認",
+    "本番デプロイはしていない（依頼の文が途中で切れていたため、続きを確認してから）"
+  ],
+  "nextActions": ["依頼の続き（「Title作成するとき、Title…」）を聞く", "デプロイの依頼があれば本番へ"],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/dialog.tsx",
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/CastSidebar.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/DraftsV21.tsx",
+    "APP/kanban-note01/src/v21/WwPanel.tsx",
+    "APP/kanban-note01/src/v21/SettingsV21.tsx",
+    "APP/kanban-note01/src/v21/PlotBoardV21.tsx",
+    "APP/kanban-note01/src/v21/KeyMonitor.tsx",
+    "APP/kanban-note01/src/v21/v21.css"
+  ],
+  "tags": ["v21", "dialog", "ux", "title"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": true, "note": "端末のポップアップは見た目も操作も端末ごとに違う。Promise を返すダイアログにまとめたので、呼び出し側は await に替えるだけで済んだ" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

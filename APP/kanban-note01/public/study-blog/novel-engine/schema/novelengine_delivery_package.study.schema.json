@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.note-story/study/novelengine_delivery_package.study.schema.json",
+  "title": "NovelEngine Delivery Package Study Schema",
+  "description": "Study用の最小納品schema。詳細版は novelEngine/docs/novelengine_content_delivery_package.schema.json を正本にする。",
+  "type": "object",
+  "required": ["meta", "scenario", "assets", "mapping", "acceptance"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["format", "version", "packageId", "title", "sourceApp", "targetEngine"],
+      "properties": {
+        "format": { "const": "novelengine_delivery_package" },
+        "version": { "const": "0.1" },
+        "packageId": { "type": "string", "pattern": "^pkg_[a-zA-Z0-9_]+$" },
+        "title": { "type": "string", "minLength": 1 },
+        "sourceApp": { "type": "string" },
+        "targetEngine": { "const": "novelEngine" }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["format", "path", "adoptTo"],
+      "properties": {
+        "format": { "enum": ["conversation_log_v0_1", "scenario_oneshot", "scenario_main"] },
+        "path": { "type": "string" },
+        "adoptTo": { "type": "string" }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "required": ["images", "audio"],
+      "properties": {
+        "images": { "type": "array", "items": { "$ref": "#/$defs/asset" } },
+        "audio": { "type": "array", "items": { "$ref": "#/$defs/asset" } }
+      }
+    },
+    "mapping": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sceneId"],
+        "properties": {
+          "sceneId": { "type": "string" },
+          "backgroundId": { "type": ["string", "null"] },
+          "characterIds": { "type": "array", "items": { "type": "string" } },
+          "bgmId": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "required": ["status", "checks"],
+      "properties": {
+        "status": { "enum": ["draft", "checking", "accepted", "needs_fix", "rejected"] },
+        "checks": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "required": ["id", "kind", "path", "status"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "type": "string" },
+        "path": { "type": "string" },
+        "status": { "enum": ["draft", "generated", "runtime_ready", "accepted", "needs_fix"] },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

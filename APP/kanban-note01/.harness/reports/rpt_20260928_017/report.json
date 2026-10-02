@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_017",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "Title と Event を分けた（イベント画面・Title の資料の開閉・選択からのごみ箱）",
+  "summary": "見出しに「イベント」を足し、前の Title カードの並べ方をイベント一覧に使った（Title タグ・Character タグ・下書き）。Title 一覧はサムネ＋名前＋Dict の行と「▶ 資料」の開閉（Event・登場人物・Scene・WW）に作り直し、届いた納品は Title 側に残した。Title・Event は見出しの「選択」から選んでごみ箱へ（戻せる・完全に消せる）。開閉の演出は UI部品カタログの expand-term-inline に合わせ、カタログへの導線も点検した。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T16:50:00+09:00",
+  "completedAt": "2026-09-28T18:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "型: Notebook に kind（無し＝Title／event）・titleIds・characterRefs・trashedAt。今ある作品は Title のまま（データを動かさない）",
+    "nav: events の画面、isStoryNotebook／isTitleNotebook／isEventNotebook／isTrashedNotebook。会話ログ・ホーム・執筆デスクの候補・発注リストは Title＋Event、ギャラリーの作品は Title だけ",
+    "EventsV21.tsx（新）: カード（サムネ・名前・Dict・Title タグ・Character タグ・場面数・✎ 下書き）、検索（名前・Dict・人物）、Title で絞る、＋ 新しいイベント（ダイアログで名前・Dict・Title）、＋ 新しいメモ",
+    "TitlesV21.tsx（作り直し）: 行（サムネ・名前・Dict）＋ ▶ 資料（Event（＋ イベント）・登場人物・Scene・アイテム・武器・スキル・用語）。開いた状態を端末ごとに覚える。届いた納品は今の形で下に",
+    "作品ページ: Event のときは Title タグ・Character タグの編集欄、戻るは ← イベント、見出しの光る所も Event ならイベント。Title を外すとその Title の Character タグも外す",
+    "ListTools.tsx（新）: 見出しの小さな「選択」→ 押して選ぶ → 下の帯「ごみ箱へ」（確認）。ごみ箱に物があるときだけ「ごみ箱 n」、中で 戻す／完全に消す（確認・クラウドからも）。ごみ箱が空になったら閉じる",
+    "ダイアログに選ぶ欄（options）を足した。スマホの下のタブを6つに。ヘルプ（タイトル・イベント）",
+    "UI部品カタログ: expand-term-inline の開き方（0fr→1fr・aria-expanded・動きを減らす設定で停止）に合わせ、閉じている間は inert。導線の点検結果と提案を docs に。場所を Claude のメモに登録"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 17本 すべて PASS（計522件）。新: Title と Event 41件（見出しの並び・下のタブ6つ・Title 一覧に Event が出ない・行の形・届いた納品が残る・資料の開閉と aria・inert・開いた状態を覚える・カタログどおりの CSS・資料から Event を開く・Event のページのタグ編集と外すときの連動・Title にはタグ欄が無い・イベント一覧のタグと下書き・納品を出さない・人物で検索・Title で絞る・新しいイベントのダイアログと Title の選択・資料の＋イベントで Title が選ばれる・選択はふだん隠れている・選んでも開かない・ごみ箱への確認・ごみ箱n・戻す・完全に消す・Title のごみ箱と会話ログから外れる・戻す）",
+    "古いテスト5本を新しい一覧の形に合わせた（メニュー6つ・行・Title の行に下書きボタンが無いこと）",
+    "画面の目視はしていない（開発サーバーは起動していない）。本番デプロイはまだ"
+  ],
+  "nextActions": [
+    "開発サーバーか本番で、Title の資料の開閉・イベント・選択とごみ箱を目で確かめる",
+    "デプロイの依頼があれば本番へ。出したら UI カタログ expand-term-inline/meta.json の usedIn に1行",
+    "導線の提案（C:/00_master/AGENTS.md に1行・CreatorHub INDEX の説明）を利用者に確認",
+    "今後: Library から Title へ足す／Template から始める／Event の話者枠と Character タグを結ぶ"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/v21/dialog.tsx",
+    "APP/kanban-note01/src/v21/ListTools.tsx",
+    "APP/kanban-note01/src/v21/EventsV21.tsx",
+    "APP/kanban-note01/src/v21/TitlesV21.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/HomeV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/sceneSlots.ts",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/構想_TitleとEvent・資料・ごみ箱_2026-09-28.md"
+  ],
+  "tags": ["v21", "title", "event", "trash", "selection", "ui-catalog", "disclosure"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": true, "note": "Event を Notebook の種類にしたので、作品ページ・会話ログ・下書き・プロットがそのまま使えた。消すのは trashedAt で隠すだけにし、完全に消すのはごみ箱の中だけにした" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

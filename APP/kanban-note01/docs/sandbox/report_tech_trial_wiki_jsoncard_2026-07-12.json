@@ -1,0 +1,15 @@
+{
+  "kind": "tech_trial",
+  "id": "tech_trial_wiki_jsoncard_20260712",
+  "sourceApp": "kanban-note01",
+  "scope": "sandbox_only",
+  "status": "implemented_pending_manual_verify",
+  "technology": {
+    "rawFormat": "Claude Wiki concepts/entities JSON",
+    "renderer": "SolidJS import.meta.glob",
+    "relationStrategy": "immutable raw copy plus presentation-only relation index",
+    "interaction": "Kobalte Dialog"
+  },
+  "decision": "Raw JSON is treated as an immutable source. Relations are not written back to the raw files and are maintained in a separate Sandbox index.",
+  "next": "After manual UX review, define the shared JsonCard contract and decide the destination for Clip persistence."
+}

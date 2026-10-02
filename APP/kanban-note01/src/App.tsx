@@ -16,10 +16,15 @@ import PageTrash from './pages/PageTrash'
 import PageNotebook from './pages/PageNotebook'
 import PageInbox from './pages/PageInbox'
 import PageDevStudio from './pages/PageDevStudio'
+import PageClaudeNote from './pages/PageClaudeNote'
+import PageTalkLog from './pages/PageTalkLog'
 import InboxComposer from './features/inbox/InboxComposer'
 import SettingsPanel from './components/SettingsPanel'
 import GalleryPanel from './components/GalleryPanel'
 import GalleryPage from './pages/gallery'
+import AppV21 from './v21/AppV21'
+import AppV31 from './v31/AppV31'
+import { appVersion } from './v21/nav'
 
 setFontSize(state.fontSize)
 
@@ -27,6 +32,10 @@ const App: Component = () => {
   onMount(() => {
     if (firebaseEnabled) initFirestore()
   })
+  // V2.1 が既定。Vol1.1（ここから下の旧画面）は凍結して残し、メニュー上部の2タブで切り替える
+  if (appVersion === 'v21') return <AppV21 />
+  // V3.1 化けるNote（2026-10-02）。迷わず書けるシンプルなメモ帳。データは V2.1 と別に持つ
+  if (appVersion === 'v31') return <AppV31 />
   return (
     <Show when={state.page === 'gallery'} fallback={<MainApp />}>
       <GalleryPage />
@@ -43,7 +52,7 @@ const MainApp: Component = () => (
         classList={{ show: state.sidebarOpen }}
         onClick={() => setState({ sidebarOpen: false })}
       />
-      <Show when={state.page !== 'notebook'}>
+      <Show when={state.page !== 'notebook' && state.page !== 'talklog'}>
         <Sidebar />
       </Show>
       <main class="flex-1 overflow-hidden relative">
@@ -85,6 +94,12 @@ const MainApp: Component = () => (
         </Show>
         <Show when={state.page === 'devstudio'}>
           <PageDevStudio />
+        </Show>
+        <Show when={state.page === 'claudenote'}>
+          <PageClaudeNote />
+        </Show>
+        <Show when={state.page === 'talklog'}>
+          <PageTalkLog />
         </Show>
       </main>
       <SettingsPanel />

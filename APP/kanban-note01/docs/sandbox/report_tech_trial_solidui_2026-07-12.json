@@ -1,0 +1,15 @@
+{
+  "kind": "tech_trial",
+  "id": "tech_trial_solidui_kobalte_20260712",
+  "sourceApp": "kanban-note01",
+  "scope": "sandbox_only",
+  "status": "implemented_pending_manual_verify",
+  "technology": {
+    "layoutReference": "SolidUI",
+    "interaction": "@kobalte/core",
+    "style": "CSS theme tokens",
+    "components": ["Button", "Dialog", "Tabs"]
+  },
+  "decision": "SolidUI is used as copied layout reference. Kobalte is used for accessible Dialog and Tabs. No production view is modified.",
+  "next": "Collect visual and interaction feedback, then decide which components migrate to production."
+}

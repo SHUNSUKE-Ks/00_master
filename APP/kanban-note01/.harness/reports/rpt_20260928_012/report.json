@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_012",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "Sceneスロットと下書きの9グリッド（テンキー 1〜9／−＋／0＝絵の発注）・発注リスト",
+  "summary": "ギャラリーの写真を作品の Sceneスロット（9つで1パレット）に登録できるようにした。執筆デスクの Scene サイドバーに「9グリッド」の見え方を足し、押す（テンキー 1〜9）と [Scene_\"名前\"] を本文に書く。− ＋ でパレット、0 は画像の無いラベルだけの Scene を置いて発注リストに 名前・作品・納品先 を書く。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T12:10:00+09:00",
+  "completedAt": "2026-09-28T13:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "型: Notebook.sceneSlots（SceneSlot: id・title・photoId・order）、ImageOrder（deliverTo・note・agent・camera・status open/delivered・requestedAt・deliveredAt）。作品と一緒にクラウドへ保存される",
+    "sceneSlots.ts: 登録・発注・納品・外す（発注から来たスロットは発注に戻る）・消す・並べ替え・発注リスト・発注リストの JSON（note_story.image_order.v0.1）・カメラアングルの仮の候補",
+    "SceneGrid.tsx: サイドバーの幅で 3×3。マス＝サムネ＋Scene 名＋番号。写真の無いマスは「絵待ち」。− ＋ でパレット、「0 ラベルだけ置いて絵を発注」",
+    "執筆デスク: Scene サイドバーの上に「一覧／9グリッド」（端末ごとに覚える。PC の右パネルとスマホのサイドバーの両方）。9グリッドが見えている間だけテンキーを受け取る（見えていなければ数字はふつうに打てる）。0 はアプリのダイアログで 名前（選んだ文字・柱の場所が最初に入る）と どんな絵か を聞く",
+    "ギャラリー: 写真の情報に「Sceneスロット」（作品を選び、新しいスロットに登録／発注中の Scene へ納品。登録済みの一覧と外す）。左に「発注リスト（絵待ち）」: 名前・作品・納品先・依頼日・どんな絵か・カメラ・担当、JSON でコピー、写真を入れて納品、発注をやめる",
+    "ヘルプ（執筆デスク・ギャラリー）を更新"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 15本 すべて PASS（計436件）。新: Sceneスロット 32件（登録・二重登録を断る・9マス・サムネ・見え方を覚える・押す／テンキー1で書く（数字は入らない）・テンキー0の発注（ダイアログ・タグ・納品先・どんな絵か・絵待ち）・10件で2パレット・＋−・パレット2の1番・9番・グリッドを閉じると数字がふつうに打てる・発注リストの件数と並び・カメラ・JSON・写真を入れて納品・発注をやめる・既存の写真で納品・外すと発注に戻る・デスクに納品した絵が出る）",
+    "開発サーバー（スマホ幅）で執筆デスクの Scene サイドバー→9グリッドの表示を確認。確認のため、開発ブラウザで作品「はじまりの町の防衛線」に下書きを1つ作った（この端末だけ）",
+    "本番デプロイはまだ"
+  ],
+  "nextActions": [
+    "CODEX へ画像を頼むときに共有する形（担当 agent・カメラアングル・どんな絵か）を決め、プロンプト辞書につなぐ（本文の「CC への申し送り」）",
+    "パレットの並べ替え・名前の変更を画面から（いまは moveSlot だけ用意）",
+    "会話ログにも9グリッドを出すか検討",
+    "デプロイの依頼があれば本番へ（前回のギャラリー・ダイアログ変更と一緒）"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/src/v21/sceneSlots.ts",
+    "APP/kanban-note01/src/v21/SceneGrid.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/GalleryV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css"
+  ],
+  "tags": ["v21", "gallery", "scene-slot", "numpad", "image-order", "codex"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": true, "note": "発注は『写真の無いスロット』として同じ並びに持たせた。納品＝photoId を入れるだけなので、パレットの番号と発注リストの納品先がずれない" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

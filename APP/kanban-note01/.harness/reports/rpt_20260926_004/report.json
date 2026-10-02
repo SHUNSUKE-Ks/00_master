@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260926_004",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-26",
+  "title": "タイトルの下書きボタン、アイディアメモ（Keep風一覧・10日でごみ箱）、会話ログのNAVつき執筆デスク",
+  "summary": "タイトル一覧の各カードに「下書き」を置き、押すと会話ログと同じ左右のNAV（スマホはオーバーレイ）と共通tagの候補がついた執筆デスクで書き始められるようにした。どの作品にも属さないアイディアメモを足し、Keep風の段組みで並べる一覧と、10日のうちに進捗を変えなければごみ箱へ移す（消さない）きまりを入れた。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-26T07:40:00+09:00",
+  "completedAt": "2026-09-26T09:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "執筆デスク（WritingDeskV21.tsx）: 下書きとメモで共通。左NAV＝一覧・人物・Scene、右NAV＝WW・演出（共通tag）。スマホは「候補」ボタンのオーバーレイ。人物／Alt+1〜9／Alt+0 でセリフの行、Scene で柱の行、共通tagはカーソル位置へ",
+    "候補のHooks を sideNav.tsx の CANDIDATE_HOOKS 1か所にまとめ、会話ログと執筆デスクの両方が読む（柱の行→Scene の柱の候補、備考の行→共通tag）",
+    "タイトル一覧: 各カードに「✎ 下書き」と下書きの数。「＋ 新しいタイトル」の隣に「＋ 新しいメモ」。見出しの見切れを直し、名前の無いカードは「無題」",
+    "作品ページの下書きタブに「執筆デスクで開く」",
+    "アイディアメモ（メニューに「メモ」）: Keep風の段組み＋成分表（NACC）のカードの形。進捗（種・育てる・使う・寝かせる）の札・検索・ごみ箱・元に戻す",
+    "ごみ箱のきまり: 作って（戻して）から10日のうちに進捗を一度も変えないメモは trashedAt をつけてごみ箱へ（消さない）。一度でも変えたメモは対象外。アプリとメモ画面を開いたときに確かめる",
+    "作成日時・更新日時（createdAt / updatedAt）は下書き・メモとも持つが、画面には出さない",
+    "質問（無変換＝左パネル・変換＝右パネル・無変換＋Qで候補を貼る）の回答を修正案の資料に記録。画面には反映していない"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "執筆デスク・メモの jsdom テスト 49件 PASS（PC幅: メニュー5つ、起動時に11日前のメモがごみ箱へ・消えない、下書きボタンで執筆デスク、NAVとパネル、人物・Alt+2・Alt+0、＋柱で柱の候補・絞り込み・入れる・離れると一覧、共通tag、＋備考で演出tag、一覧と新しい下書き、ヘルプ、戻る、下書きの数、新しいメモ・進捗・残り日数・作品ごとの人物、Keep風カード・タグ・あと2日・絞り込み・検索・ごみ箱・元に戻す・手でごみ箱へ・保存。スマホ幅: レールなし・候補ボタン・5タブ・人物・柱の行で自動で開く・離れると閉じる）",
+    "回帰: V2.1 の流れ 28（メニュー5つに更新）・ヘルプ 16・下書き 26・柱 21・スマホ 16・納品 20・PC幅 25 すべて PASS",
+    "Vol1.1 の会話ログは今回ソースを変えていないため再実行していない",
+    "本番デプロイ済み（https://kanban-note01.vercel.app）。公開中の main-DtUzl2hc.js に新しいコードが入っていることを確認。アプリ内ブラウザで本番のタイトル一覧（各カードの下書きボタン、見出しの2ボタン、無題、メニュー5つ）とメモ一覧（空の状態・進捗の札・ごみ箱のきまり）を見た。データを作る操作はしていない"
+  ],
+  "nextActions": [
+    "実機のスマホで執筆デスクとメモ一覧を見る",
+    "無変換／変換のキー操作を入れるか決める（入れるなら KeyDeck の辞書に NONCONVERT・CONVERT を足すか、F13〜F24 で受けるか）",
+    "入力の型（Template）は、今の機能に慣れてから考える（利用者）",
+    "WW（世界観の用語）の置き場を決める"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/MemosV21.tsx",
+    "APP/kanban-note01/src/v21/sideNav.tsx",
+    "APP/kanban-note01/src/v21/drafts.ts",
+    "APP/kanban-note01/src/v21/TitlesV21.tsx",
+    "APP/kanban-note01/src/v21/DraftsV21.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "drafts", "idea-memo", "keep-style", "trash", "writing-desk", "hooks", "keydeck-prototype"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "会話ログのNAVを sideNav.tsx に切り出したので、1枚のテキストで書く画面にも同じ候補（とHooks）を出せた。行の種類をカーソルから読めば、ブロック単位でない入力欄にも同じ表が使える"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

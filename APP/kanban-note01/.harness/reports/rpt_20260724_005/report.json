@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260724_005",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "study-library",
+  "kind": "phase_report",
+  "date": "2026-07-24",
+  "title": "Tauri Studio旧構想とOneShot Prompt辞書目的の分離保管",
+  "summary": "Tauri統合制作環境の原本と、本文には未記載だったOneShot用Scene・部位Prompt辞書の目的を分離してStudyへ保管した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-07-24T00:00:00+09:00",
+  "completedAt": "2026-07-24T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "Tauri Studio構想の原本と要約を作成した。",
+    "OneShot Prompt辞書を、具体語彙のない目的メモとして分離した。",
+    "KingsAIの利用実績が原本にないことを明記した。"
+  ],
+  "verification": [
+    "Study Cardに目次、Tauri Studio要約、OneShot Prompt辞書目的、原本を追加した。",
+    "各要約から原本への見出しリンクを設定した。"
+  ],
+  "nextActions": [
+    "KingsAIまたは具体的な生成Prompt記事が見つかった時に、辞書の語彙・テンプレートを追加する。",
+    "実装を再開する時は現行のTauri/Rust/SolidJS方針と既存AssetRegistryを前提に再設計する。"
+  ],
+  "deliverables": [
+    "public/study-blog/legacy/held-ideas/tauri-studio-prompt-dictionary/目次.md",
+    "public/study-blog/legacy/held-ideas/tauri-studio-prompt-dictionary/TauriStudio_要約.md",
+    "public/study-blog/legacy/held-ideas/tauri-studio-prompt-dictionary/OneShotPrompt辞書_目的.md",
+    "public/study-blog/legacy/held-ideas/tauri-studio-prompt-dictionary/原本チャット_保管.md"
+  ],
+  "tags": ["Study", "保留構想", "Tauri", "OneShot", "Prompt辞書"],
+  "blockedEncountered": ["原本にKingsAI、具体的Scene list、人体部位Prompt語彙が含まれていないため、実辞書は作成していない。"],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "原本の実内容とユーザーが記憶している目的を分離することで、古い資料を誤った名前で再利用するリスクを抑えられる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

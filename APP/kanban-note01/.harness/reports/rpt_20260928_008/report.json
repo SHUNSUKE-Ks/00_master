@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_008",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "design",
+  "kind": "design_decision",
+  "date": "2026-09-28",
+  "title": "構想: 出来事のフローチャートと Scene ごとの登場人物スロット（攻略本のフローチャートを参考に）",
+  "summary": "利用者が示した攻略本のフローチャートのページ（写真3枚）を文字にし、Note Story での作り方（章→Scene（場所名）→一行プロットの縦のつながり、ページ・下書き・WW のリンク、PARTY スロット、Scene スコープのショートカット）と作る順番をまとめた。実装はしていない。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T18:20:00+09:00",
+  "completedAt": "2026-09-28T18:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "写真3枚の文字化（見方の説明・チャート内の項目の意味・実際のページ）",
+    "攻略本の部品と Note Story の対応表、データの形の案（人物・ページ・WW は ID で指す）",
+    "Scene スコープのショートカット（その時点の PARTY を Alt+番号 に使う）の考え方",
+    "作る順番: フローチャートの一覧 → リンク → PARTY スロット → Scene スコープ → バッジと KeyDeck",
+    "追記 §5: JSON の形。ブロックに type（今は plot、将来 novel/adv/cg/sim/battle/map）、名前つきスロット、資料はパスを写さず種類つきの参照（page:/draft:/ww:/cast:/url:/file:）＋型名（schema）。next は1本から始め、選択肢で when 付きに。状態機械（XState）・novelEngine の進行表の元になる"
+  ],
+  "verification": [
+    "資料のみ。コードの変更なし"
+  ],
+  "nextActions": [
+    "利用者の確認後、フローチャートの一覧（作品ページの新しいタブ）から作る"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/docs/構想_フローチャートとScene登場人物スロット_2026-09-28.md"
+  ],
+  "tags": [
+    "design",
+    "flowchart",
+    "plot",
+    "party-slots",
+    "scope"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "参考の写真は、部品ごとに『見た目・意味』の表にしておくと、あとで写真を見返さずに作れる"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

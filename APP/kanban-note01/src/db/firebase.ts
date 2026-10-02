@@ -14,6 +14,7 @@ import {
   orderBy,
   Timestamp,
 } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 import type { Memo, Blog, Notebook, Product, Nutrient, Page } from '../types'
 
 const firebaseConfig = {
@@ -35,8 +36,13 @@ export const firebaseConfigured =
 export const kanbanMemoInboxEnabled =
   import.meta.env.VITE_ENABLE_KANBAN_MEMO_SYNC === 'true' && firebaseConfigured
 
-const app = firebaseEnabled || kanbanMemoInboxEnabled ? initializeApp(firebaseConfig) : null
+export const rpaJobSyncEnabled =
+  (import.meta.env.VITE_ENABLE_RPA_JOB_SYNC === 'true' || import.meta.env.VITE_ENABLE_KANBAN_MEMO_SYNC === 'true') &&
+  firebaseConfigured
+
+const app = firebaseEnabled || kanbanMemoInboxEnabled || rpaJobSyncEnabled ? initializeApp(firebaseConfig) : null
 export const firestore = app ? getFirestore(app) : null
+export const storage = app ? getStorage(app) : null
 const auth = app ? getAuth(app) : null
 
 function requireFirestore() {
@@ -44,7 +50,7 @@ function requireFirestore() {
   return firestore
 }
 
-async function ensureAnonymousUser() {
+export async function ensureAnonymousUser() {
   if (!auth) throw new Error('Firebase auth is disabled.')
   if (auth.currentUser) return auth.currentUser
   const credential = await signInAnonymously(auth)
@@ -286,6 +292,64 @@ export async function fetchIdeaInboxItems(): Promise<IdeaInboxItem[]> {
     .map((entry) => ({ id: entry.id, ...fromFs(entry.data()) } as IdeaInboxItem))
     .filter((item) => item.type === 'idea_inbox')
     .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
+}
+
+// ── RPA job bridge ───────────────────────────────────────────────────────────
+
+export type RpaJobAction = 'rpa' | 'kanji'
+export type RpaJobStatus = '実行依頼' | '確認中' | 'Library化済み' | '保留' | '失敗'
+
+export type RpaJobInput = {
+  candidateId: string
+  repo: string
+  url: string
+  titleOriginal: string
+  concept: string
+  genre: string
+  subGenre: string
+  priority: string
+  sourceType: string
+  reportPath: string
+  action: RpaJobAction
+  formatId: string
+  formatLabel: string
+  schemaPath: string
+  outputFolderPattern: string
+}
+
+export type RpaJobItem = RpaJobInput & {
+  id: string
+  type: 'rpa_job'
+  source: 'kanban-note01'
+  target: 'codex'
+  status: RpaJobStatus
+  createdAt: string
+  updatedAt: string
+}
+
+const RPA_JOBS_COLLECTION = import.meta.env.VITE_RPA_JOBS_COLLECTION || 'rpaJobs'
+
+export async function sendRpaJobToFirebase(input: RpaJobInput): Promise<RpaJobItem> {
+  if (!rpaJobSyncEnabled) {
+    throw new Error('RPA job sync is disabled. Set VITE_ENABLE_RPA_JOB_SYNC=true.')
+  }
+  const db = requireFirestore()
+  await ensureAnonymousUser()
+
+  const now = new Date().toISOString()
+  const id = `rpa_job_${input.candidateId}_${input.action}_${Date.now()}`
+  const item: RpaJobItem = {
+    ...input,
+    id,
+    type: 'rpa_job',
+    source: 'kanban-note01',
+    target: 'codex',
+    status: '実行依頼',
+    createdAt: now,
+    updatedAt: now,
+  }
+  await setDoc(doc(db, RPA_JOBS_COLLECTION, item.id), stripUndefined(item as unknown as Record<string, unknown>), { merge: true })
+  return item
 }
 
 // ── Blogs ────────────────────────────────────────────────────────────────────

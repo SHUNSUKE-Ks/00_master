@@ -1,0 +1,35 @@
+{
+  "id": "entity_json_viz_lab",
+  "type": "entity",
+  "name": "JSON構造ビジュアライザー (json_viz_lab_001)",
+  "title": "教材工房cycle 1の初号製品（HTML教材）",
+  "category": "product",
+  "summary": "JSONを貼って解析ボタンを押すと、オブジェクト/配列/型が階層ツリーで見える学習教材。Vanilla HTML/CSS/JS・外部通信ゼロ・機械検査6/6 pass。教材工房の10日サイクルを初めて完走した実証物。",
+  "body": [
+    "## 実体",
+    "",
+    "- 置き場: `00_Projects/CreatorHub/06_Output/products/product_json_viz_lab/`（製品契約14ファイル）",
+    "- 入口: `app_index.html`（ダブルクリックで起動・インストール不要・オフライン動作）",
+    "- 検証: acceptanceTests 6件（正常4+異常2）をjsdomで機械実行、verdict=pass。verify_report.json同梱",
+    "- 来歴: build_manifest.json（仕様書SHA-256＋工程系譜 task_0012→0015）",
+    "",
+    "## 生産の事実（cycle 1）",
+    "",
+    "| 工程 | 担当 | 結果 |",
+    "|---|---|---|",
+    "| 探索→選定→仕様 | haiku→opus→opus | 全VERIFY PASS |",
+    "| 実装→検査→包装 | sonnet→script→sonnet | 6/6 pass・ハッシュ一致 |",
+    "| 編纂→裁定 | FABLE→人間 | 裁定待ち(Day 10) |",
+    "",
+    "詳細な反省はreflection_report.json（file://制約の教訓・flaky検査の決定化等）。"
+  ],
+  "urls": {},
+  "verdict": "cycle 1完走の実証物。公開可否はDay 10人間裁定待ち",
+  "sources": [
+    "実物: 06_Output/products/product_json_viz_lab/（全14ファイル実在・検証済み）",
+    "工程記録: task_0012〜0015 + verify_report.json + reflection_report.json"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11"
+}

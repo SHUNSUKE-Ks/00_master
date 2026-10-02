@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA AI Asset Workflow v0.1",
+  "type": "object",
+  "required": ["repo", "assetType", "workflow", "input", "output", "topics"],
+  "properties": {
+    "repo": { "type": "string" },
+    "assetType": { "type": "string" },
+    "workflow": { "type": "string" },
+    "input": { "type": "string" },
+    "output": { "type": "string" },
+    "consistency": { "type": "string" },
+    "models": { "type": "array", "items": { "type": "string" } },
+    "runtime": { "type": "string" },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

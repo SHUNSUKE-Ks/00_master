@@ -69,6 +69,14 @@ export function addLocalGalleryPhoto(photo: GalleryPhoto): GalleryPhoto[] {
   return next
 }
 
+export function updateLocalGalleryPhoto(photoId: string, patch: Partial<GalleryPhoto>): GalleryPhoto[] {
+  const next = loadLocalGalleryPhotos().map((photo) =>
+    photo.id === photoId ? { ...photo, ...patch } : photo
+  )
+  saveLocalGalleryPhotos(next)
+  return next
+}
+
 export function deleteLocalGalleryPhoto(photoId: string): GalleryPhoto[] {
   const next = loadLocalGalleryPhotos().filter((photo) => photo.id !== photoId)
   saveLocalGalleryPhotos(next)

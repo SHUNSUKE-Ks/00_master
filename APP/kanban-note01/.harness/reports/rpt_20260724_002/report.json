@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260724_002",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "study-library",
+  "kind": "decision",
+  "date": "2026-07-24",
+  "title": "攻略本化 / Game Knowledge System 制作思考のStudy化",
+  "summary": "攻略本を単なる成果物ではなく、ゲーム本体・HP・図鑑・アセット管理へ再利用する共通データ設計としてStudyに追加した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-07-24T00:00:00+09:00",
+  "completedAt": "2026-07-24T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "制作思考 / 攻略本化カテゴリを追加した。",
+    "Level 01-10と共通データ構造をStudy記事として保存した。",
+    "旧State駆動資料と現行の攻略本化思考を分離した。"
+  ],
+  "verification": [
+    "StudyCard型、カテゴリ、表示グループを制作思考カテゴリへ拡張した。",
+    "目次と本文のファイルパスを追加した。"
+  ],
+  "nextActions": [
+    "実プロジェクトで使う最初のMasterData schemaを、NovelEngineまたはNote02の仕様確定後に作成する。",
+    "攻略本用Componentは必要な作品を選んでからui_componentsとして切り出す。"
+  ],
+  "deliverables": [
+    "public/study-blog/creation-thinking/game-knowledge-system/目次.md",
+    "public/study-blog/creation-thinking/game-knowledge-system/level-01-10.md",
+    "public/study-blog/creation-thinking/game-knowledge-system/common-data-architecture.md",
+    "src/dataBridge/studyLibrary.ts",
+    "src/pages/PageStudy.tsx"
+  ],
+  "tags": ["Study", "制作思考", "攻略本化", "MasterData", "GameKnowledgeSystem"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "情報を正本にしてゲーム、HP、図鑑、アセットViewを分ける構造は、作品ごとに再利用可能な制作テンプレート候補になる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

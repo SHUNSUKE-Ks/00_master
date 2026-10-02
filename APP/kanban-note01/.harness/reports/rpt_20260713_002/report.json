@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260713_002",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "game_ui_reference_and_policy",
+  "kind": "idea",
+  "date": "2026-07-13",
+  "title": "GameUI候補DBとGameUIDesignerAgent規範の追加",
+  "summary": "Gameface-UIを中心とするGameUI候補、DesignerAgentのState、AI風UI抑制規則を保存し、全体像PDFへ追加した。PDFの非埋込フォント問題も互換形式へ修正した。",
+  "agentId": "codex",
+  "modelProfileId": "GPT-5",
+  "startedAt": "2026-07-13T07:00:00+09:00",
+  "completedAt": "2026-07-13T07:15:00+09:00",
+  "durationMin": 15,
+  "tokensUsed": null,
+  "outcomes": [
+    "GameUI GenreへGit候補9件を登録した。",
+    "GameUI専用RPA出力Schemaを追加した。",
+    "GameUIDesignerAgentの5 Stateと出力契約を保存した。",
+    "AI風UI抑制規則8件をJSON化した。",
+    "GameUIAgent研究をResearch資料として保存した。",
+    "全体像PDFへGameUI候補とDesignerAgent規範を追加した。",
+    "PDFを画像格納方式へ変更し、ビューアのフォント依存を解消した。"
+  ],
+  "verification": [
+    "npm run buildが成功した。",
+    "PDFが6ページであることを確認した。",
+    "PDF先頭ページと最終ページをPNGへ再描画し、内容表示と白背景を目視確認した。"
+  ],
+  "nextActions": [
+    "Gameface-UI候補をRPA実行依頼へ送り、部品単位で解析する。",
+    "既存DesignerAgentへGAME_UI Stateを統合する。",
+    "実ゲーム画面でScreenshot Reviewの試験を行う。"
+  ],
+  "deliverables": [
+    "src/dataBridge/ossCandidateDb.ts",
+    "src/dataBridge/outputFormatSchemaDb.ts",
+    "public/study-blog/schema/output/oss_candidate_rpa_game_ui_v0_1.schema.json",
+    "public/study-blog/claude-rpa/GameUI/00_InBox/",
+    "docs/harness/game_ui_designer_agent_ideas_2026-07-13.md",
+    "docs/harness/rules_anti_ai_ui.json",
+    "docs/harness/learning_note_harness_overview_2026-07-13.pdf"
+  ],
+  "tags": ["game-ui", "designer-agent", "solidjs", "gameface-ui", "policy", "pdf"],
+  "blockedEncountered": [
+    "指定名Godot UI Componentsの単独Repositoryは特定できず、Godot公式GUIデモ群を代替登録した。",
+    "初版PDFの日本語CIDフォントがビューアで解決されず、空白表示が発生した。"
+  ],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": true,
+    "templateCandidate": true,
+    "note": "GameUIは自然言語から直接コード化せず、Reference、Spec、Implementation、Screenshot ReviewをStateとして分離する。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

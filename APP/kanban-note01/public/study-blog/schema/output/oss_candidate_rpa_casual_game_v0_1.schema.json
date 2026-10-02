@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Casual Game v0.1",
+  "type": "object",
+  "required": ["repo", "genre", "gameLoop", "state", "rendering", "topics"],
+  "properties": {
+    "repo": { "type": "string" },
+    "genre": { "const": "カジュアルゲーム" },
+    "subGenre": { "type": "string" },
+    "gameLoop": { "type": "string" },
+    "state": { "type": "string" },
+    "rendering": { "type": "string" },
+    "input": { "type": "string" },
+    "asset": { "type": "string" },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

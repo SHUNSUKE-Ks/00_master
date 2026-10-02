@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Harness v0.1",
+  "type": "object",
+  "required": ["agent", "harness", "loop", "topics"],
+  "properties": {
+    "agent": { "type": "string" },
+    "harness": { "type": "string" },
+    "loop": { "type": "string" },
+    "tools": { "type": "string" },
+    "memory": { "type": "string" },
+    "permissions": { "type": "string" },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

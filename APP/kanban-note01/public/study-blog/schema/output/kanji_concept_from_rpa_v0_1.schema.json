@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Kanji Concept From RPA v0.1",
+  "type": "object",
+  "required": ["kanjiKey", "englishTerm", "definition", "sourceFile"],
+  "properties": {
+    "kanjiKey": { "type": "string", "minLength": 2, "maxLength": 4 },
+    "englishTerm": { "type": "string" },
+    "definition": { "type": "string" },
+    "sourceFile": { "type": "string" },
+    "usedIn": { "type": "array", "items": { "type": "string" } },
+    "languageMapping": { "type": "array", "items": { "type": "string" } }
+  }
+}

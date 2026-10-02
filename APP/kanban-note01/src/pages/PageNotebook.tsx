@@ -314,6 +314,7 @@ const PageNotebook: Component = () => {
   const [devStudioInfo, setDevStudioInfo] = createSignal<{ id?: string; sentAt?: string; message?: string } | null>(null)
   const [characterPickerOpen, setCharacterPickerOpen] = createSignal(false)
   const [notebookEditMode, setNotebookEditMode] = createSignal(false)
+  const [pageEditMode, setPageEditMode] = createSignal(false)
   const [characterSearch, setCharacterSearch] = createSignal('')
   const [characterDraft, setCharacterDraft] = createSignal('')
   const [characterVersion, setCharacterVersion] = createSignal(0)
@@ -322,6 +323,7 @@ const PageNotebook: Component = () => {
   const [tagSidebarOpen, setTagSidebarOpen] = createSignal(false)
   const [blockSidebarOpen, setBlockSidebarOpen] = createSignal(false)
   const [templatePanelOpen, setTemplatePanelOpen] = createSignal(false)
+  const [mobileToolsOpen, setMobileToolsOpen] = createSignal(false)
   const [ideaInboxOpen, setIdeaInboxOpen] = createSignal(false)
   const [inboxSyncing, setInboxSyncing] = createSignal(false)
   const [ideaSubject, setIdeaSubject] = createSignal('')
@@ -386,6 +388,31 @@ const PageNotebook: Component = () => {
     setState({ notebooks: current })
     localStorage.setItem('note-story-local-notebooks-v1', JSON.stringify(current))
     console.log('[APP04-NOTE-DB] 14-2 Move notebook', { notebookId: id, delta })
+  }
+
+  function togglePageFavorite(pageId: string) {
+    const nb = selectedNotebook()
+    const page = nb?.pages.find((item) => item.id === pageId)
+    if (!nb?.id || !page) return
+    const pages = nb.pages.map((item) =>
+      item.id === pageId ? { ...item, favorite: !item.favorite } : item
+    )
+    updateNotebook(nb.id, { pages, updatedAt: new Date() })
+    console.log('[APP04-NOTE-PAGE] 16-1 Toggle page favorite', { notebookId: nb.id, pageId, favorite: !page.favorite })
+  }
+
+  function movePage(pageId: string, delta: number) {
+    const nb = selectedNotebook()
+    if (!nb?.id) return
+    const ordered = nb.pages.slice().sort((a, b) => a.order - b.order)
+    const index = ordered.findIndex((item) => item.id === pageId)
+    const target = index + delta
+    if (index < 0 || target < 0 || target >= ordered.length) return
+    const [item] = ordered.splice(index, 1)
+    ordered.splice(target, 0, item)
+    const pages = ordered.map((page, order) => ({ ...page, order }))
+    updateNotebook(nb.id, { pages, updatedAt: new Date() })
+    console.log('[APP04-NOTE-PAGE] 16-2 Move page', { notebookId: nb.id, pageId, delta })
   }
   const ideaNotebook = () => state.notebooks.find((n) => n.id === 'story-ideas' || n.title === 'アイディア帳')
   const inboxNotebook = () => state.notebooks.find((n) => n.id === 'story-inbox' || n.title === 'InBox')
@@ -1725,9 +1752,13 @@ const PageNotebook: Component = () => {
 
   const TogakiEditor = () => (
     <div class="togaki-page-editor flex-1 min-h-0 flex flex-col gap-3">
-      <ScenarioInputSection onInsert={insertScenarioBlock} />
-      <CharacterInputSection onInsert={insertCharacterLine} />
-      <CalloutInputSection onInsert={insertBlockAtCursor} />
+      <Show when={!isMobile() || mobileToolsOpen()}>
+        <div class="togaki-input-tools">
+          <ScenarioInputSection onInsert={insertScenarioBlock} />
+          <CharacterInputSection onInsert={insertCharacterLine} />
+          <CalloutInputSection onInsert={insertBlockAtCursor} />
+        </div>
+      </Show>
       <textarea
         ref={bodyTextareaRef}
         class="togaki-page-textarea flex-1 min-h-56 text-sm font-mono text-nacc-dark border border-nacc-border outline-none bg-white rounded-xl p-4 resize-none leading-relaxed shadow-sm focus:ring-1 focus:ring-nacc-gold/30"
@@ -1857,6 +1888,16 @@ const PageNotebook: Component = () => {
               <div class="flex shrink-0 gap-2">
                 <button
                   class="rounded-lg border border-nacc-border bg-white px-3 py-2 text-xs font-bold text-gray-700 shadow-sm active:scale-[.98]"
+                  classList={{ 'bg-[#3a2e1a] text-white border-nacc-gold/70': pageEditMode() }}
+                  onClick={() => {
+                    setPageEditMode((value) => !value)
+                    console.log('[APP04-NOTE-PAGE] 16-3 Toggle page edit mode')
+                  }}
+                >
+                  編集
+                </button>
+                <button
+                  class="rounded-lg border border-nacc-border bg-white px-3 py-2 text-xs font-bold text-gray-700 shadow-sm active:scale-[.98]"
                   onClick={handleAddTogakiPage}
                 >
                   + ト書き
@@ -1893,7 +1934,8 @@ const PageNotebook: Component = () => {
               >
                 <For each={nb().pages.slice().sort((a, b) => a.order - b.order)}>
                   {(page) => (
-                    <div class="mb-2 flex items-center gap-2 rounded-xl border border-nacc-border bg-white px-3 py-3 shadow-sm">
+                    <div class="mb-2 rounded-xl border border-nacc-border bg-white px-3 py-3 shadow-sm">
+                      <div class="flex items-center gap-2">
                       <button
                         class="min-w-0 flex-1 text-left active:scale-[.99]"
                         onClick={() => {
@@ -1911,13 +1953,46 @@ const PageNotebook: Component = () => {
                           </Show>
                         </p>
                       </button>
-                      <button
-                        class="shrink-0 rounded-lg px-3 py-2 text-xs font-bold text-red-400 active:bg-red-50"
-                        onClick={() => handleDeletePage(page.id)}
-                        title="ページを削除"
-                      >
-                        <Show when={nb().id === 'story-inbox' || nb().title === 'InBox'} fallback="削除">×</Show>
-                      </button>
+                      <Show when={page.favorite}>
+                        <span class="shrink-0 text-amber-500" title="お気に入り">★</span>
+                      </Show>
+                      </div>
+                      <Show when={pageEditMode()}>
+                        <div class="mt-2 flex items-center gap-1 border-t border-nacc-border/70 pt-2">
+                          <button
+                            class="rounded-md px-2 py-1 text-xs font-bold"
+                            classList={{
+                              'bg-amber-100 text-amber-600': Boolean(page.favorite),
+                              'bg-gray-100 text-gray-400': !page.favorite,
+                            }}
+                            onClick={() => togglePageFavorite(page.id)}
+                            title="ページをお気に入り"
+                          >
+                            {page.favorite ? '★' : '☆'}
+                          </button>
+                          <button
+                            class="rounded-md bg-gray-100 px-2 py-1 text-xs font-bold text-gray-500"
+                            onClick={() => movePage(page.id, -1)}
+                            title="上へ"
+                          >
+                            ↑
+                          </button>
+                          <button
+                            class="rounded-md bg-gray-100 px-2 py-1 text-xs font-bold text-gray-500"
+                            onClick={() => movePage(page.id, 1)}
+                            title="下へ"
+                          >
+                            ↓
+                          </button>
+                          <button
+                            class="ml-auto shrink-0 rounded-lg px-3 py-1 text-xs font-bold text-red-400 active:bg-red-50"
+                            onClick={() => handleDeletePage(page.id)}
+                            title="ページを削除"
+                          >
+                            <Show when={nb().id === 'story-inbox' || nb().title === 'InBox'} fallback="削除">×</Show>
+                          </button>
+                        </div>
+                      </Show>
                     </div>
                   )}
                 </For>
@@ -1977,6 +2052,16 @@ const PageNotebook: Component = () => {
                       </button>
                       <button
                         class="text-xs px-3 py-1.5 rounded-lg border border-nacc-border bg-white text-gray-700"
+                        classList={{ 'bg-[#3a2e1a] text-white border-[#b38247]': mobileToolsOpen() }}
+                        onClick={() => setMobileToolsOpen((open) => !open)}
+                      >
+                        ツール
+                      </button>
+                    </div>
+                    <Show when={mobileToolsOpen()}>
+                      <div class="mobile-page-tools-drawer">
+                        <button
+                        class="text-xs px-3 py-1.5 rounded-lg border border-nacc-border bg-white text-gray-700"
                         onClick={() => {
                           setViewMode('edit')
                           setCharacterTargetBlock(null)
@@ -2002,7 +2087,8 @@ const PageNotebook: Component = () => {
                         <SendIcon />
                         <span>{devStudioStatus() === 'sending' ? '送信中...' : 'DevStudioへ送信'}</span>
                       </button>
-                    </div>
+                      </div>
+                    </Show>
                     <Show when={sendStatus() === 'sent' || sendStatus() === 'error' || devStudioStatus() === 'sent' || devStudioStatus() === 'error'}>
                       <div class="px-4 pt-2 text-right text-xs">
                         <Show when={sendStatus() === 'sent' || sendStatus() === 'error'}>
@@ -2034,42 +2120,57 @@ const PageNotebook: Component = () => {
                         when={viewMode() === 'preview'}
                         fallback={
                           <div class="flex-1 min-h-0 flex flex-col gap-2">
-                            <div class="mode-pill self-start shrink-0">
+                            <div class="mobile-editor-tool-strip">
                               <button
-                                classList={{ active: editorMode() === 'note' }}
-                                onClick={() => setEditorMode('note')}
+                                type="button"
+                                class="mobile-editor-tool-trigger"
+                                classList={{ open: mobileToolsOpen() }}
+                                onClick={() => setMobileToolsOpen((open) => !open)}
                               >
-                                Note
+                                <span>{editorMode() === 'togaki' ? 'ト書き' : editorMode() === 'stepMemo' ? '階層' : editorMode() === 'dialogueLog' ? '会話' : editorMode() === 'characterSheet' ? 'Char' : 'Note'}</span>
+                                <small>{mobileToolsOpen() ? '閉じる' : 'モード / Template'}</small>
                               </button>
-                              <button
-                                classList={{ active: editorMode() === 'togaki' }}
-                                onClick={() => setEditorMode('togaki')}
-                              >
-                                ト書き
-                              </button>
-                              <button
-                                classList={{ active: editorMode() === 'stepMemo' }}
-                                onClick={() => setEditorMode('stepMemo')}
-                              >
-                                階層ステップ
-                              </button>
-                              <button
-                                classList={{ active: editorMode() === 'dialogueLog' }}
-                                onClick={() => {
-                                  setActiveScenarioLogScope(null)
-                                  setEditorMode('dialogueLog')
-                                }}
-                              >
-                                会話ログ
-                              </button>
-                              <button
-                                classList={{ active: editorMode() === 'characterSheet' }}
-                                onClick={() => setEditorMode('characterSheet')}
-                              >
-                                Character
-                              </button>
+                              <Show when={mobileToolsOpen()}>
+                                <div class="mobile-editor-tools-panel">
+                                  <div class="mode-pill self-start shrink-0">
+                                    <button
+                                      classList={{ active: editorMode() === 'note' }}
+                                      onClick={() => setEditorMode('note')}
+                                    >
+                                      Note
+                                    </button>
+                                    <button
+                                      classList={{ active: editorMode() === 'togaki' }}
+                                      onClick={() => setEditorMode('togaki')}
+                                    >
+                                      ト書き
+                                    </button>
+                                    <button
+                                      classList={{ active: editorMode() === 'stepMemo' }}
+                                      onClick={() => setEditorMode('stepMemo')}
+                                    >
+                                      階層ステップ
+                                    </button>
+                                    <button
+                                      classList={{ active: editorMode() === 'dialogueLog' }}
+                                      onClick={() => {
+                                        setActiveScenarioLogScope(null)
+                                        setEditorMode('dialogueLog')
+                                      }}
+                                    >
+                                      会話ログ
+                                    </button>
+                                    <button
+                                      classList={{ active: editorMode() === 'characterSheet' }}
+                                      onClick={() => setEditorMode('characterSheet')}
+                                    >
+                                      Character
+                                    </button>
+                                  </div>
+                                  <TemplatePicker />
+                                </div>
+                              </Show>
                             </div>
-                            <TemplatePicker />
                             <Show when={editorMode() === 'stepMemo'}>
                               <div class="scenario-step-tools">
                                 <button
@@ -2335,6 +2436,17 @@ const PageNotebook: Component = () => {
                     />
                     <InboxSyncCheckButton />
                     <button
+                      class="rounded-md px-2 py-1 text-[11px] font-bold border border-nacc-border text-gray-500 hover:bg-white"
+                      classList={{ 'bg-white text-nacc-gold border-nacc-gold/60': pageEditMode() }}
+                      onClick={() => {
+                        setPageEditMode((value) => !value)
+                        console.log('[APP04-NOTE-PAGE] 16-3 Toggle page edit mode')
+                      }}
+                      title="ページの並び替え・削除・お気に入り"
+                    >
+                      編集
+                    </button>
+                    <button
                       class="w-7 h-7 rounded-lg text-gray-400 hover:bg-white hover:text-gray-600 shrink-0"
                       onClick={() => setPagePanelOpen(false)}
                     >
@@ -2359,16 +2471,48 @@ const PageNotebook: Component = () => {
                           }}
                         >
                           <span class="flex-1 min-w-0 truncate">📄 {page.title || '無題'}</span>
+                          <Show when={page.favorite}>
+                            <span class="text-amber-500" title="お気に入り">★</span>
+                          </Show>
                           <Show when={nb().id === 'story-inbox' || nb().title === 'InBox'}>
                             <InboxSyncBadge page={page} />
                           </Show>
-                          <button
-                            class="ml-2 rounded-md px-2 py-1 text-[11px] font-bold text-red-400 hover:bg-red-50 hover:text-red-500 transition-all shrink-0"
-                            onClick={(e) => { e.stopPropagation(); handleDeletePage(page.id) }}
-                            title="ページを削除"
-                          >
-                            <Show when={nb().id === 'story-inbox' || nb().title === 'InBox'} fallback="削除">×</Show>
-                          </button>
+                          <Show when={pageEditMode()}>
+                            <div class="ml-1 flex shrink-0 items-center gap-1">
+                              <button
+                                class="rounded-md px-1.5 py-1 text-[11px] font-bold"
+                                classList={{
+                                  'bg-amber-100 text-amber-600': Boolean(page.favorite),
+                                  'bg-white/70 text-gray-400': !page.favorite,
+                                }}
+                                onClick={(e) => { e.stopPropagation(); togglePageFavorite(page.id) }}
+                                title="ページをお気に入り"
+                              >
+                                {page.favorite ? '★' : '☆'}
+                              </button>
+                              <button
+                                class="rounded-md bg-white/70 px-1.5 py-1 text-[11px] font-bold text-gray-500"
+                                onClick={(e) => { e.stopPropagation(); movePage(page.id, -1) }}
+                                title="上へ"
+                              >
+                                ↑
+                              </button>
+                              <button
+                                class="rounded-md bg-white/70 px-1.5 py-1 text-[11px] font-bold text-gray-500"
+                                onClick={(e) => { e.stopPropagation(); movePage(page.id, 1) }}
+                                title="下へ"
+                              >
+                                ↓
+                              </button>
+                              <button
+                                class="rounded-md px-1.5 py-1 text-[11px] font-bold text-red-400 hover:bg-red-50 hover:text-red-500 transition-all"
+                                onClick={(e) => { e.stopPropagation(); handleDeletePage(page.id) }}
+                                title="ページを削除"
+                              >
+                                <Show when={nb().id === 'story-inbox' || nb().title === 'InBox'} fallback="削除">×</Show>
+                              </button>
+                            </div>
+                          </Show>
                         </div>
                       )}
                     </For>

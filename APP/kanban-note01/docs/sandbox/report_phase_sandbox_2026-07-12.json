@@ -1,0 +1,17 @@
+{
+  "kind": "phase_report",
+  "id": "phase_note_sandbox_20260712",
+  "sourceApp": "kanban-note01",
+  "target": "Claude Sandbox",
+  "phase": "sandbox_base",
+  "status": "implemented_pending_manual_verify",
+  "entry": "/sandbox.html",
+  "storagePrefix": "sandbox_note01_",
+  "productionImports": false,
+  "checks": [
+    "SANDBOX badge is always visible",
+    "seed reset is available",
+    "production App/store/Firebase/dataBridge imports are forbidden",
+    "theme uses CSS variables"
+  ]
+}

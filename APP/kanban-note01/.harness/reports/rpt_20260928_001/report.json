@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "下書きのNAVの押す／長押しを逆に、タブレット横画面の2カラム、下書きの種類とテンプレートボタン、構想まとめ",
+  "summary": "下書きのNAVを 押す＝直書きのタグ／0.6秒長押し＝サイドバー に逆にした。執筆デスクに2カラムを足し、列ごとにタブ（開いている物に緑の丸）とノートの右の境目のNAVを置いた。タブレットの横画面では最初から2カラム。下書きに種類（下書き・イベント・キャラクター・世界観）を持たせ、将来の記入テンプレートのボタンを置いた。あふれたアイディア（サイドパネルは最小から、Template START、MasterDB／Store／Title紐づけ／View）を構想の資料にまとめた。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T09:00:00+09:00",
+  "completedAt": "2026-09-28T11:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "執筆デスクのNAV（スマホの右NAV・PCの左右NAV）: 押す＝[Character_\"\"]・[Scene_\"\"]・[演出_\"\"]、0.6秒長押し＝開く。WW・一覧は押すと開く",
+    "DeskSplitV21.tsx: 1カラム／2カラムの切り替え（端末ごとに覚える。未設定ならタブレット横画面で2カラム）と2カラムの画面。列ごとにタブ（緑の丸・＋・種類）、右の列の下書きを覚える",
+    "WritingDeskV21.tsx: embedded（2カラムの中に入れる）。小さい見出し、ノートの右隣にNAV、サイドバーはその列の中、一覧からの切り替えはその列だけ",
+    "drafts.ts: DraftKind（下書き・イベント・キャラクター・世界観）、setDraftKind。見出しに種類の選択と「テンプレート」ボタン（押せない・準備中）",
+    "docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md: 今回作った物、Title ごとの名前の確認、構想（種類→テンプレート、サイドパネルは最小から、Template START、MasterDB／Store／Title紐づけ／View、進める順番）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 10本 すべて PASS（計286件）。新しい2カラムのテスト 20件（タブレット横画面で最初から2カラム・列ごとのタブと緑の丸・列ごとのノートと右隣のNAV・右の列で押すとその列だけにタグ・左の列の長押しでその列の中にサイドバー・＋で新しい下書き・タブでその列だけ切り替え・種類の保存とタブ表示・テンプレートは押せない・1カラム／2カラムの行き来と右の列を覚える・PCはボタンで2カラム・スマホは出さない）。執筆デスク 76・登場人物 32 は押す／長押しを逆にした操作で更新",
+    "開発サーバー（1180×820）で2カラム: 列が590pxずつ、NAVはそれぞれの列の右端（534〜590px、1124〜1180px）、見出しのはみ出しなし",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-ClgZtVMJ.js に2カラム（緑の丸・端末ごとの切り替え）、テンプレートボタン、下書きの種類のコードが入っていることを確認。実機は未確認"
+  ],
+  "nextActions": [
+    "iPad などの実機の横画面で2カラムを試してもらう",
+    "下書きの種類を使ってみて、最初のテンプレート（キャラクター）を決める"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/DeskSplitV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/drafts.ts",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md"
+  ],
+  "tags": [
+    "v21",
+    "writing-desk",
+    "split",
+    "tablet",
+    "draft-kind",
+    "template",
+    "design-note"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "既存の画面に embedded を足して2つ並べる形にしたので、NAV・サイドバー・直書きタグ・名前の変更などを作り直さずに2カラムで使えた"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

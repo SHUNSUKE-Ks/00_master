@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260927_003",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-27",
+  "title": "登場人物を9つの枠（Character1〜9）に、名前札の名前スペースで作品の登場人物と全セリフを書き換える",
+  "summary": "登場人物を作品ごとの9つの枠にし、初期は Character1〜9 を保存する。Alt+1〜9 はいつでもその枠のセリフを作る。名前札のメニューの先頭を名前のスペースにし、書き換えると作品の登場人物（DB）・全場面のセリフ・サイドバー・作品ページが一緒に変わる。名前の正は作品のDB（nb.cast）で、本文の名前はその写し。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-27T14:00:00+09:00",
+  "completedAt": "2026-09-27T15:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "nav.ts: CAST_SLOTS=9、defaultSlotName、castSlots（登録済み→全場面のセリフの名前→Character番号）、namedCast（人数表示用）",
+    "actions.ts: createTitle が9つの枠を保存、ensureCastSlots（開いたときにそろえて保存）、addCharacter は空きの枠に入れる、clearCastSlot・moveCastSlot、renameCharacter は枠に無い名前を枠の人物へまとめる",
+    "会話ログ: 9つの枠を人物として使い、Alt+1〜9 は常に有効。名前札のメニュー先頭に名前スペース（変える＝作品の全セリフ、下の一覧＝その行だけ）",
+    "作品ページ: 9行の枠。名前の欄の確定でセリフも付け替え（以前は登録だけが変わっていた）、× で空きに戻す",
+    "サイドバー・執筆デスク: 空きの枠を「空き」と表示、＋ 人物を足す は空きの枠へ",
+    "NPC の扱いは提案として回答（ブロックの種類は分けず、場面の人物欄で持つ）。未実装"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom: 登場人物 28（開いたら9つの枠を保存・Alt+3 がすぐ使える・名前札の名前スペースで作品の登場人物と全セリフ・一覧から選ぶとその行だけ・サイドバーの ✎ と足す・重複やナレーションを断る・空の作品は Character1〜9 と Alt+1・作品ページの確定でセリフも変わる・× で空き・人数は名前のある人だけ・枠に無い名前を枠の人物へまとめる・新しいタイトルは9つの枠・執筆デスクでも同じ）ほか、V2.1 の流れ 30・ヘルプ 16・下書き 26・柱 21・スマホ 16・納品 24・PC幅 25・執筆デスク 49 すべて PASS（9つの枠に合わせて期待値を更新）",
+    "開発サーバーで名前札のメニュー（名前スペースに今の名前が選ばれ、入力できる状態・空きの表示）を確認",
+    "本番デプロイはしていない（依頼なし）"
+  ],
+  "nextActions": [
+    "NPC（場面の人物欄・無変換＋1〜9・主要にする）を作るか利用者と決める",
+    "デプロイの依頼があれば本番へ"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/CastSidebar.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/TitlesV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/HomeV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "cast", "slots", "rename", "talklog"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "名前の正を作品のDBに置き、本文の名前は写しとして常にDBから書き換える形にした。本文の書式を変えずに一元管理できるが、他の画面で本文を直接直すと写しがずれるので、ずれた名前は『枠に無い話者』として扱い、名前札からまとめられるようにした"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

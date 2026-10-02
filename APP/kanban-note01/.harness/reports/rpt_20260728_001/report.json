@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260728_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "projectdirector-inbox-submission",
+  "kind": "phase_report",
+  "date": "2026-07-28",
+  "title": "Kanban / Note保有資料をProjectDirector InBoxへ提出",
+  "summary": "Kanban / Noteが管轄する文章資料27件を原本のままコピーし、由来と除外範囲を記した提出目録とともにProjectDirector InBoxへ提出した。",
+  "agentId": "terra",
+  "modelProfileId": "gpt-5-codex",
+  "startedAt": "2026-07-28T19:00:00+09:00",
+  "completedAt": "2026-07-28T19:25:00+09:00",
+  "durationMin": 25,
+  "tokensUsed": null,
+  "outcomes": [
+    "Noteの設計、Study、Sandbox、RPA運用資料を提出した。",
+    "Kanbanの計画、運用、Task棚卸し、Report受信、Chat引継ぎ資料を提出した。",
+    "提出物ごとの元パス・内容を提出目録に記録した。",
+    "InBox目録へ未着手の受付行を登録した。"
+  ],
+  "verification": [
+    "提出フォルダーの存在、資料27件と提出目録1件の計28ファイルを確認した。",
+    "InBox台帳の受付ID INB-20260728-TERRA-KANBAN-NOTE-001 を確認した。",
+    "元データの移動・削除・改名を行っていない。"
+  ],
+  "nextActions": [
+    "ProjectDirector側で内容確認し、OKF化・Mission化・保留を判断する。",
+    "8月移行会議では、提出目録と202608移行候補目録をあわせて参照する。"
+  ],
+  "deliverables": [
+    "C:/00_ProjectDirector/00_受付口/01_Codex_InBox/20260728_Terra_KanbanNote_資料提出/",
+    "C:/00_ProjectDirector/00_受付口/01_Codex_InBox/台帳/InBox目録.md"
+  ],
+  "tags": ["inbox", "migration", "kanban", "note", "raw-materials"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "Raw資料は加工せずコピーし、別の提出目録で由来・範囲・除外を管理すると、後続のOKF整形時に出典を失わない。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

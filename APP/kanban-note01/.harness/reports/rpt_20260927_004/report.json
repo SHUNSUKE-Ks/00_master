@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260927_004",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "incident",
+  "date": "2026-09-27",
+  "title": "Android で下書きにサイドバーが出続ける不具合を直し、右隣の縦長NAVとスマホ専用のジャンル別サイドバーを追加",
+  "summary": "執筆デスクのスマホ幅で、柱の行に入るたびに候補のオーバーレイを自動で開き、フォーカスが外れて戻るたびに開き直して書けなかった。スマホでは自動で開かずアイコンに印を付けるだけにした。あわせて、右隣の縦長NAV（人物・Scene・WW・演出・一覧）から、そのジャンルだけを縦に並べた広めのサイドバーを開く形にし、人物は押す＝貼る・長押し＝名前を変える・左スワイプ＝赤いごみ箱で消す にした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-27T15:40:00+09:00",
+  "completedAt": "2026-09-27T17:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "原因: スマホ幅で柱の行に入ると自動で開くオーバーレイ（約9割の幅）が、閉じる・キーボードの出入りでフォーカスが外れるたびに、戻ると開き直していた",
+    "直し: 執筆デスクのスマホ幅では自動で開かない。カーソルの行に合うアイコン（柱→Scene、備考→演出）に印だけ付ける。PC幅の左右パネルの切り替えはそのまま",
+    "右隣の縦長NAV（.v21-mrail）: 人物・Scene・WW・演出・一覧をワンボタンで開閉",
+    "GenreSheet.tsx: スマホ専用のサイドバー。1ジャンルだけの縦リスト、右のNAVを残した広い幅（最大480px）、ヘッダーに検索窓（変換中は絞らず、確定で絞る）",
+    "SwipeRow.tsx: 押す・長押し・左スワイプで右に赤いごみ箱（白アイコン）。入力欄のフォーカスを奪わない。縦スクロールは邪魔しない",
+    "人物: 押す＝貼る（空の行はセリフの行、文中は名前だけ）、長押し＝名前を変える（作品の登場人物・全セリフ・下書き）、スワイプ＝その番号を空きに戻す。空きの枠はスワイプ不可",
+    "スマホ幅の旧オーバーレイ（右下の候補ボタン）は執筆デスクから外した。ヘルプを更新"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 執筆デスク 63件 PASS（スマホ: 柱の行でフォーカスが外れて戻るのを3回繰り返しても開かない・Scene に印・人物のサイドバーと検索窓・変換中は絞らず確定で絞る・空の行でセリフの行・文中で名前だけ・長押しで名前変更が作品と全セリフと下書きに届く・左スワイプで -84px ずれて赤いごみ箱・押すと空きに戻る・空きはスワイプ不可・Scene／演出（検索で絞る）／WW／一覧・同じアイコンで閉じる）",
+    "回帰: V2.1 の流れ 30・ヘルプ 16・下書き 26・柱 21・スマホの会話ログ 16・納品 24・PC幅 25・登場人物 28 すべて PASS",
+    "開発サーバー（375px）で右のNAVと人物のサイドバー（幅301px、検索窓、10行）を確認。空きの行に赤が透けていたのを直した",
+    "実機の Android では未確認。本番デプロイはしていない（依頼なし）"
+  ],
+  "nextActions": [
+    "Android の実機で書けるか確かめてもらう（デプロイの依頼があれば本番へ）",
+    "会話ログのスマホ幅でも同じように自動で開き続けていないか確認し、必要なら同じ直しを入れる"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/GenreSheet.tsx",
+    "APP/kanban-note01/src/v21/SwipeRow.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "writing-desk", "android", "bugfix", "mobile", "swipe", "search"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "スマホで入力中に画面の大半を覆う物を自動で出すと、閉じる・キーボードの出入りのフォーカス変化で『入り直し』が起き、出し直しの繰り返しになる。スマホでは自動表示をやめ、印で知らせてワンボタンで開く形が安全"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

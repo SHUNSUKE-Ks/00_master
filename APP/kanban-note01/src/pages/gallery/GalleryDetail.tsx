@@ -6,7 +6,7 @@ import {
 } from './store'
 import { addBlog, navigate, setState, state, updateBlog } from '../../store'
 import type { GalleryCategory } from './types'
-import { CATEGORY_LABELS, CATEGORY_BG, CATEGORY_ICON } from './types'
+import { CATEGORY_LABELS, CATEGORY_BG, CATEGORY_ICON, ASSET_STATUS_LABELS, SYNC_STATUS_LABELS } from './types'
 
 const ALL_CATEGORIES: GalleryCategory[] = ['product', 'nutrient', 'reference', 'other']
 
@@ -201,6 +201,23 @@ const GalleryDetail: Component<Props> = (props) => {
                     <MetaRow label="形式" value={it().mimeType.split('/')[1]?.toUpperCase() ?? '—'} />
                     <MetaRow label="作成日" value={formatDate(it().createdAt)} />
                     <MetaRow label="更新日" value={formatDate(it().updatedAt)} />
+                  </div>
+                </div>
+
+                <div class="rounded-xl bg-gray-50 p-3.5">
+                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5">同期</p>
+                  <div class="space-y-2">
+                    <MetaRow label="状態" value={SYNC_STATUS_LABELS[it().syncStatus ?? 'local']} />
+                    <MetaRow label="Asset" value={ASSET_STATUS_LABELS[it().assetStatus ?? 'localDraft']} />
+                    <Show when={it().storagePath}>
+                      <MetaRow label="Storage" value={it().storagePath ?? '—'} />
+                    </Show>
+                    <Show when={it().syncedAt}>
+                      <MetaRow label="同期日時" value={formatDate(it().syncedAt ?? '')} />
+                    </Show>
+                    <Show when={it().syncError}>
+                      <MetaRow label="Error" value={it().syncError ?? ''} />
+                    </Show>
                   </div>
                 </div>
 

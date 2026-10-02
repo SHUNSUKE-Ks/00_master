@@ -1,25 +1,9 @@
 import { type Component, Show, createSignal } from 'solid-js'
 import { state, setState, navigate } from '../store'
-import type { Page } from '../types'
 import { exportLocalWorkspace } from '../dataBridge/localExport'
 import { setGalleryState } from '../pages/gallery/store'
-
-const PAGE_LABELS: Record<Page, string> = {
-  memo:     'scenarioノート',
-  upnote:   'UPNOTE',
-  db01:     'Title DB',
-  db02:     'Character DB',
-  db03:     'DB03 Relation',
-  db10:     'DB10 Status',
-  blog:     '📓 ブログ',
-  study:    'Study',
-  notebook: '📚 ノートブック',
-  inbox:    'InBox DB',
-  trash:    '🗑️ ごみ箱',
-  gallery:  '🖼 ギャラリー',
-  assetTags: '🏷 Asset Tag DB',
-  devstudio: 'Scenario Board',
-}
+import { VersionTabs } from '../v21/VersionTabs'
+import '../v21/v21.css'
 
 const Header: Component = () => {
   const [viewMenuOpen, setViewMenuOpen] = createSignal(false)
@@ -28,6 +12,11 @@ const Header: Component = () => {
   function closeViewMenu() { setViewMenuOpen(false) }
   function goToDevStudio() {
     navigate('devstudio')
+    closeViewMenu()
+  }
+  function goToClaudeNote() {
+    navigate('claudenote')
+    console.log('[CLAUDENOTE-NAV] 1-1 ClaudeNote opened from menu')
     closeViewMenu()
   }
   function goToNotebook(notebookId?: string) {
@@ -57,8 +46,50 @@ const Header: Component = () => {
     console.log('[APP04-ASSETTAGDB-NAV] 4-1 Asset Tag DB page opened')
     closeViewMenu()
   }
+  function openConceptDb() {
+    sessionStorage.setItem('note-story-db-hub-mode-v1', 'conceptDb')
+    navigate('inbox')
+    console.log('[APP04-CONCEPTDB-NAV] 15-1 Concept DB page opened')
+    closeViewMenu()
+  }
+  function openAllAssetsDbDesign() {
+    sessionStorage.setItem('note-story-db-hub-mode-v1', 'allAssets')
+    navigate('inbox')
+    console.log('[APP04-ALLASSETS-NAV] 14-1 AllAssets sample master DB design opened')
+    closeViewMenu()
+  }
 
   const activeNotebookId = () => state.page === 'notebook' ? state.selectedNotebookId : null
+  const headerNoteName = () => {
+    if (state.page === 'inbox') return 'DB'
+    if (state.page === 'devstudio') return 'Scenario Board'
+    if (state.page === 'notebook') {
+      if (state.selectedNotebookId === 'story-ideas') return 'アイディア帳'
+      return 'アイディア帳'
+    }
+    if (state.page === 'blog') return 'ブログ表紙'
+    if (state.page === 'talklog') return '会話ログ'
+    if (state.page === 'study') return 'Study'
+    if (state.page === 'gallery') return 'Gallery'
+    if (state.page === 'assetTags') return 'Asset Tag DB'
+    if (isDbPage()) return 'DB'
+    return 'Note_Story'
+  }
+  const headerStateLabel = () => {
+    if (state.page === 'notebook') {
+      if (!state.selectedNotebookId) return 'default'
+      if (!state.selectedNotebookPageId) return 'ページ一覧'
+      return '書き込み中'
+    }
+    if (state.page === 'inbox') return 'DB Hub'
+    if (state.page === 'gallery') return 'Gallery'
+    if (state.page === 'devstudio') return 'Kanban'
+    if (state.page === 'talklog') return 'Talk Log'
+    if (state.page === 'study') return 'Study'
+    if (state.page === 'blog') return state.blogMode === 'view' ? 'Blog View' : 'Blog Memo'
+    if (isDbPage()) return 'DB'
+    return 'default'
+  }
 
   return (
     <header class="h-12 bg-white border-b border-nacc-border flex items-center px-3 gap-2 shrink-0 z-50 relative">
@@ -78,12 +109,13 @@ const Header: Component = () => {
       {/* Logo + DB View dropdown (DB pages only) */}
       <div class="relative">
         <button
-          class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#0b1f3a] text-white hover:bg-[#12345f] transition-colors shadow-sm"
+          class="flex max-w-[52vw] items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#0b1f3a] text-white hover:bg-[#12345f] transition-colors shadow-sm"
           onClick={() => setViewMenuOpen((v) => !v)}
+          title={`${headerNoteName()} / ${headerStateLabel()}`}
         >
-          <span class="font-bold text-sm tracking-tight">Note_Story</span>
-          <span class="hidden sm:inline text-[10px] font-semibold rounded-full bg-white/12 px-1.5 py-0.5 text-blue-100">
-            scenarioノート
+          <span class="min-w-0 truncate font-bold text-sm tracking-tight">{headerNoteName()}</span>
+          <span class="inline-flex shrink-0 text-[10px] font-semibold rounded-full bg-white/12 px-1.5 py-0.5 text-blue-100">
+            {headerStateLabel()}
           </span>
           <svg
             class="w-3 h-3 text-blue-100 transition-transform"
@@ -98,10 +130,24 @@ const Header: Component = () => {
           <div
             class="absolute left-0 top-10 bg-white border border-nacc-border rounded-xl shadow-lg w-72 max-w-[calc(100vw-1.5rem)] overflow-hidden z-50"
           >
-            <div class="px-3 py-2 text-xs text-gray-400 font-medium border-b border-nacc-border">
-              Note_Story Menu
+            <div class="px-3 py-2 text-xs text-gray-400 font-medium border-b border-nacc-border flex items-center gap-2">
+              <span>Note_Story Menu</span>
             </div>
             <div class="p-1.5 flex flex-col gap-0.5">
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={goToClaudeNote}
+              >
+                <span>CN</span>
+                <div>
+                  <div class="font-medium">ClaudeNote</div>
+                  <div class="text-xs text-gray-400">技術トピックの素材を拾う（読むだけ）</div>
+                </div>
+                <Show when={state.page === 'claudenote'}>
+                  <span class="ml-auto text-nacc-gold text-xs">✓</span>
+                </Show>
+              </button>
+
               <button
                 class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
                 onClick={() => {
@@ -140,10 +186,24 @@ const Header: Component = () => {
               >
                 <span>SN</span>
                 <div>
-                  <div class="font-medium">シナリオノート</div>
-                  <div class="text-xs text-gray-400">本文・アイディア・会話ログを書く</div>
+                  <div class="font-medium">アイディア帳</div>
+                  <div class="text-xs text-gray-400">芽生え・ネタ・企画断片を書く</div>
                 </div>
                 <Show when={activeNotebookId() === 'story-ideas'}>
+                  <span class="ml-auto text-nacc-gold text-xs">✓</span>
+                </Show>
+              </button>
+
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={() => { navigate('talklog'); closeViewMenu() }}
+              >
+                <span>TL</span>
+                <div>
+                  <div class="font-medium">会話ログ</div>
+                  <div class="text-xs text-gray-400">名前とセリフを書く（Alt+1〜9 / KeyDeck）</div>
+                </div>
+                <Show when={state.page === 'talklog'}>
                   <span class="ml-auto text-nacc-gold text-xs">✓</span>
                 </Show>
               </button>
@@ -186,6 +246,17 @@ const Header: Component = () => {
                 <Show when={isDbPage()}>
                   <span class="ml-auto text-nacc-gold text-xs">✓</span>
                 </Show>
+              </button>
+
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={openAllAssetsDbDesign}
+              >
+                <span>AA</span>
+                <div>
+                  <div class="font-medium">AllAssets設計室</div>
+                  <div class="text-xs text-gray-400">Sample MasterDB / DB設計たたき台</div>
+                </div>
               </button>
 
               <Show when={isDbPage()}>
@@ -260,11 +331,46 @@ const Header: Component = () => {
                   <div class="text-xs text-gray-400">DB Hub内で管理</div>
                 </div>
               </button>
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={openConceptDb}
+              >
+                <span class="w-6 h-6 rounded-lg bg-linear-to-br from-amber-600 to-orange-400 text-white flex items-center justify-center text-xs">概</span>
+                <div>
+                  <div class="font-medium">Concept DB</div>
+                  <div class="text-xs text-gray-400">漢字Keyと使用元を管理</div>
+                </div>
+              </button>
+              <button
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 text-left w-full transition-colors"
+                onClick={openAllAssetsDbDesign}
+              >
+                <span class="w-6 h-6 rounded-lg bg-linear-to-br from-slate-700 to-teal-500 text-white flex items-center justify-center text-xs">AA</span>
+                <div>
+                  <div class="font-medium">AllAssets</div>
+                  <div class="text-xs text-gray-400">仮MasterDB設計をテキストで確認</div>
+                </div>
+              </button>
             </div>
           </div>
           <div class="fixed inset-0 z-40" onClick={closeViewMenu} />
         </Show>
       </div>
+
+      <button
+        class="flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all shrink-0"
+        classList={{
+          'bg-emerald-50 text-emerald-600': state.page === 'study',
+          'text-gray-400 hover:bg-gray-100 hover:text-gray-600': state.page !== 'study',
+        }}
+        onClick={() => navigate('study')}
+        title="Study"
+      >
+        <div class="w-5 h-5 rounded-md bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0 text-[10px] font-bold text-white">
+          ST
+        </div>
+        <span class="text-xs font-semibold hidden sm:inline">Study</span>
+      </button>
 
       {/* Gallery button — ロゴ直後、ブレッドクラム前 */}
       <button
@@ -295,11 +401,6 @@ const Header: Component = () => {
         </div>
         <span class="text-xs font-semibold hidden md:inline">Asset Tags</span>
       </button>
-
-      {/* Breadcrumb */}
-      <div class="flex items-center gap-1 text-xs text-gray-400 ml-1">
-        <span>{PAGE_LABELS[state.page]}</span>
-      </div>
 
       {/* Blog mode toggle (center, blog only) */}
       <Show when={state.page === 'blog'}>
@@ -376,6 +477,9 @@ const Header: Component = () => {
             <circle cx="12" cy="12" r="3" />
           </svg>
         </button>
+
+        {/* 版の切り替え。V2.1 と同じ右上の位置・同じ大きさ。V2.1（新・既定）へ戻ると再読み込みしてホームから始まる */}
+        <span class="ml-1.5 shrink-0"><VersionTabs current="v11" /></span>
       </div>
     </header>
   )

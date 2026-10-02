@@ -23,7 +23,13 @@ const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
     console.log(`[APP04-GALLERY-HEADER] ${testId} ${action}`)
   }
 
+  function openImagePicker(source: 'header' | 'mobile-fab') {
+    logScaffold(source === 'mobile-fab' ? '15-1' : '2-4', `${source} image add picker open`)
+    fileInput.click()
+  }
+
   return (
+    <>
     <header class="h-14 bg-white border-b border-gray-100 flex items-center px-4 gap-3 shrink-0">
 
       {/* Back button */}
@@ -148,7 +154,8 @@ const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
         />
         <button
           class="flex items-center gap-1.5 px-3.5 py-2 bg-linear-to-r from-violet-500 to-pink-500 text-white text-xs font-bold rounded-full hover:opacity-90 active:scale-95 transition-all shadow-sm shadow-violet-200"
-          onClick={() => fileInput.click()}
+          onClick={() => openImagePicker('header')}
+          title="画像を追加"
         >
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
@@ -157,6 +164,18 @@ const GalleryHeader: Component<{ onBack: () => void }> = (props) => {
         </button>
       </div>
     </header>
+    <button
+      class="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-50 flex md:hidden h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-violet-500 to-pink-500 text-white shadow-2xl shadow-pink-950/40 ring-1 ring-white/20 active:scale-95 transition-all"
+      onClick={() => openImagePicker('mobile-fab')}
+      title="画像を追加"
+      aria-label="画像を追加"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16l4.6-4.6a2 2 0 012.8 0L16 16m-2-2l1.6-1.6a2 2 0 012.8 0L20 14M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 7v6m3-3H9" />
+      </svg>
+    </button>
+    </>
   )
 }
 

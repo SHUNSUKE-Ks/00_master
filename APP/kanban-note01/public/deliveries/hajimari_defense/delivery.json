@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "format": "note_story_delivery",
+    "version": "0.1",
+    "basedOn": "novelengine_content_delivery_package v0.1（meta の項目名をそろえた）",
+    "packageId": "pkg_hajimari_defense_ep01",
+    "title": "はじまりの町の防衛線",
+    "subtitle": "第一章「勇者が旅立つ理由がない朝」",
+    "episode": 1,
+    "source": {
+      "project": "GAME08_VoiceOfCards",
+      "session": "Voice of Cards TRPG title creation",
+      "scenario": "C:/00_CreatorHub/projects/GAME08_VoiceOfCards/src/AppScreen/60_Arcade/modes/questTale/scenarios/scenario_hajimari_01.json",
+      "assets": "C:/00_CreatorHub/projects/GAME08_VoiceOfCards/setupdoc/QuestTaleAssets/hajimari_defense",
+      "manifest": "C:/00_CreatorHub/projects/GAME08_VoiceOfCards/src/assets/assetManifest.json"
+    },
+    "convertedAt": "2026-09-25T20:44:27.257Z",
+    "rules": [
+      "本文は原本から1文字も変えていない",
+      "話者の無い行は「ナレーション」の台詞にした（ナレーションは全作品共通の Alt+0。登場人物の番号には入れない）",
+      "背景が変わる所で場面を分け、背景名を柱にした",
+      "章・クエストの呼び出しと選択肢（結果つき）は備考にした"
+    ]
+  },
+  "synopsis": "魔王を討った戦士と魔法使いは、懐中時計の光に飲まれ、十二歳の朝へ戻る。今夜、森から来る襲撃を止めれば、勇者は旅立つ理由を失う。二人は町に知らせず、森の平原で防衛線を張る。",
+  "synopsisNote": "原本にあらすじ欄が無いため、納品時に本文から要約した",
+  "cover": "/deliveries/hajimari_defense/trpg-loc-secret-base-morning.webp",
+  "cast": [
+    {
+      "id": "char_warrior",
+      "name": "戦士",
+      "role": "十二歳の戦士",
+      "portrait": "/deliveries/hajimari_defense/trpg-char-warrior-12.webp",
+      "focusY": "10%"
+    },
+    {
+      "id": "char_mage",
+      "name": "魔法使い",
+      "role": "十二歳の魔法使い",
+      "portrait": "/deliveries/hajimari_defense/trpg-char-mage-12.webp",
+      "focusY": "8%"
+    },
+    {
+      "id": "char_goblin_scout",
+      "name": "小鬼の斥候",
+      "role": "小鬼の斥候",
+      "portrait": "/deliveries/hajimari_defense/trpg-enemy-goblin-scout.webp",
+      "focusY": "18%"
+    },
+    {
+      "id": "char_beast",
+      "name": "牙の魔獣",
+      "role": "牙のある魔獣",
+      "portrait": "/deliveries/hajimari_defense/trpg-enemy-beast.webp",
+      "focusX": "28%",
+      "focusY": "35%"
+    }
+  ],
+  "images": [
+    {
+      "id": "char_warrior",
+      "kind": "character",
+      "label": "戦士",
+      "note": "十二歳の戦士。木刀を構えた赤髪の子ども",
+      "path": "/deliveries/hajimari_defense/trpg-char-warrior-12.webp",
+      "focusX": null,
+      "focusY": "10%"
+    },
+    {
+      "id": "char_mage",
+      "kind": "character",
+      "label": "魔法使い",
+      "note": "十二歳の魔法使い。木製ペンの先に種火を灯した青髪の子ども",
+      "path": "/deliveries/hajimari_defense/trpg-char-mage-12.webp",
+      "focusX": null,
+      "focusY": "8%"
+    },
+    {
+      "id": "char_goblin_scout",
+      "kind": "enemy",
+      "label": "小鬼の斥候",
+      "note": "小鬼の斥候。森の平原の防衛戦に来る基本の敵",
+      "path": "/deliveries/hajimari_defense/trpg-enemy-goblin-scout.webp",
+      "focusX": null,
+      "focusY": "18%"
+    },
+    {
+      "id": "char_beast",
+      "kind": "enemy",
+      "label": "牙の魔獣",
+      "note": "牙のある魔獣。横長の絵なので縦長の札では左右が切れる（focusX で頭を残す）",
+      "path": "/deliveries/hajimari_defense/trpg-enemy-beast.webp",
+      "focusX": "28%",
+      "focusY": "35%"
+    },
+    {
+      "id": "bg_demon_king_chamber",
+      "kind": "background",
+      "label": "魔王の間",
+      "note": "魔王の間。物語『はじまりの町の防衛線』プロローグ、魔王討伐直後の広間",
+      "path": "/deliveries/hajimari_defense/trpg-loc-demon-king-chamber.webp"
+    },
+    {
+      "id": "bg_secret_base",
+      "kind": "background",
+      "label": "はじまりの秘密基地（夜明け）",
+      "note": "はじまりの秘密基地（夜明け）。十二歳の身体で目を覚ます場所。柱に背比べの刻み、机に手書きの地図",
+      "path": "/deliveries/hajimari_defense/trpg-loc-secret-base-morning.webp"
+    },
+    {
+      "id": "bg_forest_night",
+      "kind": "background",
+      "label": "森の平原（夜）",
+      "note": "森の平原（夜）。町の門へ続く二本の道と、掘られた穴。防衛線を張る場所",
+      "path": "/deliveries/hajimari_defense/trpg-loc-forest-defense-night.webp"
+    },
+    {
+      "id": "item_pocket_watch",
+      "kind": "item",
+      "label": "懐中時計",
+      "note": "",
+      "path": "/deliveries/hajimari_defense/trpg-icon-pocket-watch.webp"
+    },
+    {
+      "id": "item_seed_flame",
+      "kind": "item",
+      "label": "種火",
+      "note": "",
+      "path": "/deliveries/hajimari_defense/trpg-icon-seed-flame.webp"
+    },
+    {
+      "id": "item_till_soil",
+      "kind": "item",
+      "label": "耕した土",
+      "note": "",
+      "path": "/deliveries/hajimari_defense/trpg-icon-till-soil.webp"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "魔王の間",
+      "background": "/deliveries/hajimari_defense/trpg-loc-demon-king-chamber.webp",
+      "body": "柱：魔王の間\n\n備考：【第一章】勇者が旅立つ理由がない朝\n\nナレーション：「剣の抜かれた音が壁に反り返り、そのまま返ってこない。玉座の前の石畳に、紫の光が細く這っている。」\n\nナレーション：「玉座の段に、真鍮の側面を持つ懐中時計が転がっている。針は動いていない。魔王は最後の魔力を、そこへ注ぎ込んでいた。」\n\nナレーション：「時計の縁から白い光が溢れ、広間の輪郭が端から溶けていく。二人は互いの手を離さないまま、光に飲まれた。」"
+    },
+    {
+      "id": "scene_02",
+      "title": "はじまりの秘密基地（夜明け）",
+      "background": "/deliveries/hajimari_defense/trpg-loc-secret-base-morning.webp",
+      "body": "柱：はじまりの秘密基地（夜明け）\n\nナレーション：「板の隙間から朝の光が斜めに差し込み、埃がその筋の中で止まっている。柱の刻みは、どれも自分の胸より低い。」\n\n戦士：「……十二歳の手だ。剣を握った手じゃない。」\n\n魔法使い：「私も同じ。術式は覚えているのに、魔石も杖もない。」\n\n戦士：「今夜、森から来る。あの襲撃を止めれば、あいつは旅立つ理由を失う。」\n\n魔法使い：「町には知らせない。町から離れた森の平原で、村人に知られず二人で迎え撃つ。」\n\nナレーション：「未来を知る二人は、まだ小さな町の眠りを見守った。陽が高くなる前に、支度を始めなければならない。」\n\n備考：選択肢（どれを選んでも次へ続く）\n   ① 木刀の柄を確かめる → 握り慣れた重さではない。何度も素振りを確かめ、この腕で振れる長さを覚え直す。\n   ② 木のペンに種火を灯してみる → ペンの先に、指の先ほどの火が灯る。小さいが、消えずに残った。魔石が無くても、これだけは動く。\n   ③ 机の手描きの地図を広げる → 子どもの字の地名の上に、大人の記憶で細道と迎撃の位置を書き足していく。この地図が、今夜の作戦になる。\n\n戦士：「木刀で止められる数じゃない。けど、道を狭くすれば一度に来ない。」\n\n魔法使い：「土の初級術で足場を崩す。派手にはできないけれど、足を取るくらいなら。」\n\n戦士：「未来の術式を、こんな枝で動かせるのか。」\n\n魔法使い：「全部は無理。だから、今ある火と水と土を、順番だけ未来の通りにする。」\n\n戦士：「勇者の妹も、勇者も、朝まで眠っていてくれればいい。」\n\n魔法使い：「それが今回の勝ち方。誰にも英雄になってもらわない。」\n\n備考：【この夜のこと】誰にも知られない防衛線"
+    },
+    {
+      "id": "scene_03",
+      "title": "森の平原（夜）",
+      "background": "/deliveries/hajimari_defense/trpg-loc-forest-defense-night.webp",
+      "body": "柱：森の平原（夜）\n\nナレーション：「月が出ている。二本の道が寄り集まる先に、町の門の灯りが小さく並んでいる。掘り返した土は、まだ濡れて光っている。」\n\nナレーション：「森の奥で枝が折れる。一度ではない。灯りをつけずに、二人は同じ方向を見る。」\n\n小鬼の斥候：「継ぎ接ぎの外套を被った緑肌の影が、細道へ踏み込んでくる。仲間を待つように、先へは出てこない。」\n\n備考：選択肢（どれを選んでも次へ続く）\n   ① 木刀で行く手を阻む → 戦士「道はここで狭い。一度に来られなければ、それでいい。」\n   ② 種火で合図し、魔法使いへ知らせる → 魔法使い「見えた。灯りの向きで、あなたの立ち位置も分かる。」\n   ③ 耕した土へ誘い込む → 耕した土に足を取られ、影の隊列が乱れる。後ろが前へ詰まり、一列が崩れた。\n\nナレーション：「退いた影の向こうで、低く伏せた輪郭がもう一つ動く。牙のある魔獣が、道を無視してまっすぐ草を裂いてくる。」\n\nナレーション：「作戦にない相手だった。細道も、耕した土も、この一体には通じきらない。」\n\n備考：選択肢（どれを選んでも次へ続く）\n   ① 前へ出て刃を受け止める → 戦士「退がるな。町の門までは、まだこっちの側にある。」\n   ② 足元をさらに耕して勢いを削ぐ → 魔法使い「もう一度――足の下だけでいい。全部止めようとしない。」\n   ③ 灯りを消し、隙を作って退く → 灯りが消え、闇に紛れて二人は身を低くする。獣の鼻先が、二人のいた場所を通り過ぎていく。\n\nナレーション：「低く唸った獣は、やがて森の奥へ引き返した。小鬼の影も見えなくなる。門の灯りは揺れていない。町は、まだ何も知らないままでいる。」\n\n備考：【防衛線】誰も通さなかった\n\nナレーション：「朝の鐘が鳴る。町の門は、いつもの朝を迎えた。」\n\n戦士：「聞こえない。泣き声も、燃える音も。」\n\n魔法使い：「何もなかったように見えるなら、うまくいったんだ。」\n\n戦士：「未来は、今日だけは違う朝になった。」\n\n魔法使い：「次も二人で考えよう。まだ持っていないものを、数える前に。」\n\nナレーション：「誰も知らない防衛線が、勇者の旅立たない朝を残した。」"
+    }
+  ]
+}

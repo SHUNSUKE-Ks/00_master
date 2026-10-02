@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260724_004",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "study-library",
+  "kind": "idea",
+  "date": "2026-07-24",
+  "title": "Git Branch・Fork学習資料のStudy追加",
+  "summary": "Branch、Fork、Commit、PR、Merge、cherry-pickを、必要時だけ使うための学習資料としてStudyへ保管した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-07-24T00:00:00+09:00",
+  "completedAt": "2026-07-24T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "Git運用 / 分岐と統合のStudy目次を追加した。",
+    "必要時にだけBranch/Forkを使う判断基準を明文化した。",
+    "詳細な原本を保管した。"
+  ],
+  "verification": [
+    "Study Cardに目次、運用、原本の3記事を追加した。",
+    "要約記事から原本の各見出しへリンクした。"
+  ],
+  "nextActions": [
+    "最初の実際のBranch作業が必要になった時に、対象を限定して作成・検証する。"
+  ],
+  "deliverables": [
+    "public/study-blog/self-tech/git-branch-fork/目次.md",
+    "public/study-blog/self-tech/git-branch-fork/必要時の運用.md",
+    "public/study-blog/self-tech/git-branch-fork/原本チャット_保管.md"
+  ],
+  "tags": ["Study", "Git", "Branch", "Fork", "PR", "Merge"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "実操作を強制しない学習資料としてGitの判断基準を保管する形式は、初学者向け運用の基礎資料として再利用できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

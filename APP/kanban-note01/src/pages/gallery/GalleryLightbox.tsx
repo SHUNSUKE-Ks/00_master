@@ -3,7 +3,7 @@ import {
   galleryState, setGalleryState, closeLightbox, openTagSheet,
   toggleGalleryFavorite, selectGalleryItem, getFilteredItems,
 } from './store'
-import { CATEGORY_BG, CATEGORY_LABELS } from './types'
+import { CATEGORY_BG, CATEGORY_LABELS, SYNC_STATUS_LABELS } from './types'
 import GalleryEditDialog from './GalleryEditDialog'
 
 const GalleryLightbox: Component = () => {
@@ -123,6 +123,9 @@ const GalleryLightbox: Component = () => {
                 <div class="flex items-center gap-2 mt-1.5 flex-wrap">
                   <span class={`text-[10px] px-2 py-0.5 rounded-full font-bold ${CATEGORY_BG[it().category]}`}>
                     {CATEGORY_LABELS[it().category]}
+                  </span>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-white/10 text-white/70">
+                    {SYNC_STATUS_LABELS[it().syncStatus ?? 'local']}
                   </span>
                   {it().tags.slice(0, 5).map((t) => (
                     <span class="text-white/55 text-[11px]">#{t}</span>

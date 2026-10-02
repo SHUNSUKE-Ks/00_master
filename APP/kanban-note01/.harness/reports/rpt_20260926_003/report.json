@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260926_003",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-26",
+  "title": "スマホの開閉式オーバーレイと、ブロックの種類で候補を開く Hooks（KeyDeck画面の原型）",
+  "summary": "V2.1 の会話ログで、スマホ幅でも下の帯を隠し、右下の「候補」ボタンから人物・Scene・WW・演出tag を選べるオーバーレイにした。ブロックの種類から出す候補を決める表（CANDIDATE_HOOKS）を1か所に置き、柱→Scene、備考→演出tag を PC は左右パネルの切り替え、スマホはオーバーレイの自動表示で出す。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-26T06:20:00+09:00",
+  "completedAt": "2026-09-26T07:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "スマホ幅: 下の帯を隠し（部品は SHOW_BOTTOM_BAR で残す）、右下の「候補」ボタン＋下から開くオーバーレイ（タブ: 人物／Scene／WW／演出、×と背景で閉じる）",
+    "パネルの中身を部品にまとめ、PCの左右パネルとスマホのオーバーレイで共通にした",
+    "人物パネルに「ブロックを足す（＋ 柱／＋ 備考）」を足した",
+    "CANDIDATE_HOOKS: 柱→Scene（PC・スマホとも自動）、備考→演出tag（PC・スマホとも自動）、セリフ→人物（どちらも自動では開かない。スマホの「候補」ボタンのタブだけ人物になる）",
+    "自動で開いたオーバーレイはブロックを離れると閉じる。手で開いたものは開いたまま。候補を押しても入力は途切れない",
+    "ヘルプ（Ctrl+/）の会話ログにHooksとスマホの「候補」ボタンの説明を足した"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "スマホ幅の jsdom テスト 16件 PASS（下の帯とNAVが無い、候補ボタン、4タブ、人物で直下にセリフ、手で開いたものは残る、柱で自動に Scene、候補で柱が入り入力が続く、離れると閉じる、＋備考で演出tagに切り替わりタグがカーソル位置に入る、セリフでは自動で開かない、＋柱ですぐ候補）",
+    "PC幅 25件 PASS（柱・備考で左右パネルが切り替わる、セリフでは目次のまま を追加）",
+    "柱のテストをオーバーレイ前提に書き直し 21件 PASS（旧 v21_revision_test は柱の扱いが古い版のため退役し、備考の書式とタグ2列の確認を移した）",
+    "回帰: V2.1 の流れ 28・ヘルプ 16・下書き 26・納品 20、Vol1.1 の会話ログ 21・12 すべて PASS",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、Ready）。公開中の main-BkIM5ePT.js にオーバーレイと Hooks のコードが入っていることを確認。1回目のコマンドの出力が切れたため再実行し、同じ内容で2回デプロイされた",
+    "未実施: 実機のスマホでの目視"
+  ],
+  "nextActions": [
+    "実機のスマホでオーバーレイの高さとキーボードの重なりを見る",
+    "WW（世界観の用語）の置き場を決め、WWタブに候補を出す",
+    "CANDIDATE_HOOKS を KeyDeck のボタン面の選択に使う（XState の状態名へ置き換える構想）"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "talklog", "mobile", "overlay", "hooks", "keydeck-prototype"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "『入力中のブロックの種類 → 出す候補』を1つの表にし、PCのパネルとスマホのオーバーレイの両方がそれを読む形にした。KeyDeck の盤面切り替えも同じ表を読めばよい"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

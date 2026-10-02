@@ -1,0 +1,28 @@
+{
+  "kind": "phase_report",
+  "id": "phase_learning_note_vision_20260712",
+  "sourceApp": "kanban-note01",
+  "target": "Claude Sandbox",
+  "phase": "learning_note_vision",
+  "status": "implemented_pending_manual_verify",
+  "productSet": ["Note", "WikiLLM", "TechBook"],
+  "wikiCards": {
+    "rawCopyCount": 10,
+    "conceptCount": 7,
+    "entityCount": 3,
+    "rawMutation": false,
+    "relationLayer": "src/sandbox/wiki/relations.ts"
+  },
+  "techBook": {
+    "title": "AIが自分で働く環境のつくり方 — ハーネス入門",
+    "mode": "toc_only",
+    "chapterCount": 6,
+    "appendixCount": 1
+  },
+  "checks": [
+    "JsonCard opens from long dictionary card",
+    "Relation moves to adjacent JsonCard",
+    "Theme is controlled by CSS variables",
+    "Production imports remain forbidden"
+  ]
+}

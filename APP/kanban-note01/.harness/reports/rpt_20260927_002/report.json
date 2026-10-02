@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260927_002",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-27",
+  "title": "ホームにお知らせ板、続きから書くを横長の行に、ページ言語を日本語に、KeyDeck画像アップロードの依頼書",
+  "summary": "ホームの続きから書くの上に「お知らせ」板を置き、納品と新しい画像を出すようにした（他の端末からのお知らせは届く道ができたら足す）。3スロットは横長の行を縦に並べる形にした。スクショで自動翻訳が「ト書き」を崩していたため、ページの言語を日本語にした。KeyDeck の新機能（端末から画像を Gallery へ）は依頼書 P-007 のみ作成。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-27T12:40:00+09:00",
+  "completedAt": "2026-09-27T13:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "NoticesPanel.tsx / notices.ts: お知らせ板。納品（取り込む・開く）、新しい画像（7日以内・まとめて1件）、他の端末（予約）。× で閉じる（この端末だけ）、閉じたものも出す",
+    "DeliveriesPanel.tsx の取り込み処理を useTakeIn にして、お知らせと共通化。index.json に deliveredAt",
+    "スロット: 横長の行（SLOT・表紙・作品名・最後の会話2行・続きを書く）を縦に3つ。狭い画面は3段",
+    "index.html: lang=\"ja\" translate=\"no\"（自動翻訳でト書きノートが「書きノート」になっていた）",
+    "KeyDeck: brief/proposals/P-007_device_image_upload_to_gallery.md（依頼書のみ）と INDEX.md への登録。画像1枚に付帯JSON、作品・人物はIDで持つ、Galleryに作品・人物フィルター。Hubの保存APIは不変条件6の追加が要るため裁定待ち"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom: 納品 24（お知らせに納品が出る・日付・× で閉じる・閉じたものも出す を追加）ほか V2.1 の流れ 29・ヘルプ 16・下書き 26・柱 21・スマホ 16・PC幅 25・執筆デスク 49・登場人物 22 すべて PASS",
+    "開発サーバー（http://localhost:5180）: PC幅でお知らせ→3スロット（各約97px、続きを書くは右端）→タイトル・よく開く の順、コンソールエラーなし。スマホ幅（375px）で横はみ出しなし。lang=ja を確認。データを書き換える操作はしていない",
+    "本番デプロイはしていない（依頼なし）"
+  ],
+  "nextActions": [
+    "P-007 の裁定（gallery_inbox/ への保存APIを足すか、受信箱を読む道）",
+    "他の端末からのお知らせが届く道を決める（P-007 と合わせて）",
+    "デプロイの依頼があれば本番へ"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/NoticesPanel.tsx",
+    "APP/kanban-note01/src/v21/notices.ts",
+    "APP/kanban-note01/src/v21/DeliveriesPanel.tsx",
+    "APP/kanban-note01/src/v21/deliveries.ts",
+    "APP/kanban-note01/src/v21/HomeV21.tsx",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/index.html",
+    "APP/kanban-note01/public/deliveries/index.json",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md",
+    "DevApps/APP_KeyDeck01/brief/proposals/P-007_device_image_upload_to_gallery.md",
+    "DevApps/APP_KeyDeck01/INDEX.md"
+  ],
+  "tags": ["v21", "home", "notices", "save-slots", "i18n", "keydeck-proposal"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "お知らせは種類ごとに集め方だけ足せば並ぶ形にした。id に中身の状態（取り込み済み・画像の枚数）を入れると、閉じたあとも変化があれば出し直せる"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

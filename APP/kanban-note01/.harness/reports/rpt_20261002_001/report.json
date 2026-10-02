@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20261002_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "release",
+  "kind": "feature",
+  "date": "2026-10-02",
+  "title": "V3.1 化けるNote（シンプルなノート・コピペリスト・目次・書き出し）を版タブに追加",
+  "summary": "ヘッダー右上の版タブに V3.1 を足し、化けるNote の最初の画面を作った。2段ヘッダー（開いているノートのタブ）、左NAV＝コピペリスト（InBox＋漢字1字の本）、本文は Ctrl+1〜4 で見出し、右に目次（押すと飛ぶ）と記号キー、テキスト／HTML／Markdown の書き出し。データは V2.1 と別の localStorage 1つ。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-10-02T00:00:00+09:00",
+  "completedAt": "2026-10-02T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "VersionTabs を3タブ（V3.1／V2.1／Vol1.1）に。既定は V2.1 のまま",
+    "src/v31/ を新設: AppV31・NoteEditor・WordPanel・HomeV31・ExportDialog・exportNote・store・v31.css",
+    "単語は1つの表（words）。本は単語に付ける印（books 配列・複数可）。コピーした文字は自動で InBox へ、選択で出る『単語に登録』（Alt+R）でも入る",
+    "ホームはカード一覧（ピン留め→最近）と本文検索（一致箇所の前後を表示）",
+    "追加（同日）: 見た目と遷移の演出。ページ・カード（順に出る）・タブ・横パネル・ダイアログ・見出しの文字の大きさが動く。ホームの見出しは UpNote 風に ∨ で畳める＋件数。視差効果を減らす設定では動きを止める",
+    "追加（同日）: PC用（PcV31）とスマホ用（MobileV31）の画面を分けた。幅767px以下は自動でスマホ用、使い方／メニューの「画面」で 自動・PC用・スマホ用 を選べる。スマホは下の道具の帯（目次・H・記号）と下から出るシート（InBox と本・目次・メニュー）",
+    "本番へデプロイ: npx vercel --prod → https://kanban-note01.vercel.app（作業ツリーの未コミット変更も含めて出た）"
+  ],
+  "verification": [
+    "tsc -b: エラーなし",
+    "vite build（出力は scratchpad）: 成功",
+    "ブラウザでの操作確認は未実施（プロジェクト規則により開発サーバーを自動起動しないため）",
+    "本番URLで確認: PC幅でコピー→InBox、Ctrl+Alt+2 で見出し・目次に反映、Enter後の行は本文に戻る、改行入り貼り付けが行に分かれる",
+    "スマホ幅（375×812）で確認: ノート画面・下の帯・単語シート・ホーム（FAB）",
+    "旧画面の html.dark input !important が入力欄を灰色にしていたので打ち消した",
+    "Android実機での確認は未実施（長押しコピーで copy イベントが出るかは実機で要確認）"
+  ],
+  "nextActions": [
+    "利用者がAndroid実機で V3.1 を使って確認（長押し→コピーで InBox に入るか、キーボードの上に道具の帯が来るか）",
+    "未コミットのまま。コミットするかは利用者が判断"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v31/",
+    "APP/kanban-note01/src/v21/VersionTabs.tsx",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/App.tsx",
+    "APP/kanban-note01/src/v31/PcV31.tsx",
+    "APP/kanban-note01/src/v31/MobileV31.tsx",
+    "APP/kanban-note01/src/v31/shared.tsx",
+    "APP/kanban-note01/src/v31/v31-mobile.css"
+  ],
+  "tags": [
+    "bakerunote",
+    "v31",
+    "note",
+    "copy-paste-list",
+    "toc",
+    "export",
+    "accessibility"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "見出しで文字の大きさを変えるため textarea をやめ、1行＝1ブロックの contenteditable にした。Enter・貼り付け後に構造を正規化する方式"
+  },
+  "bodyFile": "report_body.md",
+  "evaluationId": null
+}

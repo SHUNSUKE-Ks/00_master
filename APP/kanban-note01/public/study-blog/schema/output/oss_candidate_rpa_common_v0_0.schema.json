@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Common v0.0",
+  "type": "object",
+  "required": ["repo", "manual", "index", "topics"],
+  "properties": {
+    "repo": { "type": "string" },
+    "manual": { "type": "string" },
+    "index": { "type": "string" },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

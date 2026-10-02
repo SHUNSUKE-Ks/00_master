@@ -1066,7 +1066,7 @@ const initialNotebooks = loadLocalNotebooks()
 const initialInboxItems = loadLocalInboxItems(initialNotebooks)
 
 const [state, setState] = createStore<AppState>({
-  page: 'notebook',
+  page: 'claudenote',   // 初期表示。元は 'notebook'
   galleryReturnPage: 'db01',
   blogMode: 'memo',
   fontSize: initFontSize(),
@@ -1289,10 +1289,29 @@ export async function initFirestore(): Promise<void> {
     const mergedInbox = [...cloudInbox, ...state.inboxItems.filter((item) => !cloudIds.has(item.id) && !item.firebaseDocId)]
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
 
-    setState({ memos, blogs, trashBlogs, notebooks, inboxItems: mergedInbox, dbStatus: 'connected' })
-    saveLocalMemos(memos)
-    saveLocalBlogs(allBlogs)
-    saveLocalNotebooks(notebooks)
+    // 「取得できなかった」と「本当に0件」を区別する。
+    // 空の取得結果で state とローカル控えを上書きすると、手元のノートが消える。
+    // check_catalogs.py が「ファイルが1件も無いときは検査の失敗として扱わない」のと同じ考え方。
+    const keepMemos     = memos.length     === 0 && state.memos.length     > 0
+    const keepNotebooks = notebooks.length === 0 && state.notebooks.length > 0
+    const keepBlogs     = allBlogs.length  === 0 && state.blogs.length     > 0
+    if (keepMemos || keepNotebooks || keepBlogs) {
+      console.warn('[Firestore] 取得が0件のため、手元のデータを保持します', {
+        memos: memos.length, notebooks: notebooks.length, blogs: allBlogs.length,
+      })
+    }
+
+    setState({
+      memos:      keepMemos     ? state.memos     : memos,
+      blogs:      keepBlogs     ? state.blogs     : blogs,
+      trashBlogs: keepBlogs     ? state.trashBlogs : trashBlogs,
+      notebooks:  keepNotebooks ? state.notebooks : notebooks,
+      inboxItems: mergedInbox,
+      dbStatus: 'connected',
+    })
+    if (!keepMemos)     saveLocalMemos(memos)
+    if (!keepBlogs)     saveLocalBlogs(allBlogs)
+    if (!keepNotebooks) saveLocalNotebooks(notebooks)
     saveLocalInboxItems(mergedInbox)
   } catch (e) {
     console.error('[Firestore] init failed:', e)

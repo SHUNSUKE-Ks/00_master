@@ -1,0 +1,39 @@
+{
+  "id": "concept_agent",
+  "type": "concept",
+  "name": "Agent",
+  "title": "実行者（役割・装備・契約を持つ自律実行単位）",
+  "summary": "役割(role)・装備(slots)・契約(runbook)・engine(model)を持つ実行単位。万能ではなく、限定された役割と装備の中で動くことが信頼性の源泉。完了は自己申告でなく実体検証で判定される。",
+  "body": [
+    "## 定義（4要素）",
+    "",
+    "| 要素 | 意味 | claudemasterでの実体 |",
+    "|---|---|---|",
+    "| role | 何を担当するか | .claude/agents/*.md のdescription |",
+    "| slots | 何を参照して動くか（装備） | 01_Harness/slots/*.slots.json（**1 slot = 1 file**） |",
+    "| 契約 | どう動き、いつ止まるか | runbook＋停止条件＋排他書込＋検証可能な完了報告 |",
+    "| engine | どのモデルで動くか | haiku/sonnet/opus（役割の複雑さで束縛） |",
+    "",
+    "## 2つの役割区分（実行者 vs 官僚）",
+    "",
+    "- **実行者（Executor）**: 成果物を作る「手」。taskをclaim（owner取得）してから自分の成果物だけに書く。",
+    "- **官僚（Governor）**: 検証と調停の「目」。**原則コードで実装**（runner層=VERIFY＋順次dispatch）。LLMは差し戻し裁定など判断が要る時だけ。",
+    "",
+    "## 信頼性の原則",
+    "",
+    "- agentの完了/進捗報告テキストは実体と乖離しうる（3度実証）。**完了は実体検証（VERIFY）かプロトコル着地で判定**。",
+    "- 契約なしのagentは空洞を量産する。習得情報・停止条件・排他書込・検証可能な完了の4点を必ず与える（Reader Agent契約が雛形）。",
+    "",
+    "## 台帳",
+    "",
+    "現況View: AGENT_SKILL_VIEW.md ／ 数値台帳: AGENT_SKILL_LEDGER.json（製作日/使用回数/最終使用日）"
+  ],
+  "sources": [
+    "実読: .claude/agents/*.md / 01_Harness/slots/schema.md / runbook_reader.md",
+    "裁定: 02_Output/2026-07-10_fable_decisions.md 裁定2（実行/官僚）",
+    "出自: CODEXのJsonSlot装備構想（AR-003）をハーネス語彙に翻訳"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11"
+}

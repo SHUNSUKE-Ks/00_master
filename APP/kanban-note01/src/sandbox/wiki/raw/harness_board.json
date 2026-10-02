@@ -1,0 +1,42 @@
+{
+  "id": "concept_harness_board",
+  "type": "concept",
+  "name": "Harness Board",
+  "title": "ハーネス実行の可視化盤面（Step実行ビュー）",
+  "summary": "ハーネスの実行ループをカードと盤面で1ステップずつ目視できるビューの概念。ゲームではなく、逐次実行・選択理由・コストの3点を見せる学習/デバッグ装置。",
+  "body": [
+    "## 中核ループ（可視化対象）",
+    "",
+    "```",
+    "受付 → 分解 → 配役 → 選技 → 実行 → 観測 → 判定 → 再試 → 完了",
+    "```",
+    "",
+    "## 盤面3ペイン",
+    "",
+    "| ペイン | 中身 |",
+    "|---|---|",
+    "| Task Lane | Inbox→Plan→Ready→Running→Review→Retry→Done のカード位置 |",
+    "| Agent Zone | Agentカード（role/skills/capacity/state: idle/planning/running/waiting/failed/completed） |",
+    "| Skill Deck | Skillカード（trigger/input/action/output/cost） |",
+    "",
+    "## 3つの必須機能（ゲーム性より優先）",
+    "",
+    "1. **逐次（STEP実行）**: 1段ずつ進める。一瞬で終わるとループを理解できない。",
+    "2. **根拠表示**: なぜそのAgent/Skillが選ばれたか（requiredSkillsとagent.skillsの一致件数等）。",
+    "3. **費用可視化**: Token/時間/Retry回数/Context使用量（HP/MPでなく実運用指標）。",
+    "",
+    "## claudemasterでの位置づけ（FABLE裁定 2026-07-11）",
+    "",
+    "- 今は**作らない**。concept（設計知識）として保持。",
+    "- 実装トリガー: conductor-lite(M1)が実イベントを吐くようになったら、**App00の1ビュー**として追加（新アプリは作らない）。",
+    "- 段階案: 手動シミュレーター→ルールエンジン→AI接続→実Harness監視(=Harness Debugger化)。",
+    "- n8n型データフロー図はWiki構築パイプライン(workflow_llmwiki)向き。実行ループの再試/分岐はこのStepビュー向き——という使い分け。"
+  ],
+  "sources": [
+    "二次資料: ユーザー提供の設計提案チャット（00_InBox/harness_board_and_json_wiki_proposal_2026-07-11.md に凝縮保存）",
+    "裁定: 02_Output/2026-07-11_wiki_first_todo.md 裁定2・3"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11"
+}

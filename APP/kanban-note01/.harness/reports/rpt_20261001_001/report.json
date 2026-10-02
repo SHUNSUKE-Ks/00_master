@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20261001_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "design",
+  "kind": "design_decision",
+  "date": "2026-10-01",
+  "title": "KeyDeck 専用チャットへの依頼書 REQ-20261001-001（Note Story 起動ボタン＋Hooksで専用の盤面へ）",
+  "summary": "KeyDeck の『Note Story 起動』ボタン1つで、PC で Note Story（PWA）を Chrome のアプリ窓で開き、押した端末の盤面を note_story へ移す仕組みの依頼書を作った。いまの KeyDeck の機能（app.launch・layout.switch・端末スロット）の範囲で足りる。ただし未修正の B-002（入れ子 fire が許可リストに載らない）を先に直す必要がある。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-sonnet-5-5",
+  "startedAt": "2026-10-01T09:00:00+09:00",
+  "completedAt": "2026-10-01T10:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "依頼書 REQ-20261001-001.json を KeyDeck の依頼の置き場に作成（kind: command）。依頼書スキーマ（title 60字・label 20字など）で検証して合格",
+    "調べて分かったこと: apps.json に note_story（chrome.exe --app=https://kanban-note01.vercel.app）が既にある／盤面 note_story と『Note Story 開く』ボタンも既にある／『起動と盤面移動を1ボタン』は B-002 が未修正（state.rs の canonical_command_id が AppLaunch の内側 fire に潜らず、LayoutSwitch は何も載せない）のため、いまは別ボタンにしてある",
+    "依頼の中身: (1) 起動ボタンに fire: layout.switch note_story を取り付ける＝Hooks (2) B-002 の修正とテスト1本 (3) --app=URL か --app-id か、窓が増えないかを試して決める (4) 押した端末だけが移る（to: all は付けない）",
+    "方針の反映: 新しい API・書き込み口・通信は作らない（Rust は B-002 の修正だけ想定。それ以上は報告して裁定待ち）。人が手でやる初期設定（PWA インストール・Hub 再起動・端末の入口 URL・実機確認）は手順書にして返事に付けてもらう"
+  ],
+  "verification": [
+    "依頼書 JSON を jsonschema で検証: valid",
+    "B-002 が未修正であることをコードで確認（state.rs:117 は AppLaunch の自分の id だけ／startup.rs:246 は最上位のみ）",
+    "Chrome（Program Files）・Edge の実在を確認",
+    "KeyDeck 側の実装・実機確認は未実施（依頼を出しただけ）。カンバンのデプロイは利用者が行う"
+  ],
+  "nextActions": [
+    "利用者が KeyDeck 統括チャットへ REQ-20261001-001 を渡す",
+    "返事（REQ-20261001-001.reply.md）を受けて、初期設定の手順書のとおり手で設定し、実機で通す",
+    "カンバンのデプロイ後、F13〜F17 の既定キーが Note Story 側で効くか確認"
+  ],
+  "deliverables": [
+    "C:/00_CreatorCompass/KeyDeck/依頼/REQ-20261001-001.json"
+  ],
+  "tags": [
+    "keydeck",
+    "request",
+    "hooks",
+    "app-launch",
+    "layout-switch",
+    "b-002",
+    "pwa"
+  ],
+  "blockedEncountered": [
+    "カンバンの本番デプロイは、Claude Code の自動モード判定で拒否された（利用者が行う）"
+  ],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "KeyDeck へ頼む前に、依頼書スキーマの文字数制限（title 60・label 20）と できること.md・DEVBOARD の既知の不具合(B-*) を先に読むと、依頼が『すでにある機能』と『先に直す穴』に分けて書ける"
+  },
+  "bodyFile": "report_body.md",
+  "evaluationId": null
+}

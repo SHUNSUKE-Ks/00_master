@@ -11,6 +11,7 @@ Noteアプリを開発した過程を、再利用可能な技術知識へ分解�
 | --- | --- |
 | [01_layout_spec.md](./01_layout_spec.md) | Android中心の画面構成、閲覧動線、文字と余白の基準 |
 | [02_functional_spec.md](./02_functional_spec.md) | Module/Card/Tag/Relation、検索、版管理、受入条件 |
+| [03_shared_board_host_view_rust_design_20260727.md](./03_shared_board_host_view_rust_design_20260727.md) | Rust連携を見据えたShared Board Host Viewの画面・Component・状態契約 |
 
 ## 情報階層
 

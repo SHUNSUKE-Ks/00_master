@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_004",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-25",
+  "title": "会話ログVIEW（バックログ風）とKeyDeckへの書き出しを追加",
+  "summary": "Note_Story Menu に会話ログVIEWを足し、名前札＋字下げ本文の暗い舞台で会話ログを読み書きできるようにした。Alt+1〜9 でその人物の新しいセリフを現在の発言の直下に作り、登場人物を KeyDeck の Deck（ALT+番号・四角アイコン付き）として書き出せる。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-25T09:00:00+09:00",
+  "completedAt": "2026-09-25T09:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "Note_Story Menu「会話ログ」から開ける新VIEW（src/pages/PageTalkLog.tsx / .css）。データは会話ログタブと共通（page.body か scenarioLogs[key]）",
+    "名前札の下の飾り線、字下げ本文、端の消える区切り線、各セリフ右に スピーカー（予定）と マイク（予定、戻るボタンの置き換え）",
+    "Alt+1〜9 で人物の新しいセリフを直下に作る（KeyDeck の ALT+番号 と同じ）。Ctrl+Enter で同じ人物で続け、Alt+↑↓ で移動、空で Backspace で削除",
+    "1 Dialog＝20字×3行の目安を超えると警告",
+    "「KeyDeckへ書き出し」で keydeck.deck_import.v1 を保存（最大9人、画像の無い人物は頭文字の四角アイコンを描く）",
+    "書き戻しは編集した発言だけ。他の部分は1文字も変えない（src/utils/talkLog.ts）"
+  ],
+  "verification": [
+    "npx tsc -b → exit 0",
+    "npx vite build → 成功（PWA生成含む）",
+    "talkLog.ts 単体テスト14件 PASS（5種の原文で往復一致、複数行セリフ、編集した発言だけ変わる、直下挿入の空行区切り、目安判定）",
+    "VIEWを単体でバンドルし jsdom で操作して20件 PASS（初期表示、ALT+2で直下に新ブロック・フォーカス・保存形式、入力保存、目安超え警告、Backspace削除、未登録番号の知らせ、話者変更、外部変更の読み直し）",
+    "書き出しの形: 9人で cols5×rows2、ALT+1〜9、iconRef がすべて icons に解決",
+    "未実施: 実ブラウザでの目視（AGENTS.md に従い開発サーバーを起動していない）"
+  ],
+  "nextActions": [
+    "利用者が npm run dev で会話ログVIEWを目視し、見た目の調整点を出す",
+    "PCのKeyDeckで Hub 再起動 → Deck編集 → 取り込み → レイアウトに置いて ALT+番号 でセリフが増えることを実機で確認する",
+    "キャラアイコンを名前札の左に置く（将来）、スピーカー・マイクの実機能（将来）"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/pages/PageTalkLog.tsx",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/src/utils/talkLog.ts",
+    "APP/kanban-note01/src/utils/keydeckExport.ts",
+    "APP/kanban-note01/src/App.tsx",
+    "APP/kanban-note01/src/components/Header.tsx",
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/docs/ref_talklog_backlog_parts_v1.md"
+  ],
+  "tags": ["talklog", "view", "keydeck", "design"],
+  "blockedEncountered": [
+    "同日に codex が kanban-note01 を並行で変更中（rpt_20260925_001〜003）。App.tsx・Header.tsx・types は追記のみで、型チェックとビルドは codex の変更を含んだ状態で通過"
+  ],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "原文の区切り（改行数）を発言ごとに保持し、編集した発言だけ書き戻す方法は、同じテキストを複数のVIEWで編集させるときに再利用できる"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260927_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-27",
+  "title": "名前札のメニューから名前を変える、ホームの「続きから書く」を3スロットに",
+  "summary": "名前札を書き換えると全セリフの名前が変わると思われていたが、実際は1行の話者切り替えだったため、名前札のメニューに作品の全セリフの名前を変える項目を足した。ホームは「続きから書く」をセーブ＆ロード風の3スロットにし、書き方・登場人物を非表示、届いた納品をタイトル一覧へ、ギャラリーをホームから外した。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-27T11:30:00+09:00",
+  "completedAt": "2026-09-27T12:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "会話ログ: 名前札のメニューに「✎ 「名前」の名前を変える（作品の全セリフ）」。サイドバーの ✎ と同じ renameCharacter を使う",
+    "ホーム: 「続きから書く」を3スロット（最近開いた場面の順、空きは「空きスロット」）。右上に「続きを書く」、作品名を押すと作品ページ。最後の会話を3行まで、最小の高さ 250px",
+    "ホーム: 書き方・登場人物は SHOW_HOWTO_PANEL / SHOW_CAST_PANEL で非表示（部品は残す）。ギャラリーのパネルを外した",
+    "届いた納品を DeliveriesPanel.tsx に切り出し、タイトル一覧の下へ移した",
+    "ホームのヘルプを新しい並びに合わせた",
+    "質問（NPC を 無変換＋1〜9 で足すか）は提案として回答。実装はしていない"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom: V2.1 の流れ 29（3スロット・続きを書くの位置・ホームから外したパネル・作品名で作品ページへ を追加）・ヘルプ 16・下書き 26・柱 21・スマホ 16・納品 21（タイトル一覧で取り込む に変更）・PC幅 25・執筆デスク 49・登場人物 22（名前札から名前を変える 3件を追加）すべて PASS",
+    "開発サーバー（http://localhost:5180）で、ホームに3スロットが並ぶこと、各スロット右上の続きを書く、作品名で作品ページへ移ること、タイトル一覧に届いた納品が出ることを確認。データを書き換える操作はしていない",
+    "作業ツリーには Sub_KanbanNote の変更（ヘッダーの「戻る」ボタンなど）も入っており、上のテストはそれを含んだ状態で通っている",
+    "本番デプロイはしていない（今回は依頼なし）"
+  ],
+  "nextActions": [
+    "場面だけの人物（NPC）を足すか、キーを 無変換＋1〜9 にするかを利用者と決める",
+    "デプロイの依頼があれば本番へ"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/HomeV21.tsx",
+    "APP/kanban-note01/src/v21/DeliveriesPanel.tsx",
+    "APP/kanban-note01/src/v21/TitlesV21.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "home", "save-slots", "talklog", "rename"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "名前の変更は、利用者が最初に触る名前札から届く必要があった。同じ処理をサイドバーと名前札の両方から呼ぶ形にした"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

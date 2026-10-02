@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_005",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "design",
+  "kind": "tech_trial",
+  "date": "2026-09-25",
+  "title": "V2.1（ノベルシナリオ特化の新画面）を既定にし、旧画面をVol1.1として凍結",
+  "summary": "機能が混在して分かりにくくなった旧画面を Vol1.1 として残し、ノベルゲームのシナリオ作成に絞った V2.1（ホーム／タイトル／会話ログ／ギャラリー）を既定にした。メニュー上部の2タブで切り替え、切り替えると再読み込みしてホームから始まる。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-25T10:00:00+09:00",
+  "completedAt": "2026-09-25T11:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "情報設計を docs/v21_情報設計_2026-09-25.md に1枚でまとめた（Vol1.1 のメニューのスクショもテキスト化）",
+    "V2.1 のコードは src/v21/ にまとめた（AppV21・HomeV21・TitlesV21・TitleV21・GalleryV21・VersionTabs・nav・actions・v21.css）",
+    "ホームのパネル: 続きから書く／よく開く（端末ごとの回数）／タイトル／登場人物／ギャラリー／書き方",
+    "作品ページ: 場面の一覧（会話数・最後のセリフ）、あらすじ、登場人物（並び順＝Alt+番号＝KeyDeckのボタン）、KeyDeckへ書き出し",
+    "スマホ幅では、メニューを画面下のタブにする",
+    "Vol1.1 は変更なし。入口（App.tsx の分岐、Header の2タブ）だけを足した。データは共通で、Notebook に任意の synopsis と cast を足しただけ"
+  ],
+  "verification": [
+    "npx tsc -b → exit 0、npx vite build → 成功",
+    "V2.1 を単体でバンドルし jsdom で操作、28件 PASS（ホームの各パネル、タイトル検索、作品ページでの登場人物の追加・並べ替え・あらすじの保存、場面→会話ログがその場面で開く、Alt+2 で作品の2番の人物のセリフ、よく開くと続きからが更新、ギャラリー表示、版タブで保存しルートを消す）",
+    "会話ログVIEWの既存テスト 21件＋12件 PASS（回帰なし）",
+    "未実施: 実ブラウザでの目視（AGENTS.md に従い開発サーバーを起動していない）"
+  ],
+  "nextActions": [
+    "利用者がスマホとPCで V2.1 を目視し、パネルの並びと言葉を直す",
+    "アイディア帳・InBox 等を V2.1 に載せるかを1つずつ決める（載せるときは情報設計の表に1行足す）",
+    "場面の並べ替えと削除、表紙画像、登場人物の画像"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/docs/v21_情報設計_2026-09-25.md",
+    "APP/kanban-note01/src/v21/",
+    "APP/kanban-note01/src/App.tsx",
+    "APP/kanban-note01/src/components/Header.tsx",
+    "APP/kanban-note01/src/pages/PageTalkLog.tsx",
+    "APP/kanban-note01/src/types/index.ts"
+  ],
+  "tags": ["v21", "information-architecture", "novel", "design"],
+  "blockedEncountered": [
+    "作品ページから会話ログへ移るときに Solid の Stale read from <Match> が出た。keyed Match で作品IDを値として渡すように直した"
+  ],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "旧画面を凍結版として残し、新しい画面を既定にして版タブで切り替える形は、KeyDeck（View_Ver1.1）と同じ進め方。データを共通にして見せ方だけを作り直すと、移行なしで試せる"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

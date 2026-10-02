@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260727_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "migration-intake-202608",
+  "kind": "phase_report",
+  "date": "2026-07-27",
+  "title": "8月開発環境向け Kanban / Note移行候補目録を提出",
+  "summary": "Kanban、Note、HarnessBoardの現行正本候補、仕様資料、運用契約、除外生成物を整理し、8月環境の提出先へ目録のみを提出した。元データの移動・削除・改名は行っていない。",
+  "agentId": "terra",
+  "modelProfileId": "gpt-5-codex",
+  "startedAt": "2026-07-27T10:00:00+09:00",
+  "completedAt": "2026-07-27T10:20:00+09:00",
+  "durationMin": 20,
+  "tokensUsed": null,
+  "outcomes": [
+    "Note、Kanban、HarnessBoardを8月再開に必要な単位で分類した。",
+    "移行案をCopy中心にし、稼働中の現行環境を壊さない提出方針を明記した。",
+    "node_modules、dist、Tauri target、Vercel作業キャッシュ、ローカルSecretを除外候補として明記した。",
+    "提出先へ提出目録のみを保存した。"
+  ],
+  "verification": [
+    "提出先READMEの提出ルールを確認した。",
+    "Note、Kanban、HarnessBoardのパッケージ定義、資料、設定、最終更新日を確認した。",
+    "提出先の提出目録ファイルが存在し、主要候補IDを含むことを確認した。"
+  ],
+  "nextActions": [
+    "人間がDEC-001からDEC-005の方針を判断する。",
+    "採用後、Copy対象を8月環境へ複製し、依存再インストールとFirebase/Secret再設定を行う。",
+    "8月環境でNote、Kanban、HarnessBoardの起動とReport受信を検証する。"
+  ],
+  "deliverables": [
+    "C:/00_ProjectDirector/00_受付口/01_Codex_InBox/202608_開発環境_移行提出/Kanban_Note/提出目録.md",
+    "C:/00_master/CHATGPTNOTELOG_0726/202608_Kanban_Note_提出目録_draft.md"
+  ],
+  "tags": ["migration", "kanban", "note", "harnessboard", "august-2026"],
+  "blockedEncountered": ["Firebaseプロジェクトの維持・統合・再作成、Secret移管、KanbanとHarnessBoardの正本分担は人間判断待ち。"],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "アプリ本体、設定、仕様、報告契約、生成物、Secretを分けて提出する目録は、次回のワークスペース移行にも再利用できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

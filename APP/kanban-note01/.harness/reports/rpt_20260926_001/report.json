@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260926_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-26",
+  "title": "「はじまりの町の防衛線」を納品パッケージにしてV2.1で取り込み・表示",
+  "summary": "GAME08_VoiceOfCards（Voice of Cards TRPG title creation セッションの成果）の物語・立ち絵・素材を、変換スクリプトで kanban-note01 の納品パッケージにした。V2.1 のホームから作品として取り込め、作品ページに立ち絵つきの登場人物と素材を、会話ログの名前札に立ち絵を出す。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-26T03:50:00+09:00",
+  "completedAt": "2026-09-26T04:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "public/deliveries/hajimari_defense/（delivery.json と webp 10点）、public/deliveries/index.json",
+    "場面3つ（魔王の間／はじまりの秘密基地（夜明け）／森の平原（夜））、人物5人（戦士・魔法使い・ナレーション・小鬼の斥候・牙の魔獣）、絵10点（立ち絵4・背景3・小物3）",
+    "src/v21/deliveries.ts: 一覧と中身の読み込み、作品としての取り込み（deliveryId で二重取り込みなし）",
+    "ホームに「届いた納品」、作品ページに副題・立ち絵つきの登場人物・素材（納品）、会話ログの名前札に立ち絵（素材の focusX/focusY で顔の位置に切り抜く）",
+    "型: PageCharacter に portrait/focusX/focusY、Notebook に subtitle/deliveryId/assets（すべて任意）"
+  ],
+  "verification": [
+    "変換スクリプトの検算: 原本の本文36行すべてが納品に含まれる（missingTexts: []）",
+    "納品の jsdom テスト 20件 PASS（ホームの表示、取り込み、1回だけ取り込み、作品ページの場面・会話数・人物の順番・立ち絵・切り抜き位置・素材10点とファイルの実在・あらすじ、取り込み済み表示、タイトル一覧の表紙、会話ログの名前札の立ち絵、ナレーションは絵なし、Alt番号、選択肢の備考）",
+    "回帰: V2.1 の流れ 28件、ヘルプ 16件、下書き 26件、柱 19件 PASS",
+    "tsc -b・vite build 成功（PWA の事前キャッシュは 175件・約5.1MB。素材の分だけ増えた）",
+    "未実施: 実機での目視、本番への再デプロイ（利用者の確認待ち）"
+  ],
+  "nextActions": [
+    "本番へ再デプロイしてスマホで見るか、PCの npm run dev で見るかを利用者に確認する",
+    "続きの話（第二話以降）が GAME08 にできたら、同じ変換スクリプトで納品を足す"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/public/deliveries/index.json",
+    "APP/kanban-note01/public/deliveries/hajimari_defense/delivery.json",
+    "APP/kanban-note01/src/v21/deliveries.ts",
+    "APP/kanban-note01/src/v21/Portrait.tsx",
+    "APP/kanban-note01/src/v21/HomeV21.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/docs/v21_情報設計_2026-09-25.md"
+  ],
+  "tags": ["v21", "delivery", "portrait", "GAME08", "hajimari"],
+  "blockedEncountered": [
+    "原本にあらすじ欄が無いため、あらすじは本文から要約し、synopsisNote に明記した",
+    "ripgrep は .gitignore の対象を読み飛ばすため、最初の検索で見つからなかった。grep -r で探し直した"
+  ],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": true,
+    "templateCandidate": true,
+    "note": "別チャットの成果（ゲーム用の場面JSON＋素材一覧）を、変換スクリプトで会話ログの書式へ移し、原本の本文が全部入ったかを機械で検算する流れは、次の話数や別作品でもそのまま使える"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

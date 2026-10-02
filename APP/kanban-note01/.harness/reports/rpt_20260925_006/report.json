@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_006",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-25",
+  "title": "V2.1 に画面ごとのヘルプ（Ctrl+/）を追加し、状態で操作を絞る構想を記録",
+  "summary": "V2.1 のどの画面でも Ctrl+/（または ? ボタン）で、その画面で使えるショートカット・書式（tag）・押して使う操作をポップアップで出すようにした。操作に「いつ使えるか」を持たせ、開いた瞬間の状態（入力中／見ているとき）に合わない操作は薄く出す。次のアプリで XState により操作を状態ごとに限定する構想の先行例として記録した。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-25T11:00:00+09:00",
+  "completedAt": "2026-09-25T11:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "src/v21/help.ts: 画面5つ（ホーム・タイトル・作品ページ・会話ログ・ギャラリー）と共通のヘルプ表。項目に when（いつでも・入力中・見ているとき）を持たせた",
+    "src/v21/HelpOverlay.tsx: いまの状態を表示し、合わない操作を薄く出す。会話ログでは、いまの番号と人物（Alt+番号）も出す",
+    "AppV21: Ctrl+/ を先取り（capture）して、入力欄の中でも開閉する。Esc で閉じる。右上に ? ボタン（押しても入力欄のフォーカスを奪わない）",
+    "構想の記録: XState で、共通操作も local に切り離し、画面・Phaseで使える操作だけに限定する（情報設計の資料と ENG03 の README に記載）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "ヘルプの jsdom テスト 16件 PASS（各画面の見出し、共通欄、Esc・トグル・閉じるボタン、入力中に開くと入力中だけの操作が明るく見るときの操作が薄い、書式の表示、いまの番号と人物、Ctrl+/ が本文に入力されない、? ボタンでも入力中の判定を保つ）",
+    "V2.1 の流れ 28件 PASS（回帰なし）",
+    "未実施: 実ブラウザでの目視"
+  ],
+  "nextActions": [
+    "利用者が各画面で Ctrl+/ を押し、足りない操作や言葉を指摘する",
+    "新アプリ（ENG03 または kanban-note01 の作り直し）で、画面を XState の状態機械として設計し、help.ts の when を状態名に置き換える"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/HelpOverlay.tsx",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/src/pages/PageTalkLog.tsx",
+    "APP/kanban-note01/docs/v21_情報設計_2026-09-25.md"
+  ],
+  "tags": ["v21", "help", "shortcut", "xstate", "design"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "ヘルプを表（データ）として持ち、操作に使える状態を付けておくと、状態機械（XState）へ移すときにそのまま流用できる。外部の操作卓の表示にも使える"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

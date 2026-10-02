@@ -7,7 +7,10 @@ import {
   deleteLocalGalleryPhoto,
   fileToLocalGalleryPhoto,
   loadLocalGalleryPhotos,
+  updateLocalGalleryPhoto,
 } from '../../dataBridge/localGallery'
+import { firebaseEnabled } from '../../db/firebase'
+import { fetchGalleryAssetDrafts, galleryAssetToGalleryItem, syncGalleryItemToFirebase } from '../../dataBridge/firebaseGallery'
 
 type GalleryLocalState = {
   items: GalleryItem[]
@@ -42,8 +45,20 @@ function galleryPhotoToItem(
     description: '',
     tags: [],
     category: 'reference',
-    mimeType: photo.dataUrl.match(/^data:([^;]+);/)?.[1] ?? 'image/*',
-    ...size,
+    mimeType: photo.mimeType ?? photo.dataUrl.match(/^data:([^;]+);/)?.[1] ?? 'image/*',
+    fileSize: photo.fileSize,
+    width: photo.width ?? size.width,
+    height: photo.height ?? size.height,
+    storagePath: photo.storagePath,
+    downloadUrl: photo.downloadUrl,
+    url: photo.downloadUrl,
+    thumbnailPath: photo.thumbnailPath,
+    thumbnailUrl: photo.thumbnailUrl,
+    syncStatus: photo.syncStatus ?? (firebaseEnabled ? 'queued' : 'disabled'),
+    assetStatus: photo.assetStatus ?? (photo.storagePath ? 'cloudDraft' : 'localDraft'),
+    syncError: photo.syncError,
+    syncedAt: photo.syncedAt,
+    lastSyncAttemptAt: photo.lastSyncAttemptAt,
     dataUrl: photo.dataUrl,
     isFavorite: false,
     createdAt: photo.createdAt,
@@ -79,6 +94,41 @@ export const [galleryState, setGalleryState] = createStore<GalleryLocalState>({
   tagSheetId: null,
 })
 
+function hydrateCloudGalleryItems(): Promise<number> {
+  return fetchGalleryAssetDrafts().then((assets) => {
+    if (assets.length === 0) return 0
+    const cloudItems = assets.map(galleryAssetToGalleryItem)
+    setGalleryState('items', (prev) => {
+      const localById = new Map(prev.map((item) => [item.id, item]))
+      const mergedCloud = cloudItems.map((cloud) => ({
+        ...cloud,
+        dataUrl: localById.get(cloud.id)?.dataUrl,
+        isFavorite: localById.get(cloud.id)?.isFavorite ?? cloud.isFavorite,
+      }))
+      const cloudIds = new Set(mergedCloud.map((item) => item.id))
+      return [...mergedCloud, ...prev.filter((item) => !cloudIds.has(item.id))]
+    })
+    setGalleryState('masterTags', (prev) =>
+      Array.from(new Set([...prev, ...extractTags(cloudItems)])).sort()
+    )
+    console.log('[APP04-FIREBASE-GALLERY] 6-4 Gallery assets loaded from Firestore', {
+      count: assets.length,
+    })
+    return assets.length
+  }).catch((error) => {
+    console.warn('[APP04-FIREBASE-GALLERY] 6-4e Gallery asset fetch failed', { error })
+    throw error
+  })
+}
+
+/** クラウドの写真を読み直す（他の端末で入れた写真を、アプリを開き直さずに見る。V2.1 ギャラリー） */
+export const refreshGalleryFromCloud = hydrateCloudGalleryItems
+
+hydrateCloudGalleryItems().catch(() => {})
+if (typeof window !== 'undefined') {
+  window.setTimeout(retryPendingLocalGalleryItems, 1200)
+}
+
 // マスタータグに追加（重複・自動ソート）
 export function addMasterTag(tag: string) {
   const t = tag.trim()
@@ -97,23 +147,118 @@ function readImageSize(dataUrl: string): Promise<{ width?: number; height?: numb
   })
 }
 
+function dataUrlToFile(dataUrl: string, filename: string, mimeType = 'image/png'): File {
+  const [header, body = ''] = dataUrl.split(',')
+  const detectedMime = header.match(/^data:([^;]+);/)?.[1] ?? mimeType
+  const binary = atob(body)
+  const bytes = new Uint8Array(binary.length)
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index)
+  }
+  return new File([bytes], filename, { type: detectedMime })
+}
+
+function syncLocalGalleryItem(item: GalleryItem, file: File) {
+  updateGalleryItem(item.id, { syncStatus: 'syncing', lastSyncAttemptAt: new Date().toISOString() })
+  updateLocalGalleryPhoto(item.id, { syncStatus: 'syncing', lastSyncAttemptAt: new Date().toISOString() })
+
+  syncGalleryItemToFirebase(item, file).then((asset) => {
+    const patch: Partial<GalleryItem> = {
+      storagePath: asset.storagePath ?? undefined,
+      downloadUrl: asset.downloadUrl ?? undefined,
+      url: asset.downloadUrl ?? undefined,
+      thumbnailPath: asset.thumbnailPath ?? undefined,
+      thumbnailUrl: asset.thumbnailUrl ?? undefined,
+      syncStatus: asset.syncStatus,
+      assetStatus: asset.assetStatus,
+      syncError: undefined,
+      syncedAt: asset.sync.syncedAt ?? undefined,
+      lastSyncAttemptAt: asset.sync.lastAttemptAt ?? undefined,
+    }
+    updateGalleryItem(item.id, patch)
+    updateLocalGalleryPhoto(item.id, patch)
+    console.log('[APP04-FIREBASE-GALLERY] 6-2 Gallery asset synced', {
+      id: asset.id,
+      storagePath: asset.storagePath,
+      syncStatus: asset.syncStatus,
+    })
+  }).catch((error) => {
+    const message = error instanceof Error ? error.message : String(error)
+    console.warn('[APP04-FIREBASE-GALLERY] 6-2e Gallery asset sync skipped or failed', {
+      id: item.id,
+      filename: file.name,
+      error,
+    })
+    updateGalleryItem(item.id, {
+      syncStatus: 'error',
+      assetStatus: 'error',
+      syncError: message,
+      lastSyncAttemptAt: new Date().toISOString(),
+    })
+    updateLocalGalleryPhoto(item.id, {
+      syncStatus: 'error',
+      assetStatus: 'error',
+      syncError: message,
+      lastSyncAttemptAt: new Date().toISOString(),
+    })
+  })
+}
+
+function retryPendingLocalGalleryItems() {
+  if (!firebaseEnabled) return
+  const pendingItems = galleryState.items.filter((item) =>
+    item.dataUrl &&
+    !item.storagePath &&
+    (item.syncStatus === 'disabled' || item.syncStatus === 'queued' || item.syncStatus === 'error')
+  )
+  if (pendingItems.length === 0) return
+  console.log('[APP04-FIREBASE-GALLERY] 6-5 Retry pending local gallery assets', {
+    count: pendingItems.length,
+  })
+  pendingItems.slice(0, 5).forEach((item) => {
+    syncLocalGalleryItem(item, dataUrlToFile(item.dataUrl ?? '', item.filename, item.mimeType))
+  })
+}
+
 export function addGalleryImage(file: File) {
   if (!file.type.startsWith('image/')) return
   fileToLocalGalleryPhoto(file).then(async (photo) => {
     if (!photo.dataUrl) return
-    addLocalGalleryPhoto(photo)
     const size = await readImageSize(photo.dataUrl)
-    const item: GalleryItem = {
-      ...galleryPhotoToItem(photo, size),
+    const initialSyncStatus = firebaseEnabled ? 'queued' : 'disabled'
+    const preparedPhoto: GalleryPhoto = {
+      ...photo,
+      ...size,
       mimeType: file.type,
       fileSize: file.size,
+      syncStatus: initialSyncStatus,
+      assetStatus: 'localDraft',
+    }
+    addLocalGalleryPhoto(preparedPhoto)
+    const item: GalleryItem = {
+      ...galleryPhotoToItem(preparedPhoto, size),
+      mimeType: file.type,
+      fileSize: file.size,
+      syncStatus: initialSyncStatus,
+      assetStatus: 'localDraft',
     }
     setGalleryState('items', (prev) => [item, ...prev.filter((entry) => entry.id !== item.id)])
     setGalleryState({ selectedId: item.id, detailOpen: true, showTrash: false })
     console.log('[APP04-LOCAL-GALLERY] 6-1 Gallery page photo added', {
       id: item.id,
       filename: file.name,
+      syncStatus: initialSyncStatus,
     })
+
+    if (!firebaseEnabled) {
+      console.log('[APP04-FIREBASE-GALLERY] 6-2 Gallery asset sync disabled', {
+        id: item.id,
+        filename: file.name,
+      })
+      return
+    }
+
+    syncLocalGalleryItem(item, file)
   }).catch((error) => {
     console.warn('[APP04-LOCAL-GALLERY] 6-1e Gallery page photo add failed', {
       filename: file.name,

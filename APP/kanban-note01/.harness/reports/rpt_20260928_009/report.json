@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_009",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "プロットのフローチャート（一行プロットを縦につなぎ、場面・下書き・資料をスロットに付ける）と、下書きの画面から付ける枠",
+  "summary": "作品ページに「プロット」タブを足した。章 → 場所（Scene）→ 一行プロットを縦の線でつなぎ、各プロットのスロットに場面・下書き・資料を種類つきの参照で付ける。資料は URL・公開パス・PC のパスを貼るか、作品の素材・WW から選べる。下書きの画面の「プロット」から、画面を移らずに今あるプロットへ付ける・新しいプロットとして足す・外すができる。JSON（note_story.plot.v0.1）に書き出せる。ゲームの進行フローとは別のボード・別のデータ。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T18:50:00+09:00",
+  "completedAt": "2026-09-28T20:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "types: PlotRef・PlotSlots・PlotNode（type: plot）・PlotChart・PlotRoll・PlotFlow（schema note_story.plot.v0.1）、Notebook.plotFlow",
+    "plotFlow.ts: 章・場所・プロットの追加・変更・並べ替え・削除、スロットの付け外し、参照（page:/draft:/ww:/url:/file:）の作り方と名前、貼った文字から参照を作る（画像・音・文書・JSON の型名も推定）、この参照が付いたプロット、JSON 書き出し（next は並び順から）",
+    "PlotBoardV21.tsx: 作品ページの「プロット」タブ。縦の線・番号つきの場所（柱の名前を候補に出す）・Enter で次のプロット・必須／任意・↑↓・スロットの札（押すと開く、PC のパスはコピー）・＋場面／＋下書き（新しく作って付けるも）／＋資料（貼る・作品の素材・WW）",
+    "PlotLinkPopover.tsx: 下書きの見出しの「プロット」（付いている数つき）。付いているプロット・新しいプロットとして足す（下書きの名前が入っている）・今あるプロットを選ぶ。画面は移らない",
+    "打っている入力欄が作り直されないよう、一覧は位置で描く形（Index）にした（入力中のカーソルが外れない）",
+    "ヘルプ（作品ページ・執筆デスク）を更新"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 13本 すべて PASS（計355件）。新しいプロットのテスト 26件（タブ・はじめる・打っても同じ入力欄のまま・Enter で次・場所と柱の候補・縦の線・必須／任意・並べ替え・場面を参照で付ける・PC のパスと公開パスの資料・URL でない文字は断る・新しい下書きを作って付ける・外す・場所と章を足す・JSON の schema と next と名前・下書きの画面から付ける／✓と数／新しいプロットとして足す／外す／閉じても下書きのまま）",
+    "開発サーバー（1280×800）で作品ページのプロットのタブ・プロット2つ・スロットの枠を確認",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-DQQCeLxu.js にプロット（note_story.plot.v0.1）・プロットに付ける枠・WW のコードが入っていることを確認。実機は未確認"
+  ],
+  "nextActions": [
+    "スマホ・タブレットで使ってみてもらう",
+    "次の段階: PARTY スロット（その時点の登場人物）→ Scene スコープのショートカット",
+    "ゲームの進行フローは別のボードとして、あとで作る"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/plotFlow.ts",
+    "APP/kanban-note01/src/v21/PlotBoardV21.tsx",
+    "APP/kanban-note01/src/v21/PlotLinkPopover.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css"
+  ],
+  "tags": [
+    "v21",
+    "plot",
+    "flowchart",
+    "slots",
+    "json",
+    "writing-desk"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "直すたびに形を写し取って保存する作りでは、一覧を物で描くと入力欄が作り直されてカーソルが外れる。位置で描く（Index）と入力欄が残る。テストで『打っても同じ入力欄のまま』を確かめた"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

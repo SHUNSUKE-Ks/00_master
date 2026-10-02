@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_013",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "会話ログの音声: セリフごとに録音・再生・通して再生（この端末に保存）",
+  "summary": "会話ログのセリフの右にあった「予定」のスピーカーとマイクを本物にした。マイクで録音（もう一度押すと保存）、スピーカーで再生、上の「▶ 通して再生」で録音のあるセリフを順に鳴らす。録音はこの端末の IndexedDB に置く。クラウドでの端末間共有は次の段階。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T13:40:00+09:00",
+  "completedAt": "2026-09-28T14:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "voiceStore.ts（新）: MediaRecorder で録音（webm/opus、無ければ mp4 など端末が出せる形）。エコー・雑音の抑え・音量の自動調整を有効。声の大きさ（見た目用）。IndexedDB（note-story-v21-voice）に保存、最初の保存で「消さないで」（storage.persist）を頼む",
+    "セリフとの結び付け: セリフに固定の id が無いので「文字の指紋＋同じ文字の何番目か」。話者名は鍵に入れない（登場人物の名前を変えても外れない）。書き直したら入力欄を離れたときに録音を付け替え、黄色の点で『録音のあとで変わった』を示す",
+    "別の所で本文が変わって合わなくなった録音は「合わない音声」に残し、再生・選んでいるセリフに付ける・消すができる",
+    "画面: マイク（録音中は赤い点が声の大きさで動き、時間を出す）／スピーカー（金色＝録音あり、押す＝再生・停止、0.6秒長押し＝消す）／録り直しはアプリのダイアログで確認／見出しに『音声 n/m』と『▶ 通して再生／■ 止める』",
+    "マイクが許可されないときは、許可のしかたを出す。ページ・範囲を替えると録音・再生を止める",
+    "タブレット幅で会話ログの見出しが縦に折れていたのを直した。ヘルプに『音声』の項"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功。vercel.json にマイクを止める設定（Permissions-Policy）が無いことを確認",
+    "jsdom 16本 すべて PASS（計464件）。新: 音声 28件（ボタン・録音の開始と保存・再生・同じ文字のセリフは別・通して再生の順番と止める・録り直しの確認・書き直しで付いていく・外で変わると合わない音声→付け直す・長押しで消す・ページごと・戻ると残っている・マイク不許可・鍵に名前を含まない）。マイク・録音・再生はテスト用のまねで確認",
+    "開発サーバー（744px）で会話ログの見た目を確認。実機のマイクでの録音はまだ（本番または実機で確認が要る）",
+    "本番デプロイはまだ"
+  ],
+  "nextActions": [
+    "デプロイ後、Android の PWA と PC で実際に録音・再生を確かめる",
+    "クラウドへの共有（Firebase Storage。ルールの確認が要る）: スマホで録って PC で聞く",
+    "書き出し（ページの録音をまとめて ZIP／WAV）、再生速度、ここから再生、未収録のセリフを合成音声で代読（speechSynthesis）"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/voiceStore.ts",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/src/v21/help.ts"
+  ],
+  "tags": ["v21", "talklog", "voice", "audio", "pwa", "indexeddb"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": false, "note": "本文をテキストで持つ設計なのでセリフに id が無い。文字の指紋で結び、書き直しは入力欄を離れるときに付け替え、合わなくなった物は捨てずに付け直せるようにした" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

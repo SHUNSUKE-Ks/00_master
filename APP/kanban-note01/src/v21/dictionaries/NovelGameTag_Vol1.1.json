@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "id": "NovelGameTag_Vol1.1",
+    "title": "NovelGameTag",
+    "volume": "1.1",
+    "kind": "tag_dictionary_book",
+    "format": "lower_snake_case",
+    "savedAt": "2026-09-25",
+    "source": "利用者がチャットに貼った辞書（2026-09-25）",
+    "summaryAsProvided": "分類: 13種類の接頭詞で整理 / 収録: 150件以上のゲーム制作用タグ / 形式: lower_snake_case / 検証: JSON構文エラーなし",
+    "receivedNote": "貼り付けは途中（bg_town_night）から始まっていた。fx_・mood_・bgm_・se_ の全件と、bg_ の前半は受け取っていない（status: missing）。受け取った分だけを1文字も変えずに収録した",
+    "design": "tags は演出、control は対象値（target / value）を必要とする処理に分ける。単純な OneShot 形式を壊さず、後から条件分岐を足せる"
+  },
+  "prefixes": [
+    { "group": "fx", "prefix": "fx_", "label": "演出", "status": "missing" },
+    { "group": "mood", "prefix": "mood_", "label": "感情", "status": "missing" },
+    { "group": "bgm", "prefix": "bgm_", "label": "音楽", "status": "missing" },
+    { "group": "se", "prefix": "se_", "label": "効果音", "status": "missing" },
+    { "group": "bg", "prefix": "bg_", "label": "背景", "status": "partial" },
+    { "group": "char", "prefix": "char_", "label": "人物", "status": "received" },
+    { "group": "face", "prefix": "face_", "label": "表情", "status": "received" },
+    { "group": "cg", "prefix": "cg_", "label": "一枚絵", "status": "received" },
+    { "group": "ui", "prefix": "ui_", "label": "画面", "status": "received" },
+    { "group": "cam", "prefix": "cam_", "label": "視点", "status": "received" },
+    { "group": "ev", "prefix": "ev_", "label": "処理", "status": "received" },
+    { "group": "flag", "prefix": "flag_", "label": "状態", "status": "received" },
+    { "group": "req", "prefix": "req_", "label": "条件", "status": "received" },
+    { "group": "memo", "prefix": "memo_", "label": "制作", "status": "received" }
+  ],
+  "groups": {
+    "bg": {
+      "bg_town_night": "夜の街",
+      "bg_room": "室内",
+      "bg_castle": "城内",
+      "bg_ruins": "遺跡",
+      "bg_dungeon": "地下迷宮",
+      "bg_battlefield": "戦場"
+    },
+    "char": {
+      "char_show_left": "左側に登場",
+      "char_show_center": "中央に登場",
+      "char_show_right": "右側に登場",
+      "char_hide_left": "左側から退場",
+      "char_hide_center": "中央から退場",
+      "char_hide_right": "右側から退場",
+      "char_move_left": "左へ移動",
+      "char_move_right": "右へ移動",
+      "char_jump": "跳ねる",
+      "char_shake": "震える"
+    },
+    "face": {
+      "face_normal": "通常",
+      "face_smile": "笑顔",
+      "face_laugh": "大笑い",
+      "face_sad": "悲しみ",
+      "face_cry": "泣き",
+      "face_angry": "怒り",
+      "face_surprised": "驚き",
+      "face_fear": "恐怖",
+      "face_blush": "照れ",
+      "face_serious": "真剣",
+      "face_injured": "負傷",
+      "face_closed_eyes": "目を閉じる"
+    },
+    "cg": {
+      "cg_show": "イベントCG表示",
+      "cg_hide": "イベントCG消去",
+      "cg_zoom_in": "CGへ寄る",
+      "cg_zoom_out": "CGから引く",
+      "cg_unlock": "ギャラリーへ登録"
+    },
+    "ui": {
+      "ui_dialog_show": "会話枠を表示",
+      "ui_dialog_hide": "会話枠を隠す",
+      "ui_name_show": "話者名を表示",
+      "ui_choice_show": "選択肢を表示",
+      "ui_choice_hide": "選択肢を隠す",
+      "ui_hud_show": "HUDを表示",
+      "ui_hud_hide": "HUDを隠す",
+      "ui_inventory_open": "所持品を開く",
+      "ui_map_open": "地図を開く",
+      "ui_save_open": "保存画面を開く"
+    },
+    "cam": {
+      "cam_reset": "標準位置へ戻す",
+      "cam_zoom_in": "拡大",
+      "cam_zoom_out": "縮小",
+      "cam_pan_left": "左へ移動",
+      "cam_pan_right": "右へ移動",
+      "cam_pan_up": "上へ移動",
+      "cam_pan_down": "下へ移動",
+      "cam_focus_left": "左の人物へ注目",
+      "cam_focus_center": "中央へ注目",
+      "cam_focus_right": "右の人物へ注目"
+    },
+    "ev": {
+      "ev_scene_start": "シーン開始",
+      "ev_scene_end": "シーン終了",
+      "ev_choice": "選択分岐",
+      "ev_jump": "指定シーンへ移動",
+      "ev_battle_start": "戦闘開始",
+      "ev_battle_end": "戦闘終了",
+      "ev_item_get": "アイテム取得",
+      "ev_item_use": "アイテム使用",
+      "ev_quest_start": "依頼開始",
+      "ev_quest_clear": "依頼達成",
+      "ev_game_over": "ゲームオーバー",
+      "ev_ending": "エンディング開始"
+    },
+    "flag": {
+      "flag_on": "フラグを真にする",
+      "flag_off": "フラグを偽にする",
+      "flag_route_a": "Aルート選択済み",
+      "flag_route_b": "Bルート選択済み",
+      "flag_route_c": "Cルート選択済み",
+      "flag_battle_win": "戦闘勝利済み",
+      "flag_battle_lose": "戦闘敗北済み",
+      "flag_item_owned": "対象アイテム所持",
+      "flag_event_seen": "対象イベント既読"
+    },
+    "req": {
+      "req_always": "無条件",
+      "req_flag_on": "指定フラグが真",
+      "req_flag_off": "指定フラグが偽",
+      "req_item_owned": "指定アイテムを所持",
+      "req_item_missing": "指定アイテムを未所持",
+      "req_level_min": "指定レベル以上",
+      "req_level_max": "指定レベル以下",
+      "req_choice_is": "指定選択肢を選択済み",
+      "req_event_seen": "指定イベントを閲覧済み"
+    },
+    "memo": {
+      "memo_draft": "下書き",
+      "memo_review": "要確認",
+      "memo_rewrite": "要修正",
+      "memo_asset_missing": "素材不足",
+      "memo_sound_missing": "音素材不足",
+      "memo_branch_check": "分岐確認",
+      "memo_foreshadow": "伏線",
+      "memo_callback": "伏線回収",
+      "memo_debug": "デバッグ対象",
+      "memo_done": "制作完了"
+    }
+  },
+  "example": {
+    "scene": "森入口",
+    "bg": "bg_forest_1280x720",
+    "talk": [["騎士", "ここが魔女の森か…"]],
+    "tags": ["fx_fog_slow", "mood_lonely", "bgm_mystery", "cam_zoom_in"],
+    "control": [
+      { "tag": "flag_event_seen", "target": "EV_01_001", "value": true },
+      { "tag": "req_item_owned", "target": "item_silver_key" }
+    ]
+  }
+}

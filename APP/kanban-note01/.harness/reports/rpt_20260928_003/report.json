@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_003",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "設定 → ショートカット（PC／Android（縦）／タブレット（横）のタブ、押して登録）",
+  "summary": "端末ごとの「操作 → キーの組み合わせ」を、設定のショートカットにタブ（PC／Android（縦）／タブレット（横））で分けて持つようにした。押したキーの組み合わせをそのまま登録し、いまの端末の種類と向きで使うタブを自動で選ぶ。登録した組み合わせは既定より先に受け取る。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T13:00:00+09:00",
+  "completedAt": "2026-09-28T14:20:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "shortcuts.ts: 端末の種類（PC／Android（縦）／タブレット（横））・操作の一覧・登録と削除・登録できないキーの判定・いまの端末のタブの自動判定（向きが変わると切り替わる）・操作を画面へ知らせる仕組み",
+    "SettingsV21.tsx: 設定 → ショートカット。タブ（いまの端末に緑の丸と「この端末」）、操作ごとに既定と登録した組み合わせ、「押して登録」（修飾キーだけは待つ・Esc でやめる）、×で消す、タブの登録をすべて消す",
+    "AppV21: 見出しに歯車（設定）。キー入力を受け取る所で、登録した組み合わせを既定より先に処理",
+    "会話ログ・下書き（2カラムでは書いている列だけ）・2カラムの画面が、登録した操作を受け取る。キー入力モニターに「登録へ」",
+    "スマホ幅で見出しのボタンがはみ出していた（118px）のを、ロゴの文字と「戻る」の Ctrl+Z を隠して詰めた"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 12本 すべて PASS（計316件）。新しいショートカットのテスト 19件（歯車で設定・3つのタブ・横向きタブレットで タブレット（横）が この端末・修飾キーだけは待つ・Ctrl+Alt+D を登録・229 と文字キーだけは断る・F13 は登録できる・Esc でやめる・同じ組み合わせは前の操作から外す・タブごとに別・Android（縦）の登録は横向きでは効かない・F15 でモニター・Ctrl+Alt+D で2カラムの切り替え・F13 で人物2・既定の Alt+1 も効く・×で消す）",
+    "開発サーバー（375px）: 見出しのはみ出し 118px → 0、設定の画面のはみ出しなし、スマホの見え方で Android（縦）が この端末 になることを確認",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-CLS5lTzd.js にキー入力モニターと設定 → ショートカットのコードが入っていることを確認。実機は未確認"
+  ],
+  "nextActions": [
+    "Lenovo タブレットで、キー入力モニターの記録を見て Alt+1 が効かない原因を決め、代わりの組み合わせをタブレット（横）に登録してもらう"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/shortcuts.ts",
+    "APP/kanban-note01/src/v21/SettingsV21.tsx",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/DeskSplitV21.tsx",
+    "APP/kanban-note01/src/v21/KeyMonitor.tsx",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md"
+  ],
+  "tags": [
+    "v21",
+    "settings",
+    "shortcuts",
+    "keyboard",
+    "tablet",
+    "android"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "登録の形をキー入力モニターの表示と同じにしたので、『モニターで見た信号をそのまま登録する』流れになった。端末の種類は固定の機種ではなく、向きと操作方法で決めるので、同じタブレットでも縦横で使い分けられる"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

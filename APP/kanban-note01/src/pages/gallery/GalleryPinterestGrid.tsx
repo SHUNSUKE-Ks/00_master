@@ -1,5 +1,6 @@
 import { type Component, For, Show } from 'solid-js'
 import type { GalleryItem } from './types'
+import { SYNC_STATUS_LABELS } from './types'
 import { galleryState, openTagSheet, selectGalleryItem } from './store'
 
 type Props = {
@@ -18,6 +19,14 @@ const SCAFFOLD_PINS = [
 ]
 
 const BOARDS = ['すべて', 'Character', 'Background', 'UI', 'Effect', 'Item', 'Sprite', 'MangaRef', 'PromptRef']
+
+function syncTone(status = 'local') {
+  if (status === 'synced') return 'bg-emerald-400/90 text-emerald-950'
+  if (status === 'syncing' || status === 'queued') return 'bg-sky-300/90 text-sky-950'
+  if (status === 'error') return 'bg-rose-400/90 text-white'
+  if (status === 'disabled') return 'bg-amber-300/90 text-amber-950'
+  return 'bg-white/15 text-white/70'
+}
 
 const GalleryPinterestGrid: Component<Props> = (props) => {
   const hasAnyRealItems = () => galleryState.items.some((item) => !item.isDeleted)
@@ -142,6 +151,9 @@ const GalleryPinterestGrid: Component<Props> = (props) => {
                     }}
                   >
                     ...
+                  </span>
+                  <span class={`absolute left-2 top-2 rounded-full px-2 py-1 text-[10px] font-bold shadow-sm ${syncTone(item.syncStatus)}`}>
+                    {SYNC_STATUS_LABELS[item.syncStatus ?? 'local']}
                   </span>
                 </button>
                 <div class="px-2.5 py-2">

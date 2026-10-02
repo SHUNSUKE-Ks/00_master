@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260930_001",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-30",
+  "title": "V2.1 導線の見直し: ヘッダーのメモ直行・ホーム項目の削除・Titleなしの人物を CharacterA〜I に・記号キーを大きく",
+  "summary": "ヘッダーの「メモ」を押すと一覧を挟まず Title なしの下書き画面へ入る。メニューの「ホーム」は左上のロゴ（Note Story）に一本化。Title なしのメモの Alt+1〜9 は、直近更新の作品（はじまりの町）の人物ではなく CharacterA〜I（初期値）になる。執筆デスクの記号キー（NAV右下）を大きくした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-sonnet-5-5",
+  "startedAt": "2026-09-30T09:00:00+09:00",
+  "completedAt": "2026-09-30T10:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "AppV21.tsx: 「メモ」= openMemoDesk。何も書いていない最新のメモがあれば開き、無ければ新規作成して desk（MEMO_SHELF）へ。上のメニューと下タブの両方",
+    "AppV21.tsx: NAV から「ホーム」を削除。ホームは左上のロゴ（既に go home）が兼ねる",
+    "原因: WritingDeskV21.tsx の castGroups が、Title なしのとき『直近更新の作品の人物』を先頭にし、Alt+1〜9 がそれを呼んでいた。先頭に Title なしの CharacterA〜I（nav.ts の defaultCastSlots / untitledSlotName）を置き、作品の人物は番号なしでその下へ",
+    "PageTalkLog.css: 記号キーを 22×30・12.5px → 33×44・17px。記号キーのある NAV（執筆デスク）だけ幅 56/60 → 76px。サイドバーの位置は --v21-mrail-w で追従（会話ログの NAV は変えない）"
+  ],
+  "verification": [
+    "npx tsc --noEmit exit 0（記号キー・NAV幅の CSS 変更前の最初の2件の時点、および人物・ホーム削除後）",
+    "画面での動作確認は未実施（開発サーバーは規則により自動起動しない）",
+    "自動テスト（jsdom）は本作業では実行していない"
+  ],
+  "nextActions": [
+    "利用者が開発サーバーで、ヘッダーのメモ直行・記号キーの大きさ（スマホ幅・タブレット横）・Title なしの人物を確認",
+    "『押すたびに必ず新規メモ』のほうがよければ openMemoDesk を1行で変える",
+    "Title なしの枠名を CharacterA〜I にしたので、Character1〜9 のままがよければ untitledSlotName を戻す"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/pages/PageTalkLog.css"
+  ],
+  "tags": ["v21", "header", "memo", "cast", "symbol-keys", "layout"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": false, "skillCandidate": false, "templateCandidate": false, "note": "『Title なし』の初期値を暗黙に『最近の作品』へ寄せていたのが原因。Title なしは作品の値を借りず、専用の初期値を持つ" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

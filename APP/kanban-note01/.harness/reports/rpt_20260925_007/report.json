@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_007",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-25",
+  "title": "作品ページに下書き（複数枚）とタグ辞書の横候補を追加し、Vercel本番へデプロイ",
+  "summary": "V2.1 の作品ページに、本番の場面とは別に保存する下書きタブを追加した。旧ノートの書式（柱・ト・セリフ・Callout）と人物ボタンを使え、横の2段タブから押すだけでタグを貼れる。タグ辞書 NovelGameTag_Vol1.1 を1冊の本として保存し、候補に出すタグを選ぶ編集画面を付けた。https://kanban-note01.vercel.app へ本番デプロイした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-25T11:40:00+09:00",
+  "completedAt": "2026-09-25T12:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "src/v21/DraftsV21.tsx: 下書きの枚の切り替え・追加・削除、柱・ト・セリフ、人物、Callout、横候補（共通／キャラクター／WW）、表示を選ぶ編集画面",
+    "src/v21/drafts.ts: 下書きの置き場。notebook には一切書かない（本番と混ざらない）。いまは端末の localStorage のみ",
+    "src/v21/dictionaries/NovelGameTag_Vol1.1.json: 受け取った93件を1文字も変えずに収録。未受領（fx・mood・bgm・se、bg前半）を status: missing で明記",
+    "Ctrl+/ のヘルプに、下書きとタグ辞書の欄を追加",
+    "Vercel 本番デプロイ（dpl_AmabXfaZdrLG1ZGGQAgCNKkNT8ss、https://kanban-note01.vercel.app にエイリアス）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "下書きの jsdom テスト 26件 PASS（空の状態、柱・ト・人物の差し込みとカーソル位置、タグの貼り付け、全分類の検索、未受領の分類は押せない、表示を選ぶで隠す・全部隠す・全部出すと保存、Callout、2枚目の切り替え、localStorage に別保存、本番の notebook が1バイトも変わらない、キャラクター・WWタブ、ヘルプ、削除）",
+    "回帰: V2.1の流れ 28件、ヘルプ 16件 PASS",
+    "本番URLを Browser pane で開き、V2.1（ホームの6パネル、4つのメニュー、狭い幅での下タブ）が出ることを確認"
+  ],
+  "nextActions": [
+    "利用者が PWA（スマホ）で本番URLを開き、再読み込みしてから確認する",
+    "辞書の残り（fx_・mood_・bgm_・se_、bg_前半）を受け取り、同じ本に足す",
+    "【既存の不具合・未修正】initFirestore が匿名サインインを待たずに読むため、初めて開いた端末では Firestore が権限エラーになり、端末内のデータで表示される（コミット済みの旧版から同じ）。直すなら initFirestore の先頭で ensureAnonymousUser() を呼ぶ1行。利用者の判断待ち",
+    "下書きの置き場を端末間で同期するか（Firestore の別コレクション等）、下書き→本番の場面へ移す操作を作るかを決める"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/DraftsV21.tsx",
+    "APP/kanban-note01/src/v21/drafts.ts",
+    "APP/kanban-note01/src/v21/dictionaries/NovelGameTag_Vol1.1.json",
+    "APP/kanban-note01/src/v21/dictionaries/index.ts",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/v21_情報設計_2026-09-25.md",
+    "https://kanban-note01.vercel.app"
+  ],
+  "tags": ["v21", "drafts", "tag-dictionary", "deploy", "vercel", "pwa"],
+  "blockedEncountered": [
+    "辞書の貼り付けが途中（bg_town_night）から始まっており、fx_・mood_・bgm_・se_ の全件と bg_ の前半を受け取れていない。作らずに未受領として記録した",
+    "デプロイは、以前の報告書（DevStudio/12）にある手順 npx vercel --prod で、ローカルの作業ツリーから本番へ出した。master への merge と push はしていない（リポジトリ全体に他の未コミット変更があるため）。同じ日に codex が kanban-note01 に入れた未コミットの変更も、この本番に含まれている"
+  ],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "本番のデータと下書きを別の置き場に分け、置き場を1ファイル（drafts.ts）に閉じ込めると、後から同期先を変えても画面は直さずに済む"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_002",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "キー入力モニター（端末のキーボードの信号を四角い窓に出す）と、端末ごとのショートカット登録の構想",
+  "summary": "Lenovo のタブレットで Alt+1 が効かない件の調べる道具として、見出しのボタンで開くキー入力モニターを作った。key・code・keyCode・修飾キー・変換中かどうか・beforeinput などを出し、いまの会話ログの Alt+番号 として受け取れるか（受け取れない理由）を示す。操作は変えない。押したキーをそのまま登録する端末ごとのショートカットは構想として資料に書いた。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T11:30:00+09:00",
+  "completedAt": "2026-09-28T12:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "KeyMonitor.tsx: 四角い浮いた窓（340px角・つかんで移動・位置を覚える）。keydown/keyup/beforeinput/compositionstart/end を見るだけで記録（capture・passive）",
+    "最後に押した組み合わせ（chordOf: 例 Alt+Digit1）と、会話ログの Alt+番号 の判定（受け取れる／IME が先に取る・altKey が false・code が空 など）",
+    "一時停止・クリア・コピー（端末の情報つき）",
+    "見出しにキーボードのアイコン（開閉）。ヘルプに説明",
+    "docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md に §4（モニターと、端末ごとのショートカット登録の構想）を追記"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 11本 すべて PASS（計297件）。新しいモニターのテスト 11件（開閉・四角い窓・Alt+Digit1 の判定が受け取れる・モニターを開いても Alt+1 でセリフができる・IME／altKey なし／code が空 の理由・記録の中身・一時停止・クリア・閉じる）",
+    "開発サーバー（1024×700）で、窓が 340×340 で右下に出て、Alt+Digit1 と判定が表示されることを確認",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-CLS5lTzd.js にキー入力モニターと設定 → ショートカットのコードが入っていることを確認。実機は未確認"
+  ],
+  "nextActions": [
+    "本番へデプロイし、Lenovo タブレットで Alt+1 を押したときの記録（コピー）を送ってもらう",
+    "記録から原因を決め、端末ごとのショートカット登録（押して登録）を作るか決める"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/KeyMonitor.tsx",
+    "APP/kanban-note01/src/v21/AppV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md"
+  ],
+  "tags": [
+    "v21",
+    "keyboard",
+    "diagnostics",
+    "tablet",
+    "android",
+    "shortcuts"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "端末ごとに違うキーの不具合は、推測で直す前に、その端末が送る信号を見る道具を先に置くと早い。記録をコピーして渡せる形にした"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

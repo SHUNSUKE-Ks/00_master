@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260927_006",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-27",
+  "title": "既存の名前への変更（まとめる）・長押し0.6秒・演出tagを[]で・NAV長押しで直書きタグ・Scene/人物を足しやすく",
+  "summary": "別の人物がもう使っている名前に変えるときは確認してから2人をまとめるようにした。長押しは0.6秒に統一。下書きの演出tagは[]で囲んで貼る。NAVのアイコンは押す＝開く、0.6秒長押し＝[Character_\"\"]・[Scene_\"\"]・[演出_\"\"]をカーソル位置に直書き。スマホのサイドバーは検索窓の文字から人物・柱を新しく足せる。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-27T18:10:00+09:00",
+  "completedAt": "2026-09-27T19:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "actions.ts: renameCharacter に allowMerge（元のセリフを付け替え、元の枠は空きに戻す）、renameNeedsMerge、renameCharacterWithConfirm（確認つき）。名前札・サイドバー・作品ページ・スマホの長押しで共通",
+    "sideNav.tsx: HOLD_MS=600 と holdPress（押す／長押しを分ける共通処理）。RailButton に onLongPress",
+    "会話ログの名前札の長押しを 0.6秒に。SwipeRow も 0.6秒",
+    "執筆デスク: 演出tag を [id] で貼る（PC・スマホ）。作品ページの下書きタブも同じ",
+    "執筆デスク: NAV の長押しで [Character_\"\"]・[Scene_\"\"]・[演出_\"\"] を直書き（\"\" の中にカーソル）。押すだけならパネル／サイドバーの開閉",
+    "スマホのサイドバー: 検索窓の文字がまだ無ければ「＋ 登場人物に足して貼る」「＋ 新しい柱にする」。PC の Scene 一覧に「＋ 新しい柱」",
+    "タグを [] で囲む書き方の解析用の正規表現と、全角記号が混ざる注意を資料に残した"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 9本 すべて PASS（計266件）。執筆デスク 76（[] のタグ、PC・スマホの長押しで直書きタグと \"\" の中のカーソル、短く押すと開閉、検索窓から人物・柱を足す）、登場人物 32（既存の名前は確認・やめると変わらない・OK でまとめて元の枠は空き、0.6秒の長押し）",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-27）。公開中の main-CLDgCv-4.js に、まとめる確認・新しく足す行・直書きタグのコードが入っていることを確認。実機は未確認"
+  ],
+  "nextActions": [
+    "スマホで0.6秒の長押し・NAVの直書きタグ・[] のタグを試してもらう",
+    "直書きタグ（[Scene_\"…\"] など）を読み取って使う側（解析・novelEngine への受け渡し）を決める"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/v21/sideNav.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/CastSidebar.tsx",
+    "APP/kanban-note01/src/v21/TitleV21.tsx",
+    "APP/kanban-note01/src/v21/DraftsV21.tsx",
+    "APP/kanban-note01/src/v21/SwipeRow.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": [
+    "v21",
+    "writing-desk",
+    "cast",
+    "merge",
+    "long-press",
+    "tags",
+    "mobile"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "押す／長押しを1つの処理（holdPress）にまとめ、秒数を1か所（HOLD_MS）にしたので、次に秒数を変えるときも1行で済む"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

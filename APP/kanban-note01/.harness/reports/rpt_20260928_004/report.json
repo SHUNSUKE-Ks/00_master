@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_004",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "incident",
+  "date": "2026-09-28",
+  "title": "Lenovo タブレット: Alt+1 は端末が先に受け取っていた（モニターで判明）／PWA が縦に固定されていた",
+  "summary": "キー入力モニターの記録で、Lenovo タブレットは Alt を押している間の数字キーの信号をブラウザに渡していないと分かった（アプリ側では受け取れない。ショートカットの登録で別の組み合わせを使う）。モニターは、修飾キーだけが届いたときにそう知らせるようにした。入れたアプリ（PWA）が縦にしかならなかったのは、manifest の orientation が portrait だったためで、any に変えた。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T14:40:00+09:00",
+  "completedAt": "2026-09-28T15:10:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "原因（Alt+1）: モニターの記録が Alt の keydown／keyup だけで、Digit1 の keydown が無い。端末が数字キーを先に受け取っている。アプリでは直せないので、設定 → ショートカットで別の組み合わせを登録して使う",
+    "KeyMonitor: 修飾キーを押して離すまでに他のキーの信号が無ければ『端末が先に受け取っている可能性』と知らせる",
+    "原因（縦にしかならない）: vite.config.ts の PWA manifest が orientation: 'portrait'。'any' に変更（ビルドした manifest.webmanifest で確認）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功、dist/manifest.webmanifest が \"orientation\":\"any\"",
+    "jsdom: キー入力モニター 13件（Alt だけ届いたときの知らせ・数字が届けば消える を追加）、ショートカット 19・2カラム 20・執筆デスク 76 PASS",
+    "本番デプロイはしていない（利用者の確認待ち）。入れたアプリの向きは、デプロイ後に Chrome が新しい manifest を取り込むか、入れ直すまで変わらない"
+  ],
+  "nextActions": [
+    "デプロイ後、Lenovo でアプリ（PWA）を入れ直して横になるか確かめる",
+    "Lenovo でモニターを使い、届く組み合わせ（Ctrl+数字、F キーなど）を探して、ショートカットに登録してもらう"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/vite.config.ts",
+    "APP/kanban-note01/src/v21/KeyMonitor.tsx",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md"
+  ],
+  "tags": ["v21", "tablet", "keyboard", "pwa", "manifest", "orientation", "diagnostics"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "推測で直さず、端末が送る信号を先に見たので、アプリ側では直せない（端末が取っている）とすぐ分かった。PWA の manifest の向きの固定は、ブラウザのタブでは効かないので見落としやすい"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

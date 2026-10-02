@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_009",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-25",
+  "title": "修正案1の訂正: 柱は本文のブロックに戻し、柱の記入ステートでだけフッターに候補を出す",
+  "summary": "利用者の訂正（柱を毎回フッターで記入するのではなく、柱ブロックに入ったらフッターに今までの候補を出す）に合わせ、V2.1 の会話ログを直した。フッターは、ふだんは今の行の場面を表示し、柱ブロックに入力しているあいだだけ候補の一覧に切り替わる。備考は前の版のまま了承された。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-25T17:00:00+09:00",
+  "completedAt": "2026-09-25T17:40:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "柱ブロックを本文に戻し、ドックに「柱」ボタンを戻した（ト書きは外したまま、備考はそのまま）",
+    "フッター: ふだんは直前の柱（いまの場面）、柱ブロックの入力中だけ今までの柱を2列で出す。打つと絞り込み、押すと入る（フォーカスは離れない）",
+    "候補: この場面の他の柱 → 作品の他の場面の柱 → 以前作ったタグ。入力中の柱自身は除き、重複なし",
+    "スマホのキーボードでフッターが隠れないよう、viewport に interactive-widget=resizes-content を追加",
+    "前の版のフッター検索窓・新規作成・× は外した（柱ブロックに書くことで作られるため）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "柱の記入ステートの jsdom テスト 19件 PASS（柱ブロックが戻る、ト書きは隠れたまま、ドック、ふだんの場面表示、入ると候補、自分の柱は出ない、絞り込み、押すと入る、入力が途切れない、離れると戻る、柱ボタンで直下に作り候補が出る、重複なし、新しい柱が次の候補になる、空で Backspace、柱なしは未設定、ヘルプ）",
+    "回帰: V2.1 の流れ 28件、ヘルプ 16件、下書き 26件、読み書きの部分 14件 PASS",
+    "未実施: 実機での目視、本番への再デプロイ（利用者の確認待ち）"
+  ],
+  "nextActions": [
+    "本番へ再デプロイするか確認する",
+    "Firestore の既存不具合の1行修正を行うか確認する",
+    "スマホで、柱ブロックに入った時にキーボードの上にフッターの候補が見えるかを実機で確かめる"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/index.html",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": ["v21", "talklog", "pillar", "state", "revision"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "入力中のブロックの種類（柱の記入ステート）でフッターの中身を切り替える形は、利用者の XState 構想（画面Phaseで使える操作を限定する）の実例。状態＝どのブロックに入っているか、で操作を出し分けられる"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

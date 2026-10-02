@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260724_003",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "study-library",
+  "kind": "phase_report",
+  "date": "2026-07-24",
+  "title": "PlotNest CustomEditor保留構想の原本保管と話題分割",
+  "summary": "混在していたPlotNest CustomEditorチャットを原本保管し、画面設計、データ・Export、React実装草案、名称・ロゴ案へ分割した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-07-24T00:00:00+09:00",
+  "completedAt": "2026-07-24T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "原本をMarkdownとして保管した。",
+    "4話題の要約記事を作り、原本セクションへリンクした。",
+    "現行SolidJS設計とReact/Zustand草案を区別した。"
+  ],
+  "verification": [
+    "Studyカードと保留構想の目次を追加した。",
+    "各要約記事から原本チャット保管へのMarkdownリンクを設定した。"
+  ],
+  "nextActions": [
+    "CustomEditorを再開する時は、NovelEngine schemaと現行SolidJS構成を前提に別仕様書を作る。",
+    "必要な発想だけを新規記事へ再採用し、保留構想の原本は編集しない。"
+  ],
+  "deliverables": [
+    "public/study-blog/legacy/held-ideas/plotnest-custom-editor/目次.md",
+    "public/study-blog/legacy/held-ideas/plotnest-custom-editor/原本チャット_保管.md",
+    "public/study-blog/legacy/held-ideas/plotnest-custom-editor/画面設計_要約.md",
+    "public/study-blog/legacy/held-ideas/plotnest-custom-editor/データExport_要約.md",
+    "public/study-blog/legacy/held-ideas/plotnest-custom-editor/React実装草案_保留.md",
+    "public/study-blog/legacy/held-ideas/plotnest-custom-editor/名称ロゴ_要約.md"
+  ],
+  "tags": ["Study", "保留構想", "CustomEditor", "PlotNest", "原本保管"],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "混在チャットを原本と分割要約に分け、要約から引用元へ戻れる構造は、今後の古い設計資料にも再利用できる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

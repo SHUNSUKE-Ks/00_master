@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260724_006",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "strategy-operations",
+  "kind": "decision",
+  "date": "2026-07-24",
+  "title": "Web ChatGPT Project戦略運用とCodex引き渡し草案",
+  "summary": "Web ChatGPTを戦略室、Git/Codexを実行室、Kanbanを管制室として分けるProject運用と、将来のプロジェクト別引き渡しschemaの草案を作成した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-5",
+  "startedAt": "2026-07-24T00:00:00+09:00",
+  "completedAt": "2026-07-24T00:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "Web ChatGPT Projectの戦略運用草案をStudyへ追加した。",
+    "WebからCodexへ渡す最小Packetとプロジェクト別schema方向を定義した。",
+    "Web Project運用の正式採用はKanban判断待ちとした。"
+  ],
+  "verification": [
+    "OpenAI公式のProjectsとファイルアップロードの説明を確認した。",
+    "Study Cardに目次、戦略運用、引き渡しPacket、原本を登録した。"
+  ],
+  "nextActions": [
+    "KanbanでWeb Project運用の正式ルールと対象Projectを決める。",
+    "採用後に各Project用handoff_schema.mdとcurrent_status.mdを作る。"
+  ],
+  "deliverables": [
+    "public/study-blog/self-tech/chatgpt-project-operations/目次.md",
+    "public/study-blog/self-tech/chatgpt-project-operations/戦略運用_草案.md",
+    "public/study-blog/self-tech/chatgpt-project-operations/引き渡しPacket_草案.md",
+    "public/study-blog/self-tech/chatgpt-project-operations/原本チャット_保管.md"
+  ],
+  "tags": ["Study", "ChatGPT Projects", "Strategy", "Codex", "Handoff", "Kanban"],
+  "blockedEncountered": ["正式なProject分類、Project別Report schema、引き渡し開始条件はKanban判断待ち。"],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": true,
+    "note": "Web戦略とローカル実装を分け、最小Packetで橋渡しする方式は複数アプリ・複数AIの文脈切れを減らせる。"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

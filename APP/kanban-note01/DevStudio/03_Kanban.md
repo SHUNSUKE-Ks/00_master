@@ -1,5 +1,180 @@
 # 03 Kanban
 
+## APP04 MultiAgent / ai-orchestrator Study Report 2026-07-09
+
+### 完了
+
+- `ai-orchestrator` を単体OSSではなく GitHub Topic / MultiAgent設計資料として整理
+- `public/study-blog/claude-rpa/MultiAgent/` ノートブックを追加
+- `00_InBox`, `manual.md`, `目次.md`, `topics/*.md` に詳細分割
+- `Study` の ClaudeRPA Library に MultiAgentカードを追加
+- `OSS候補DB` に `MultiAgent` genre と `github/topics/ai-orchestrator` を追加
+
+### 作成ファイル
+
+- `public/study-blog/claude-rpa/MultiAgent/00_InBox/oss_candidate_ai-orchestrator_2026-07-09.md`
+- `public/study-blog/claude-rpa/MultiAgent/目次.md`
+- `public/study-blog/claude-rpa/MultiAgent/manual.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/overview.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/concept-map.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/agent-roles.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/queue-state-workflow.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/git-worktree.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/rust-tauri-solidjs.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/knowledge-factory.md`
+- `public/study-blog/claude-rpa/MultiAgent/topics/implementation-roadmap.md`
+
+### 次手
+
+- `Planner -> Researcher -> Topic -> Writer` の4Agent構成を最小案として検討
+- 個別OSS候補を選び、OpenHarness方式で追加Library化
+- 判断質問: `04_MultiAgent / ai-orchestrator` をNote_Story内で再現するか、Note_Storyを参考にクローンして新規MultiAgent専用プロジェクトにするか
+- 暫定意見: まずNote_Story内でStudy/DB/Reportとして設計を温め、実装段階で専用クローン化
+- 詳細報告: `docs/reports/kanban_report_multiagent_ai_orchestrator_study_2026-07-09.md`
+
+## APP04 Header State / Study / AllAssets Report 2026-07-01
+
+### 報告
+
+- Header左上プルダウン表示を、固定 `Note_Story` ではなく現在のメニュー項目名へ変更
+- メニュー項目 `シナリオノート` を `アイディア帳` に変更
+- 右側の角丸バッジは画面ステート表示として維持
+- StudyにSolidJS基礎Cardを追加し、State / 表示 / 画面遷移 / UI追加 / JSON連携を学習できる形にした
+- Markdown code blockにCopyボタンを追加
+- AllAssets側のschema相談に対して、Note側の表示名、syncStatus / assetStatus / intake.status 表示方針を返答済み
+
+### Header表示仕様
+
+```txt
+DB画面          -> DB
+アイディア帳    -> アイディア帳
+Scenario Board -> Scenario Board
+Study          -> Study
+Gallery        -> Gallery
+Blog           -> ブログ表紙
+```
+
+ステートバッジ:
+
+```txt
+Notebook page未選択 -> ページ一覧
+Notebook page選択中 -> 書き込み中
+InBox              -> DB Hub
+Gallery            -> Gallery
+Study              -> Study
+Blog               -> Blog Memo / Blog View
+DB系               -> DB
+```
+
+### 変更ファイル
+
+- `src/components/Header.tsx`
+- `src/components/MarkdownView.tsx`
+- `src/pages/PageStudy.tsx`
+- `src/index.css`
+- `public/study-blog/solidjs-state-ui-json-basics.md`
+- `public/study-blog/note-story-dev-environment-outline.md`
+
+### 確認
+
+- `npm run build` 成功
+- PWA本番デプロイは未実施
+
+### 次アクション
+
+- Headerステートをさらに細かくする場合、`PageNotebook.tsx` 内の `editorMode` をstoreへ上げる
+- PWA反映が必要になったらProduction deployを実施
+- AllAssets側でDB Hub Gallery DBの `syncStatus / assetStatus` 表示が入ったらNote側表示と再照合
+
+### 追加確認 2026-07-01
+
+- ユーザー確認により、Header左上は「選択中Notebook名」ではなく「Note_Story Menuで選択している項目名」を表示する仕様に確定
+- `アイディア帳` メニュー文言とHeader表示を再修正済み
+- ステートバッジは現行仕様を維持
+- Build確認済み
+
+## APP04 PWA / Vercel Production Redeploy Report 2026-06-29
+
+### 解決
+
+- `master` へのmerge / push後も本番URLで旧UIが残っていたため、Vercel Productionを手動で再デプロイ
+- 実行コマンド: `npx vercel --prod`
+- Production Deploy成功
+- Alias反映先: `https://kanban-note01.vercel.app/`
+
+### 問題
+
+- feature branch `codex/novel-engine-devstudio-layer` の変更は `master` に未マージだった
+- `master` へmerge / push後も、Vercel本番が配信していたJSバンドルは旧成果物のままだった
+- PWA端末キャッシュではなく、Vercel本番の配信成果物が古いことを確認
+
+### 切り分け結果
+
+- ローカルProduction build: `index-C2zxh54L.js`
+- Vercel本番が配信していたJS: `index-DLRoRmI9.js`
+- Vercel本番JSには `Asset Tags / Pinterest Masonry / DB Hub` が含まれていなかった
+- ローカルbuild成果物には上記文字列が含まれていた
+
+### 実施
+
+```txt
+cd C:\00_master\APP\kanban-note01
+npx vercel --prod
+```
+
+結果:
+
+```txt
+Production: https://kanban-note01-ojpojwlp0-shunsuke-ks-projects.vercel.app
+Aliased: https://kanban-note01.vercel.app
+```
+
+### 次アクション
+
+- PCブラウザで `https://kanban-note01.vercel.app/` を通常リロード
+- 古い場合はハードリロード
+- PWA端末はアプリ再起動、必要ならキャッシュ削除
+- 今後は `master` 反映後に、Vercel本番JSのハッシュと中身を確認してからPWA側を疑う
+
+### 再発防止
+
+- feature branchのpushだけではProduction URLに出ない
+- Production反映は `master` へのmerge / push、または `npx vercel --prod` を明示する
+- Vercel本番で旧UIが残る場合は、PWAキャッシュより先に配信中JSバンドルを確認する
+
+## APP04 PWA / Vercel Reflect Failure Report 2026-06-29
+
+### 報告
+
+- PWA本番URL `https://kanban-note01.vercel.app/` でAPP04最新UIが反映されていない
+- 最新変更は `codex/novel-engine-devstudio-layer` の `0160c58 Add APP04 gallery and DB hub updates` にpush済み
+- Vercel画面では旧Header / 旧DB導線が残っているため、PWAキャッシュ単体ではなくProduction Deploy対象の不一致が主因と判断
+
+### 原因候補
+
+- Vercel Production Branchが `codex/novel-engine-devstudio-layer` ではなく、`master` など別ブランチを見ている
+- feature branchのPreview Deployは作成されても、Production URLには出ていない
+- PWA Service Workerキャッシュは副次要因。Production自体が新しくなった後に再確認する
+
+### 確認
+
+- current branch: `codex/novel-engine-devstudio-layer`
+- latest pushed commit: `0160c58`
+- app working tree: clean
+- Vercel project: `kanban-note01`
+- 詳細: `DevStudio/11_PWA_Vercel_Reflect_Failure_Report.md`
+
+### 次アクション
+
+- Vercel DashboardでProduction Branchを確認
+- Production Branchへmerge、またはProduction Deployを明示実行
+- Productionの最新コミットが `0160c58` 以降か確認
+- その後にPWA端末で再読み込み、必要ならPWA再インストール
+
+### 判断
+
+- これ以上PWA側だけを疑ってキャッシュ削除を繰り返すより、先にVercelのProduction参照先を確定する
+
 ## APP04 DB Hub Source List Report 2026-06-29
 
 ### 完了

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Novel Game v0.1",
+  "type": "object",
+  "required": ["repo", "scenario", "dialogue", "runtime", "topics"],
+  "properties": {
+    "repo": { "type": "string" },
+    "scenario": { "type": "string" },
+    "dialogue": { "type": "string" },
+    "choice": { "type": "string" },
+    "saveLoad": { "type": "string" },
+    "asset": { "type": "string" },
+    "runtime": { "type": "string" },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

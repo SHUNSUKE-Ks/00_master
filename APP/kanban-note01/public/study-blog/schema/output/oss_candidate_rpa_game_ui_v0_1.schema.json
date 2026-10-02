@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Game UI v0.1",
+  "type": "object",
+  "required": ["repo", "screenTypes", "components", "visualIdentity", "review", "topics"],
+  "properties": {
+    "repo": { "type": "string" },
+    "screenTypes": { "type": "array", "items": { "type": "string" } },
+    "components": { "type": "array", "items": { "type": "string" } },
+    "informationDensity": { "type": "object" },
+    "visualIdentity": { "type": "string" },
+    "input": { "type": "array", "items": { "type": "string" } },
+    "accessibility": { "type": "string" },
+    "review": { "type": "string" },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

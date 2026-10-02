@@ -1,0 +1,28 @@
+{
+  "id": "entity_jockey",
+  "type": "entity",
+  "name": "jockey / JockeyUI",
+  "title": "ACPマルチエージェント指揮基盤（Tauri+Rust+SolidJS）",
+  "category": "orchestrator",
+  "summary": "Claude Code/Codex CLI/Gemini CLIをACP（JSON-RPC over stdio）で束ねるConductor型orchestrator。並行制御・完了のプロトコル判定・役割→CLI束縛の設計解を持つ。",
+  "body": [
+    "## 要点",
+    "",
+    "- **Conductor**＝単一指揮者が全メッセージ流を順次化（エージェント同士は直接対話しない）→ 並行書き込み衝突の構造的回避。",
+    "- **完了はRPC Response着地で判定**（テキスト報告でなくプロトコルで）→ VERIFY設計の一次資料。",
+    "- **役割→CLI束縛**（complex=claude / long-context=gemini / 高頻度=ollama）→ Claude/Codex分業・モデルコスト最適化の型。",
+    "- Shared Brain（scope隔離黒板、DashMap+SQLite）。ただしversion/Append衝突回避は設計docのみで未実装＝自前実装の価値大。",
+    "",
+    "## 詳細digest",
+    "",
+    "本Vault内 `jockey/`（manual＋目次＋topics6本、2026-07-10解析）。再現レシピ: `jockey/topics/reproduction_recipe.md`（既存パーツ5部品＋要新規3パーツ owner_lock/artifact_verify/sequential_dispatch）。"
+  ],
+  "urls": { "repo": "https://github.com/recailai/jockey" },
+  "verdict": "設計採用・実装は自前（FABLE裁定1、2026-07-10）。本体は動かさず移設もしない。cloneはC:\\00_master\\TestRoomに閲覧専用。",
+  "sources": [
+    "実読: README/CLAUDE.md/AGENTS.md/docs/completed/agent_orchestrator_design.md/db/context.rs/acp/mod.rs（2026-07-10、ローカルclone）"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-10",
+  "updatedAt": "2026-07-11"
+}

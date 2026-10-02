@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_015",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "執筆デスクの NAV 右下に記号キー（# {} [] () : //）と、本番デプロイ",
+  "summary": "執筆デスク（下書き・メモ）の NAV の右下に、押すと半角の記号を打つキーを置いた。# は行の頭に見出し（押すたびに ## ###）、括弧は選んだ文字を囲む（無ければ間にカーソル）、// は行のメモ。あわせて今日の変更（ギャラリー・Sceneスロット・ダイアログ・音声・ZIP）を本番へデプロイした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T15:20:00+09:00",
+  "completedAt": "2026-09-28T16:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "記号キー: スマホ・タブレットの右隣の NAV（一覧の下）と、PC の右の NAV（下端）に 2列×3段。押しても本文のカーソルは外れない",
+    "# ＝行の頭に見出し（章・小見出し）／{} ＝文中のメモ／[] ＝タグ／() ＝補足／: ／// ＝行のメモ（行の途中なら前に空白を足す）",
+    "縦の短い画面で NAV からはみ出していたので、2列にし、NAV のボタンを少し詰めた（高さ 760px 以下）",
+    "ヘルプ（執筆デスク）に一行"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 16本 すべて PASS（計481件）。Sceneスロットのテストに記号キー 9件（並び・# と ##・() で囲む・{} と [] で間にカーソル・//・:・カーソルが外れない）",
+    "開発サーバー（スマホ幅・高さ約400pxの NAV）で、記号キーが収まることを確認"
+  ],
+  "nextActions": [
+    "本番で: 写真をスマホから入れて PC で見る／Sceneスロット／録音と再生（実機のマイク）を確かめる",
+    "{} と // を本文に出さないメモとして扱う決まりを、KeyDeck・novelEngine へ書き出すときに入れる"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/src/v21/help.ts"
+  ],
+  "tags": ["v21", "desk", "symbols", "deploy"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": false, "note": "メモの書き方は [] をタグに取ってあるので、本文に出さないメモは {}（文中）と //（行）に分けると、あとで機械で読み分けやすい" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

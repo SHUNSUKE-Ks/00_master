@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_011",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "V2.1 のギャラリーを新しく（左の絞り込み・作品と人物の紐付け・タグ・コメント・JSON・クラウド共有）",
+  "summary": "ギャラリーを V2.1 の画面に作り直した。前のピンタレスト風は残し「前のギャラリー」から開ける。写真は縮めて IndexedDB に置き、クラウド（galleryAssets）へ送るので、スマホで入れた写真を PC のアプリから見られる。写真ごとの JSON に作品・登場人物・タグ・小さなコメント（いくつでも）を持つ。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T09:30:00+09:00",
+  "completedAt": "2026-09-28T12:00:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "GalleryV21.tsx（新）: 左サイドバー（表示: すべて・お気に入り・この端末だけ・ごみ箱／作品と作品なし／選んだ作品の登場人物／タグ／クラウドの状態・読み直す・送り直す／前のギャラリー）。スマホは「絞り込み」で出す引き出し",
+    "一覧: ＋ 写真を入れる（複数可）・PC は落として入れる・左で選んだ作品／人物が最初から付く・名前・タグ・コメントで探す・新しい順／古い順・カードに同期の点とコメント数",
+    "写真の情報: 名前・お気に入り・作品（複数）・登場人物（\"<作品ID>:<枠ID>\"）・タグ（タグ DB と既存タグから候補）・小さなコメント（足す・消す、時刻と端末つき）・JSON を見る／コピー・ごみ箱へ（アプリのダイアログで確認）／戻す・大きく見る（← → Esc）",
+    "photoStore.ts（新）: 長い辺 2048px の JPEG に縮める → IndexedDB に画像、localStorage には画像なしの記録と写真ごとの情報 → クラウドへ送る。直した情報は 0.8 秒まとめてクラウドにも書く。開くたび・ボタンでクラウドを読み直し、この端末の新しい直しを重ねる",
+    "前のギャラリーは GalleryLegacyV21.tsx としてそのまま残した",
+    "直した不具合: 他の端末でごみ箱に入れた写真がクラウドから戻ると消えていなかった（deletedAt も見るようにした）／読めない形式（PC の HEIC など）で写真の読み込みが止まり得た（8 秒で諦めてそのまま入れる）／写真を直すたびに情報の欄が作り直され入力が外れていた（id で引き直す）",
+    "ヘルプのギャラリーの項を新しい画面に合わせた"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 14本 すべて PASS（新: ギャラリー 45件。複数枚を入れる・作品と人物が最初から付く・画像は localStorage に入れない・落として入れる（画像だけ）・作品なし・作品と人物の紐付け・タグ（# を外す・重ねない）・欄が作り直されない・コメント足す／消す・JSON とコピー・情報を覚える・お気に入り／タグ／人物／コメント検索の絞り込み・大きく見る・ごみ箱（確認）と戻す・前のギャラリーと戻る・出入りしても残る）。テストは Firebase を切ったビルドで行い、本物のクラウドには書いていない",
+    "開発サーバー（PC 幅・スマホ幅）で画面を確認。「クラウドから読み直す」は読むだけで動作（クラウドの写真は現在 0 枚）。開発サーバーでは写真を入れていない（本物のクラウドに書くため）",
+    "本番デプロイはまだ"
+  ],
+  "nextActions": [
+    "デプロイ後、スマホで写真を1枚入れ、PC のアプリの「クラウドから読み直す」で見えるか確かめる（Firebase Storage のルールはリポジトリに無いので、送れなければ写真の欄に理由が出る）",
+    "前のダイアログ変更（未デプロイ）と一緒にデプロイするか確認",
+    "Sub_KanbanNote の V2.1 見返しの結果を受けて統合"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/GalleryV21.tsx",
+    "APP/kanban-note01/src/v21/GalleryLegacyV21.tsx",
+    "APP/kanban-note01/src/v21/photoStore.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/gallery/types.ts",
+    "APP/kanban-note01/src/pages/gallery/store.ts",
+    "APP/kanban-note01/src/dataBridge/firebaseGallery.ts"
+  ],
+  "tags": ["v21", "gallery", "firebase", "sync", "photo"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": false, "note": "前のギャラリーは画像を localStorage に文字で置いていたので数枚で満杯になっていた。画像は IndexedDB、情報だけ localStorage に分けると、前の入れ物（galleryState）とクラウド連携をそのまま使えた" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

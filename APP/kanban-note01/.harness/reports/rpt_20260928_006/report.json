@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_006",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "起動時の画面をタイトル一覧に、下書きのNAVを 押す＝開く／長押し＝タグ に戻す、本番デプロイ",
+  "summary": "アプリを開いたときの画面をホームからタイトル一覧に変えた。下書きのNAVを、押す＝サイドバー（パネル）を開く、0.6秒長押し＝直書きのタグ に戻した。前回までの変更（変換の組み合わせ、縦向きタブレットの見出し、PWA の向き any）とあわせて本番へデプロイした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T16:20:00+09:00",
+  "completedAt": "2026-09-28T16:50:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "nav.ts: 保存された画面が無いとき（起動時・版の切り替え後）はタイトル一覧",
+    "WritingDeskV21: スマホの右NAV・PC の左右NAV とも、押す＝開く、長押し＝[Character_\"\"]・[Scene_\"\"]・[演出_\"\"]",
+    "ヘルプを合わせた"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功、manifest の orientation は any",
+    "jsdom 12本 すべて PASS（計324件）。起動がタイトル一覧になること、PC・スマホ・2カラムで 押す＝開く／長押し＝タグ を確認",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-Y9NniDd2.js と manifest（orientation: any）を確認。実機は未確認"
+  ],
+  "nextActions": [
+    "Lenovo でアプリを入れ直し、横向き・変換 + 数字・Alt+数字を試してもらう"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/nav.ts",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts"
+  ],
+  "tags": [
+    "v21",
+    "startup",
+    "writing-desk",
+    "nav",
+    "deploy"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": false,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "押す／長押しの入れ替えは holdPress の呼び先を入れ替えるだけで済んだ"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

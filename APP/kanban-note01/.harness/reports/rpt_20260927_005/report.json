@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260927_005",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-27",
+  "title": "会話ブロックの名前札を1秒長押しで、その場で名前を編集",
+  "summary": "利用者がスマホで名前札から名前を変えられなかったのは、その機能が開発版だけで本番に出していなかったため。利用者の案どおり、名前札を1秒長押しするとその場で入力欄に変わり、確定で作品の登場人物と全セリフの名前が変わる形にした。短く押すのは話者の入れ替えのまま。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-27T17:10:00+09:00",
+  "completedAt": "2026-09-27T17:50:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "名前札の1秒長押しで入力欄に（押している間は金の線が伸びる）。Enter・欄を離れると確定、Esc でやめる",
+    "確定は renameCharacter（作品の登場人物＝DB と全場面のセリフ）。枠に無い名前を枠の人物にするとセリフをまとめる動きもそのまま",
+    "1秒前に離す・指が動くと編集にしない。長押しで文字選択・コンテキストメニューが出ないようにした",
+    "短く押す＝その行の話者だけ入れ替えるメニュー。メニュー内の名前欄はやめ、長押しの案内にした",
+    "長押しのあとに札が入力欄へ替わるため、『長押しのあとの click を無視する』印が残って次のタップを飲み込む不具合をテストで見つけ、編集の終わりで印を戻すよう直した"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 登場人物 30件（短く押すとメニューで名前欄なし・0.4秒では編集にならない・1秒長押しで入力欄にフォーカス・Enter で作品の登場人物と全セリフ・欄を離れても確定・Esc で何も変わらない・枠に無い名前をまとめる など）ほか V2.1 の8本すべて PASS",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-27）。公開中の main-CLotZx2B.js に、名前札の長押し編集・執筆デスクの右NAVとスマホ用サイドバー・ホームの3スロットとお知らせ・9つの枠のコードが入り、html が lang=ja になっていることを確認。実機（スマホ）は未確認"
+  ],
+  "nextActions": [
+    "スマホで名前札の1秒長押し・下書きの右NAVを試してもらう"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/修正案_2026-09-25_テキスト化.md"
+  ],
+  "tags": [
+    "v21",
+    "talklog",
+    "cast",
+    "rename",
+    "long-press",
+    "mobile"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "開発版だけの変更を『できた』と伝えると、本番で試す利用者には伝わらない。本番に出ているかどうかを毎回はっきり書く"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

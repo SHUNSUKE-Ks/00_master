@@ -1,0 +1,61 @@
+{
+  "format": "app_commands",
+  "version": "0.1",
+  "note": "Note Story（カンバンNote）V2.1 を外（KeyDeck・AI）から動かせる操作の一覧。キーは KeyDeck の辞書の名前（/api/schema の dictionary.vk）で書いた。keydeck=ok は今の KeyDeck で送れる、no は送れない（理由つき）。手で書いた初版。今後はアプリのコードから書き出す（コマンド一覧の書き出し機能は未着手）。",
+  "app": {
+    "id": "kanban_note",
+    "name": "Note Story（カンバンNote）V2.1",
+    "url": "https://kanban-note01.vercel.app",
+    "howToOpenOnPC": "Chrome のアプリ窓で開く（chrome.exe --app=https://kanban-note01.vercel.app）。普通のタブだと Alt+数字 を Chrome が先に取る（タブの切り替え）",
+    "textInput": "日本語の本文は普通のキーボードで打つ。KeyDeck の text 動作（KEYEVENTF_UNICODE）でも入力欄へそのまま入る",
+    "source": "C:/00_master/APP/kanban-note01/src/v21/help.ts・shortcuts.ts・TalkLogV21.tsx・WritingDeskV21.tsx",
+    "updatedAt": "2026-09-28"
+  },
+  "phases": [
+    { "id": "any", "name": "どの画面でも" },
+    { "id": "talk", "name": "会話ログ（場面のセリフを書く）" },
+    { "id": "desk", "name": "執筆デスク（下書き・アイディアメモ）" },
+    { "id": "desk.grid", "name": "執筆デスクで Scene サイドバーの「9グリッド」が見えているとき" },
+    { "id": "gallery", "name": "ギャラリー（写真を大きく見ているとき）" }
+  ],
+  "commands": [
+    { "id": "app.help", "phase": "any", "name": "この画面で使える操作を出す／閉じる", "keys": ["CTRL", "SLASH"], "keydeck": "ok" },
+    { "id": "app.undo", "phase": "any", "name": "一つ前に戻る（入力中の欄）", "keys": ["CTRL", "Z"], "keydeck": "ok" },
+    { "id": "app.escape", "phase": "any", "name": "閉じる（ヘルプ・ダイアログ・大きく見る）", "keys": ["ESC"], "keydeck": "ok" },
+    { "id": "app.keymon", "phase": "any", "name": "キー入力モニターを開く／閉じる", "keys": ["F17"], "keydeck": "ok", "note": "F17 は既定キー（登録しなくても動く。2026-09-28 追加。本番へ出るのは次のデプロイから）" },
+
+    { "id": "talk.speak.0", "phase": "talk", "name": "ナレーションの行を直下に作る", "keys": ["ALT", "0"], "keydeck": "ok" },
+    { "id": "talk.speak.1-9", "phase": "talk", "name": "その番号の人物のセリフを直下に作る（番号＝作品の登場人物の枠1〜9）", "keys": ["ALT", "1〜9"], "keydeck": "ok", "note": "人物の名前とアイコンは作品ごと。Note Story の「KeyDeckへ書き出し」→ KeyDeck の Deck編集「取り込み」で、名前・アイコン付きのボタンにできる（keydeck.deck_import.v1）" },
+    { "id": "talk.continue", "phase": "talk", "name": "同じ人物で次のセリフを続ける", "keys": ["CTRL", "ENTER"], "keydeck": "ok" },
+    { "id": "talk.prev", "phase": "talk", "name": "前のセリフへ", "keys": ["ALT", "UP"], "keydeck": "ok" },
+    { "id": "talk.next", "phase": "talk", "name": "次のセリフへ", "keys": ["ALT", "DOWN"], "keydeck": "ok" },
+    { "id": "talk.delete-empty", "phase": "talk", "name": "空のセリフ・柱・備考を消す", "keys": ["BKSP"], "keydeck": "ok" },
+    { "id": "talk.scroll", "phase": "talk", "name": "会話ログを上下にスクロール", "keys": ["mouse.wheel up/down"], "keydeck": "ok", "note": "KeyDeck の wheel_scroll（jog shape=wheel）か PGUP / PGDN" },
+
+    { "id": "desk.speak.0", "phase": "desk", "name": "ナレーションの行を作る", "keys": ["ALT", "0"], "keydeck": "ok" },
+    { "id": "desk.speak.1-9", "phase": "desk", "name": "その番号の人物のセリフ 名前：「」 を今の行の下に作る", "keys": ["ALT", "1〜9"], "keydeck": "ok" },
+    { "id": "desk.tag.cast", "phase": "desk", "name": "直書きタグ [Character_\"\"] を入れて \"\" の中にカーソル", "keys": ["F13"], "keydeck": "ok", "note": "F13〜F15 は既定キー（2026-09-28 追加）。text 動作ではカーソルを \"\" の中へ動かせないので、このキーで呼ぶ" },
+    { "id": "desk.tag.scenes", "phase": "desk", "name": "直書きタグ [Scene_\"\"] を入れる", "keys": ["F14"], "keydeck": "ok" },
+    { "id": "desk.tag.tags", "phase": "desk", "name": "直書きタグ [演出_\"\"] を入れる", "keys": ["F15"], "keydeck": "ok" },
+    { "id": "desk.split.toggle", "phase": "desk", "name": "2カラムの切り替え（タブレット横・PC）", "keys": ["F16"], "keydeck": "ok" },
+    { "id": "desk.block.pillar", "phase": "desk", "name": "柱（場所・時間）を書き始める", "text": "柱：", "keydeck": "ok" },
+    { "id": "desk.block.note", "phase": "desk", "name": "備考（本文に出ないメモ）を書き始める", "text": "備考：", "keydeck": "ok" },
+    { "id": "desk.symbol", "phase": "desk", "name": "記号: 見出し # ／ 文中のメモ {} ／ タグ [] ／ 補足 () ／ : ／ 行のメモ //", "text": "# | {} | [] | () | : | // ", "keydeck": "ok", "note": "text 動作で1つずつ。括弧は2文字そのまま入る（カーソルは後ろ）。画面の記号キーは括弧の中にカーソルを置く" },
+    { "id": "desk.grid.1-9", "phase": "desk.grid", "name": "9グリッドのそのマスの [Scene_\"名前\"] を書く", "keys": ["NUMPAD1〜9"], "keydeck": "no", "note": "KeyDeck の辞書にテンキーが無い（REQ-20260928-002 で追加を依頼）" },
+    { "id": "desk.grid.palette", "phase": "desk.grid", "name": "9グリッドのパレットを前・次へ", "keys": ["NUMPAD_SUBTRACT / NUMPAD_ADD"], "keydeck": "no", "note": "同上" },
+    { "id": "desk.grid.order", "phase": "desk.grid", "name": "ラベルだけの Scene を置いて絵を発注", "keys": ["NUMPAD0"], "keydeck": "no", "note": "同上" },
+
+    { "id": "gallery.prev", "phase": "gallery", "name": "前の写真", "keys": ["LEFT"], "keydeck": "ok" },
+    { "id": "gallery.next", "phase": "gallery", "name": "次の写真", "keys": ["RIGHT"], "keydeck": "ok" },
+    { "id": "gallery.close", "phase": "gallery", "name": "大きく見るのを閉じる", "keys": ["ESC"], "keydeck": "ok" }
+  ],
+  "textPalette": {
+    "note": "定型文の一覧（Deck の list 表示）に向く。すべて text 動作で入る",
+    "items": ["柱：", "備考：", "ナレーション：「」", "[bg_town_night]", "[bg_room]", "# ", "// "]
+  },
+  "cannotYet": [
+    "画面（Phase）に合わせて KeyDeck の盤面を自動で切り替える: Hub は画面を見ない。PWA（HTTPS）から Hub（LAN の HTTP）へはブラウザが通信を止める。いまは layout.switch のボタンで手で切り替える",
+    "盤面の切り替えと同時にキーを押す（layout.switch の fire）: KeyDeck の不具合 B-002 で内側のキーが許可リストに載らない（REQ-20260928-002 で修正を依頼）",
+    "スマホ・iPad で開いた Note Story の操作: KeyDeck は Windows PC へ打ち込むので、PC で開いた Note Story だけが相手"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSS Candidate RPA Index v0.1",
+  "type": "object",
+  "required": ["repo", "indexScope", "genreBuckets", "candidateRules"],
+  "properties": {
+    "repo": { "type": "string" },
+    "indexScope": { "type": "string" },
+    "genreBuckets": { "type": "array", "items": { "type": "string" } },
+    "candidateRules": { "type": "array", "items": { "type": "string" } },
+    "extractionTargets": { "type": "array", "items": { "type": "string" } },
+    "topics": { "type": "array", "items": { "type": "string" } }
+  }
+}

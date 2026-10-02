@@ -1,0 +1,38 @@
+{
+  "id": "concept_loop",
+  "type": "concept",
+  "name": "Loop",
+  "title": "自走ループ（定時/トリガー発火の実行循環）",
+  "summary": "人間の起動なしに、agentが定時またはトリガーで目を覚まし、仕事を1件処理して眠る循環。「何もしない」を正しく判断できることが健全性の証。",
+  "body": [
+    "## 定義",
+    "",
+    "```",
+    "起動（スケジューラ/コマンド/クラウドルーチン）",
+    "↓ 自分のrunbookを読む",
+    "↓ 仕事の在り処（TaskBoard等）を走査",
+    "↓ 自分宛あり → 1件処理 → report → 終了",
+    "↓ 自分宛なし → NO_WORK で終了（何も作らない）",
+    "```",
+    "",
+    "- **NO_WORKの価値**: 仕事が無い時に何もしない判断を自力でできる＝自走の健全性（2026-07-08に実証済み）。",
+    "- **1起動1タスク**: 暴走と競合を防ぐ最小単位。",
+    "",
+    "## 安全規則（LoopSafety、system_rulesより）",
+    "",
+    "1起動1タスク／自動実行中の削除・上書き破壊・push・deploy禁止／冪等／3回失敗で打切り＋質問md／401即打切り。",
+    "",
+    "## claudemasterでの実装",
+    "",
+    "- ローカル: Windowsタスクスケジューラ → `90_Loop/run_agent.ps1` → claude CLI headless（現在は自動発火停止中、コマンド発火に移行）",
+    "- 将来: フォーマット安定後にPCを閉じても動くクラウドルーチンへ移行（方針確定済み）",
+    "- ログ: `90_Loop/logs/`（回数はAGENT_SKILL_LEDGER.jsonに集計）"
+  ],
+  "sources": [
+    "実読: 00_Projects/CreatorHub/01_Harness/system_rules.md（LoopSafety）/ workflow.md（WakeFlow）/ 90_Loop/run_agent.ps1",
+    "実証: 2026-07-08 10:00定時起動のNO_WORK正常終了（handoff_2026-07-08_session_close.md）"
+  ],
+  "state": "approved",
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11"
+}

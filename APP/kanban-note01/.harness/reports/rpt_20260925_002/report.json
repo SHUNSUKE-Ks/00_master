@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260925_002",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "phase_report",
+  "date": "2026-09-25",
+  "title": "メモに直接入力できるCard Viewを追加",
+  "summary": "前回の商品・成分・資料向け移植を取り消し、既存メモをカード表面で直接編集するViewを追加した。",
+  "agentId": "codex",
+  "modelProfileId": "gpt-6-sol",
+  "startedAt": "2026-09-25T08:55:53.7191453+09:00",
+  "completedAt": "2026-09-25T08:55:53.7191453+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "既存メモ画面で通常ViewとCard Viewを切り替えられる",
+    "カード表面のタイトルと本文へ直接入力できる",
+    "既存のメモ保存処理を再利用する",
+    "前回の対象外コード変更とPDFコピーを取り消した"
+  ],
+  "verification": [
+    "npm run build: 成功",
+    "git diff --check: エラーなし",
+    "対象外コード3ファイルに差分なし、PDFコピー2件なし"
+  ],
+  "nextActions": [
+    "利用者の端末でCard Viewの入力と再表示を確認する"
+  ],
+  "deliverables": [
+    "src/pages/PageMemo.tsx"
+  ],
+  "tags": [
+    "correction",
+    "card-view",
+    "memo"
+  ],
+  "blockedEncountered": [
+    "3ファイルの一括git restoreは自動承認審査で拒否。差分を検査したうえで前回追加分の逆パッチのみ適用した。"
+  ],
+  "reflection": {
+    "templateCandidate": false,
+    "note": "既存メモのtitle/bodyと保存処理を利用し、別データ型を作らずCard Viewを追加した。",
+    "skillCandidate": false,
+    "reusable": true
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

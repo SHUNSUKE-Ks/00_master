@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_005",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "変換・無変換をショートカットの組み合わせに、縦向きタブレットの見出しを画面下のタブに",
+  "summary": "Lenovo タブレットで、変換キーの信号が届くこと、入れたアプリ（PWA）では Alt+1 が効くこと（Chrome のタブでは Chrome が Alt+数字を取っていた）が分かった。変換・無変換を押したままのキーとして組み合わせ（変換 + 1 など）に登録できるようにし、幅900px以下では見出しのメニューを画面下のタブにした。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T15:20:00+09:00",
+  "completedAt": "2026-09-28T16:10:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "KeyMonitor.chordOf: 変換・無変換を押している間を覚え、組み合わせに入れる（Convert+Digit1 など）。モニター・登録・受け取りで共通",
+    "設定 → ショートカット: 変換・無変換は押したまま次のキーを待つ。何も押さずに離すとそれだけで登録。表示は「変換 + 1」",
+    "shortcuts.chordProblem: 変換・無変換との組み合わせを登録してよいものに",
+    "v21.css: 幅900px以下は見出しのメニューを隠し、画面下のタブ（5つ）に。メニューの文字は折り返さない",
+    "調べた結果を構想の資料 §4-5 に記録（Chrome のタブでは Alt+数字を Chrome が取る・入れたアプリでは効く・変換は届く）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 12本 すべて PASS（計323件）。ショートカット 24件（変換を押したままは待つ・変換+3 を Convert+Digit3 で登録し『変換 + 3』と表示・無変換だけを離して登録・変換+3 で人物3・無変換でナレーション を追加）",
+    "開発サーバー（800×1280）: 見出しのはみ出し 0、上のメニューは非表示、画面下に5つのタブ",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-Y9NniDd2.js と manifest（orientation: any）を確認。実機は未確認"
+  ],
+  "nextActions": [
+    "デプロイ後、Lenovo でアプリを入れ直して横向きと、変換 + 数字 の登録を試してもらう"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/KeyMonitor.tsx",
+    "APP/kanban-note01/src/v21/SettingsV21.tsx",
+    "APP/kanban-note01/src/v21/shortcuts.ts",
+    "APP/kanban-note01/src/v21/v21.css",
+    "APP/kanban-note01/docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md"
+  ],
+  "tags": [
+    "v21",
+    "tablet",
+    "keyboard",
+    "shortcuts",
+    "convert-key",
+    "layout"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "Chrome のタブと入れたアプリ（PWA）では、ブラウザが先に取るキーが違う。モニターで両方を比べたので、端末ではなくブラウザが原因だと分かった"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

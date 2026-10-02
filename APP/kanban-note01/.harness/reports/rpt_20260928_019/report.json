@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_019",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "design_decision",
+  "date": "2026-09-28",
+  "title": "KeyDeck へ Note Story 用ボードを依頼（コマンド一覧・F13〜F17 の既定キー・依頼書2件）",
+  "summary": "Note Story を外から動かせる操作の一覧（app_commands v0.1）を作り、KeyDeck の依頼書の形で2件（ボード／テンキーと B-002）を CreatorCompass に置いて、統括＿KEYDECK へ渡した。ボードがすぐ使えるよう、Note Story にキーが無かった5つの操作へ F13〜F17 の既定キーを足した。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T20:40:00+09:00",
+  "completedAt": "2026-09-28T21:30:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "docs/commands/kanban_note_commands_v0.1.json（新）: 画面（Phase）ごとの操作とキー（KeyDeck の辞書名）、送れる／送れない（テンキー・自動切替・B-002）",
+    "shortcuts.ts: EXTERNAL_DEFAULTS（[Character_\"\"]=F13・[Scene_\"\"]=F14・[演出_\"\"]=F15・2カラム=F16・キー入力モニター=F17）。登録が先に効く。設定の「既定」欄に出る",
+    "C:/00_CreatorCompass/KeyDeck/依頼/REQ-20260928-001.json（board）・REQ-20260928-002.json（fix: テンキーの辞書・B-002・9グリッドの区画）。依頼書のスキーマの項目・ID・文字数・参照パスの実在を機械で確認",
+    "統括＿KEYDECK へ依頼を送信（届いた）"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom: Sceneスロットのテストに F13・F14 を足して 43件 PASS、ショートカット 24・キー入力モニター 13・執筆デスク 78 も PASS",
+    "KeyDeck のコード: VK_DICTIONARY にテンキーが無いこと、canonical_command_id が TgFire だけ入れ子へ潜ること（B-002 未修正）を確認",
+    "本番デプロイはまだ（F13〜F17 は次のデプロイから本番で効く）"
+  ],
+  "nextActions": ["F13〜F17 を本番へ出す（利用者のデプロイ指示で）", "統括＿KEYDECK の返事を受けて、足りないキー・操作を Note Story に足す", "コマンド一覧をアプリのコードから書き出す機能（今は手書きの初版）"],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/shortcuts.ts",
+    "APP/kanban-note01/docs/commands/kanban_note_commands_v0.1.json",
+    "C:/00_CreatorCompass/KeyDeck/依頼/REQ-20260928-001.json",
+    "C:/00_CreatorCompass/KeyDeck/依頼/REQ-20260928-002.json"
+  ],
+  "tags": ["keydeck", "commands", "shortcuts", "handoff"],
+  "blockedEncountered": [],
+  "reflection": { "reusable": true, "skillCandidate": false, "templateCandidate": true, "note": "外の操作盤から呼ぶ操作には、物理キーボードに無い F13〜F24 を既定キーに割り当てると、打ち間違いとぶつからずに登録不要で動く" },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}

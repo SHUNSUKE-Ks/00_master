@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "2.0",
+  "reportId": "rpt_20260928_007",
+  "projectId": "kanban-note01",
+  "milestoneId": null,
+  "taskId": null,
+  "phase": "build",
+  "kind": "tech_trial",
+  "date": "2026-09-28",
+  "title": "横画面は 左＝人物・右＝Scene のパネル、WW（アイテム・武器・スキル・用語）の登録と貼り付け",
+  "summary": "Alt+1 の代わりに横画面のサイドパネルを使うため、会話ログと下書きの PC 幅で 左＝人物、右＝Scene を最初から開くようにした（Scene を右のNAVへ移し、柱の Hooks も右のパネルへ）。WW に、作品ごとにアイテム・武器・スキル・用語を名前と Dict で登録し、押すと名前を貼る仕組みを作った。",
+  "agentId": "claude-code",
+  "modelProfileId": "claude-opus-5-5",
+  "startedAt": "2026-09-28T17:00:00+09:00",
+  "completedAt": "2026-09-28T18:10:00+09:00",
+  "durationMin": null,
+  "tokensUsed": null,
+  "outcomes": [
+    "会話ログ: 左のNAV＝目次・人物、右のNAV＝Scene・WW・演出。最初は 左＝人物・右＝Scene（開き方を覚える鍵を新しくした）",
+    "下書き（執筆デスク）: 左のNAV＝一覧・人物、右のNAV＝Scene・WW・演出。最初は 左＝人物・右＝Scene",
+    "sideNav.CANDIDATE_HOOKS: 柱 → Scene は右のパネル",
+    "types: Notebook.ww（WwEntry: kind＝item/weapon/skill/term、name、dict）。actions: WW_KINDS・addWw（同じ種類に同じ名前は断る）・removeWw",
+    "WwPanel.tsx: 種類の札（すべて・アイテム・武器・スキル・用語）・検索・一覧（押すと名前を貼る・×で消す）・足す欄。会話ログ（書いている行のカーソル位置へ）・下書き（PC パネル・スマホのサイドバー）で共通。メモでは使えない旨を出す",
+    "ヘルプと構想の資料 §5 を更新"
+  ],
+  "verification": [
+    "npx tsc -b exit 0、npx vite build 成功",
+    "jsdom 12本 すべて PASS（計329件）。PC幅の会話ログ 28（NAV の並び・最初は 左＝人物／右＝Scene・柱の Hooks は右・WW の登録と Dict・同じ名前は断る・押すとカーソル位置に名前）、執筆デスク 78（PC の並びと最初のパネル・スマホの WW サイドバーで登録して貼る）",
+    "開発サーバー（1280×800）で会話ログを開き、左に登場人物・右に Scene一覧 が出ることを確認",
+    "本番デプロイ済み（https://kanban-note01.vercel.app、2026-09-28）。公開中の main-DQQCeLxu.js にプロット（note_story.plot.v0.1）・プロットに付ける枠・WW のコードが入っていることを確認。実機は未確認"
+  ],
+  "nextActions": [
+    "WW の種類ごとの一覧を、将来 MasterDB（アイテム・スキルのリスト）から選べるようにする"
+  ],
+  "deliverables": [
+    "APP/kanban-note01/src/v21/WwPanel.tsx",
+    "APP/kanban-note01/src/v21/TalkLogV21.tsx",
+    "APP/kanban-note01/src/v21/WritingDeskV21.tsx",
+    "APP/kanban-note01/src/v21/sideNav.tsx",
+    "APP/kanban-note01/src/v21/actions.ts",
+    "APP/kanban-note01/src/types/index.ts",
+    "APP/kanban-note01/src/v21/help.ts",
+    "APP/kanban-note01/src/pages/PageTalkLog.css",
+    "APP/kanban-note01/docs/構想_下書き・テンプレート・MasterDB_2026-09-28.md"
+  ],
+  "tags": [
+    "v21",
+    "talklog",
+    "writing-desk",
+    "side-panels",
+    "ww",
+    "landscape"
+  ],
+  "blockedEncountered": [],
+  "reflection": {
+    "reusable": true,
+    "skillCandidate": false,
+    "templateCandidate": false,
+    "note": "パネルの中身を部品にしていたので、左右の置き場所を入れ替えても、Hooks の表の side を1か所変えるだけで済んだ"
+  },
+  "evaluationId": null,
+  "bodyFile": "report_body.md"
+}
